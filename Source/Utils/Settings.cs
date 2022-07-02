@@ -1,4 +1,5 @@
 ﻿using Blish_HUD.Settings;
+using Microsoft.Xna.Framework;
 
 namespace TodoList
 {
@@ -13,6 +14,11 @@ namespace TodoList
         public SettingEntry<float> OverlayBackgroundBlue { get; }
         public SettingEntry<float> OverlayBackgroundGreen { get; }
         public SettingEntry<float> OverlayBackgroundAlpha { get; }
+
+        public Color OverlayBackgroundColor => new Color(
+            OverlayBackgroundRed.Value, OverlayBackgroundGreen.Value,
+            OverlayBackgroundBlue.Value, OverlayBackgroundAlpha.Value
+        );
 
         public Settings(SettingCollection settings)
         {

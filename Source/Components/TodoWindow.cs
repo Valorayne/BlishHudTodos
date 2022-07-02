@@ -33,7 +33,7 @@ namespace TodoList.Components
             
             Parent = GameService.Graphics.SpriteScreen;
             Title = "Todo List";
-            BackgroundColor = GetBackgroundColor;
+            BackgroundColor = settings.OverlayBackgroundColor;
             SavesPosition = true;
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanClose = false;
@@ -46,17 +46,10 @@ namespace TodoList.Components
             _scrollView = new TodoScrollView(resources, settings) { Parent = this };
             _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
         }
-
-        private Color GetBackgroundColor => new Color(
-            _settings.OverlayBackgroundRed.Value, 
-            _settings.OverlayBackgroundGreen.Value,
-            _settings.OverlayBackgroundBlue.Value, 
-            _settings.OverlayBackgroundAlpha.Value
-        );
         
         private void OnBackgroundColorsChanged(object target, ValueChangedEventArgs<float> args)
         {
-            BackgroundColor = GetBackgroundColor;
+            BackgroundColor = _settings.OverlayBackgroundColor;
         }
 
         protected override void DisposeControl()

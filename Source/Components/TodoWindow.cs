@@ -26,10 +26,5 @@ namespace TodoList.Components
                 Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3"
             };
         }
-
-        public void Initialize()
-        {
-            
-        }
     }
 }

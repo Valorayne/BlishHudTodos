@@ -39,5 +39,16 @@ namespace TodoList
                 entity.Dispose();
             _entities.Clear();
         }
+
+        protected virtual void Initialize()
+        {
+            
+        }
+
+        public static void InitializeAllEntities()
+        {
+            foreach (var entity in _entities)
+                entity.Initialize();
+        }
     }
 }

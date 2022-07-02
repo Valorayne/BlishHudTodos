@@ -17,7 +17,7 @@ namespace TodoList.Components
             _icon = RegisterForDisposal(CreateIcon(resources));
         }
         
-        public void Initialize()
+        protected override void Initialize()
         {
             _icon.Click += OnIconClicked;
             _settings.ShowMenuIcon.SettingChanged += OnShowMenuIconChanged;

@@ -64,10 +64,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TodoCornerIcon.cs" />
-    <Compile Include="TodoWindow.cs" />
-    <Compile Include="TodoModule.cs" />
-    <Compile Include="Resources.cs" />
+    <Compile Include="Source\Resources.cs" />
+    <Compile Include="Source\TodoCornerIcon.cs" />
+    <Compile Include="Source\TodoModule.cs" />
+    <Compile Include="Source\TodoWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AsyncClipboardService, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">

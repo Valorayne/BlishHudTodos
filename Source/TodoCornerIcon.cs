@@ -3,7 +3,7 @@ using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Todo_List
+namespace TodoList
 {
     public class TodoCornerIcon : IDisposable
     {
@@ -14,9 +14,9 @@ namespace Todo_List
         }
         
         private readonly CornerIcon _icon;
-        private readonly IWindow _window;
+        private readonly Container _window;
 
-        public TodoCornerIcon(IResources resources, IWindow window)
+        public TodoCornerIcon(IResources resources, Container window)
         {
             _window = window;
             _icon = new CornerIcon

@@ -1,18 +1,13 @@
-﻿using Blish_HUD;
-using Blish_HUD.Modules;
-using Blish_HUD.Settings;
+﻿using Blish_HUD.Modules;
 using System;
 using System.ComponentModel.Composition;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace Todo_List
+namespace TodoList
 {
 	[Export(typeof(Module))]
 	public class TodoModule : Module
 	{
-		public static readonly Logger Logger = Logger.GetLogger<TodoModule>();
-		
 		private Resources _resources;
 		private TodoCornerIcon _cornerIcon;
 		private TodoWindow _window;
@@ -20,20 +15,11 @@ namespace Todo_List
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
-		protected override void DefineSettings(SettingCollection settings)
-		{
-		}
-
 		protected override void Initialize()
 		{
 			_resources = new Resources(ModuleParameters.ContentsManager);
-			_window = new TodoWindow(_resources);
+			_window = new TodoWindow(_resources, ModuleParameters.SettingsManager.ModuleSettings);
 			_cornerIcon = new TodoCornerIcon(_resources, _window.Window);
-		}
-
-		protected override async Task LoadAsync()
-		{
-
 		}
 
 		protected override void OnModuleLoaded(EventArgs e)
@@ -56,7 +42,5 @@ namespace Todo_List
 			_cornerIcon.Dispose();
 			_resources.Dispose();
 		}
-
 	}
-
 }

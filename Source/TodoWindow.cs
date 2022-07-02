@@ -1,10 +1,11 @@
 ﻿using System;
 using Blish_HUD;
 using Blish_HUD.Controls;
+using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Todo_List
+namespace TodoList
 {
     public class TodoWindow : IDisposable
     {
@@ -14,20 +15,25 @@ namespace Todo_List
             Texture2D WindowBackground { get; }
         }
 
-        public TabbedWindow2 Window { get; }
+        public Container Window { get; }
 
-        public TodoWindow(IResources resources)
+        public TodoWindow(IResources resources, SettingCollection settings)
+        {
+            Window = CreateWindow(resources);
+        }
+
+        private static Container CreateWindow(IResources resources)
         {
             var windowRec = new Rectangle(-20, 20, 925, 710);
             var contentRec = new Rectangle(windowRec.X + 47, windowRec.Y + 5, windowRec.Width - 5, windowRec.Height - 10);
-            Window = new TabbedWindow2(resources.WindowBackground, windowRec , contentRec)
+            return new TabbedWindow2(resources.WindowBackground, windowRec , contentRec)
             {
                 Parent = GameService.Graphics.SpriteScreen,
                 Title = "Todo List",
                 Emblem = resources.WindowEmblem,
                 Subtitle = "Notes",
                 SavesPosition = true,
-                Id = "NotesModule_995A840DE116AB0805655673E1C4930851149861252974B00F9DE4ACEF762578"
+                Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3"
             };
         }
 

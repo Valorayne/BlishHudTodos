@@ -2,7 +2,7 @@
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Todo_List
+namespace TodoList
 {
     public class Resources : IDisposable, TodoCornerIcon.IResources, TodoWindow.IResources
     {

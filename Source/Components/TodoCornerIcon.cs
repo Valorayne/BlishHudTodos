@@ -1,29 +1,22 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace TodoList
+namespace TodoList.Components
 {
     public class TodoCornerIcon : IDisposable
     {
-        public interface IResources
-        {
-            Texture2D CornerIcon { get; }
-            Texture2D CornerIconHovered { get; }
-        }
-        
         private readonly CornerIcon _icon;
         private readonly Container _window;
 
-        public TodoCornerIcon(IResources resources, Container window)
+        public TodoCornerIcon(Resources resources, Container window)
         {
             _window = window;
             _icon = new CornerIcon
             {
                 IconName = "Todo List",
-                Icon = resources.CornerIcon,
-                HoverIcon = resources.CornerIconHovered,
+                Icon = resources.GetTexture(Textures.CornerIcon),
+                HoverIcon = resources.GetTexture(Textures.CornerIconHovered),
                 Priority = 5
             };
             _icon.Click += OnIconClicked;

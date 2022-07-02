@@ -1,0 +1,19 @@
+{
+  "name": "Todo List",
+  "version": "0.1.0",
+  "namespace": "valorayne.bh.todo",
+  "package": "Todo List.dll",
+  "manifest_version": 1,
+
+  "description": "Allows to define potentially re-occuring custom Todos",
+  "dependencies": {
+    "bh.blishhud": ">=0.11.7"
+  },
+  "url": "https://github.com/kanup/Todo_List",
+  "contributors": [
+    {
+      "name": "Valorayne",
+      "username": "RavenGrey.4709"
+    }
+  ]
+}

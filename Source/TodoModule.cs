@@ -10,6 +10,7 @@ namespace TodoList
 	public class TodoModule : Module
 	{
 		private Resources _resources;
+		private Settings _settings;
 		private TodoCornerIcon _cornerIcon;
 		private TodoWindow _window;
 
@@ -19,8 +20,9 @@ namespace TodoList
 		protected override void Initialize()
 		{
 			_resources = new Resources(ModuleParameters.ContentsManager);
-			_window = new TodoWindow(_resources, ModuleParameters.SettingsManager.ModuleSettings);
-			_cornerIcon = new TodoCornerIcon(_resources, _window.Window);
+			_settings = new Settings(ModuleParameters.SettingsManager.ModuleSettings);
+			_window = new TodoWindow(_resources);
+			_cornerIcon = new TodoCornerIcon(_resources, _window.Window, _settings);
 		}
 
 		protected override void OnModuleLoaded(EventArgs e)

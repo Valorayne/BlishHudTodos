@@ -1,6 +1,5 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
-using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
@@ -9,7 +8,7 @@ namespace TodoList.Components
     {
         public Container Window { get; }
 
-        public TodoWindow(Resources resources, SettingCollection settings)
+        public TodoWindow(Resources resources)
         {
             Window = RegisterForDisposal(CreateWindow(resources));
         }
@@ -23,7 +22,6 @@ namespace TodoList.Components
                 Parent = GameService.Graphics.SpriteScreen,
                 Title = "Todo List",
                 Emblem = resources.GetTexture(Textures.WindowEmblem),
-                Subtitle = "Notes",
                 SavesPosition = true,
                 Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3"
             };

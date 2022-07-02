@@ -69,6 +69,7 @@
     <Compile Include="Source\TodoModule.cs" />
     <Compile Include="Source\Utils\ModuleEntity.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
+    <Compile Include="Source\Utils\Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AsyncClipboardService, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">

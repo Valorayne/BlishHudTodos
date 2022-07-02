@@ -27,9 +27,9 @@ namespace TodoList
 
 		protected override Task LoadAsync()
 		{
+			// put here in case anything becomes async in the future
 			_resources = new Resources(ModuleParameters.ContentsManager);
-			_window = new TodoWindow(_resources, _settings);
-			//var overlay = new TodoOverlay(resources, settings);
+			_window = TodoWindow.Create(_resources, _settings);
 			_cornerIcon = new TodoCornerIcon(_resources, _window, _settings);
 			return Task.CompletedTask;
 		}
@@ -47,7 +47,7 @@ namespace TodoList
 		private void OverlayDimensionsChanged(object target, ValueChangedEventArgs<int> args)
 		{
 			_window.Dispose();
-			_window = new TodoWindow(_resources, _settings);
+			_window = TodoWindow.Create(_resources, _settings);
 			_window.Show();
 		}
 

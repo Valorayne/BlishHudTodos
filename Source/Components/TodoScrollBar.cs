@@ -1,20 +1,14 @@
-﻿using System;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
+using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
 {
-    public class TodoScrollBar
+    public class TodoScrollBar : Scrollbar
     {
-        private readonly Scrollbar _scrollbar;
-        
-        public TodoScrollBar(Container parent, Container scrollView)
+        public TodoScrollBar(Container scrollView, int width, int height) : base(scrollView)
         {
-            var scrollbar = new Scrollbar(scrollView)
-            {
-                Parent = parent,
-                Right = 0,
-                Height = scrollView.Height
-            };
+            Height = height;
+            Location = new Point(width - 10, 0);
         }
     }
 }

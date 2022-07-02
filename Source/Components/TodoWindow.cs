@@ -12,22 +12,22 @@ namespace TodoList.Components
         private const int VERTICAL_PADDING = 5;
         
         private readonly Settings _settings;
+        private readonly TodoScrollView _scrollView;
+        private readonly TodoScrollBar _scrollBar;
 
-        public TodoWindow(Resources resources, Settings settings) : base(
-            resources.GetTexture(Textures.Empty), 
-            new Rectangle(
-                WINDOW_X, 
-                WINDOW_Y, 
-                settings.OverlayWidth.Value, 
-                settings.OverlayHeight.Value
-            ),
-            new Rectangle(
-                WINDOW_X + HORIZONTAL_PADDING, 
-                WINDOW_Y + VERTICAL_PADDING, 
-                settings.OverlayWidth.Value - 2*HORIZONTAL_PADDING, 
-                settings.OverlayHeight.Value - 2*VERTICAL_PADDING
-            )
-        )
+        public static TodoWindow Create(Resources resources, Settings settings)
+        {
+            var hp = HORIZONTAL_PADDING;
+            var vp = VERTICAL_PADDING;
+            var width = settings.OverlayWidth.Value;
+            var height = settings.OverlayHeight.Value;
+            var windowRegion = new Rectangle(WINDOW_X, WINDOW_Y, width, height);
+            var contentRegion = new Rectangle(WINDOW_X + hp, WINDOW_Y + vp, width - 2 * hp, height - 2 * vp);
+            return new TodoWindow(windowRegion, contentRegion, resources, settings);
+        }
+
+        private TodoWindow(Rectangle windowRegion, Rectangle contentRegion, Resources resources, Settings settings) 
+                : base(resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
         {
             _settings = settings;
             
@@ -38,13 +38,13 @@ namespace TodoList.Components
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanClose = false;
             
-            var scrollView = new TodoScrollView(this, resources, settings).View;
-            //var scrollBar = new TodoScrollBar(_window, scrollView);
+            settings.OverlayBackgroundRed.SettingChanged += OnBackgroundColorsChanged;
+            settings.OverlayBackgroundGreen.SettingChanged += OnBackgroundColorsChanged;
+            settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
+            settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
             
-            _settings.OverlayBackgroundRed.SettingChanged += OnBackgroundColorsChanged;
-            _settings.OverlayBackgroundGreen.SettingChanged += OnBackgroundColorsChanged;
-            _settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
-            _settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
+            _scrollView = new TodoScrollView(resources, settings) { Parent = this };
+            _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
         }
 
         private Color GetBackgroundColor => new Color(
@@ -61,12 +61,15 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
+            _scrollBar.Dispose();
+            _scrollView.Dispose();
+            
             _settings.OverlayBackgroundRed.SettingChanged -= OnBackgroundColorsChanged;
             _settings.OverlayBackgroundGreen.SettingChanged -= OnBackgroundColorsChanged;
             _settings.OverlayBackgroundBlue.SettingChanged -= OnBackgroundColorsChanged;
             _settings.OverlayBackgroundAlpha.SettingChanged -= OnBackgroundColorsChanged;
             
-            base.DisposeControl();;
+            base.DisposeControl();
         }
     }
 }

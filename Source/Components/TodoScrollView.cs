@@ -3,20 +3,22 @@ using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
 {
-    public class TodoScrollView
+    public sealed class TodoScrollView : FlowPanel
     {
-        public FlowPanel View { get; }
-        
-        public TodoScrollView(Container parent, Resources resources, Settings settings)
+        public TodoScrollView(Resources resources, Settings settings)
         {
-            View = new FlowPanel
+            FlowDirection = ControlFlowDirection.SingleTopToBottom;
+            WidthSizingMode = SizingMode.Fill;
+            HeightSizingMode = SizingMode.Fill;
+
+            for (var i = 0; i < 50; i++)
             {
-                Parent = parent,
-                FlowDirection = ControlFlowDirection.SingleTopToBottom,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.Fill, 
-                BackgroundColor = Color.Aqua
-            };
+                new Label()
+                {
+                    Parent = this,
+                    Text = $"Entry Number {i}"
+                };
+            }
         }
     }
 }

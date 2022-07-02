@@ -1,18 +1,17 @@
-﻿using System;
-using Blish_HUD;
+﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
 {
-    public class TodoWindow : IDisposable
+    public class TodoWindow : ModuleEntity
     {
         public Container Window { get; }
 
         public TodoWindow(Resources resources, SettingCollection settings)
         {
-            Window = CreateWindow(resources);
+            Window = RegisterForDisposal(CreateWindow(resources));
         }
 
         private static Container CreateWindow(Resources resources)
@@ -33,11 +32,6 @@ namespace TodoList.Components
         public void Initialize()
         {
             
-        }
-
-        public void Dispose()
-        {
-            Window.Dispose();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,7 +12,7 @@ namespace TodoList
         CornerIconHovered
     }
     
-    public class Resources : IDisposable
+    public class Resources : ModuleEntity
     {
         private readonly ContentsManager _contents;
         private readonly IDictionary<Textures, Texture2D> _loadedTextures = new Dictionary<Textures, Texture2D>();
@@ -29,7 +28,7 @@ namespace TodoList
         public Texture2D GetTexture(Textures texture)
         {
             if (!_loadedTextures.ContainsKey(texture))
-                _loadedTextures.Add(texture, _contents.GetTexture(_texturePaths[texture]));
+                _loadedTextures.Add(texture, RegisterForDisposal(_contents.GetTexture(_texturePaths[texture])));
             return _loadedTextures[texture];
         }
         
@@ -38,12 +37,8 @@ namespace TodoList
             _contents = contents;
         }
 
-        public void Dispose()
+        protected override void CustomDispose()
         {
-            foreach (var texture in _loadedTextures.Values)
-            {
-                texture.Dispose();
-            }
             _loadedTextures.Clear();
         }
     }

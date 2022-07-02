@@ -39,9 +39,7 @@ namespace TodoList
 
 		protected override void Unload()
 		{
-			_window.Dispose();
-			_cornerIcon.Dispose();
-			_resources.Dispose();
+			ModuleEntity.DisposeAllEntities();
 		}
 	}
 }

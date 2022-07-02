@@ -67,6 +67,7 @@
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
     <Compile Include="Source\Components\TodoWindow.cs" />
     <Compile Include="Source\TodoModule.cs" />
+    <Compile Include="Source\Utils\ModuleEntity.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
   </ItemGroup>
   <ItemGroup>

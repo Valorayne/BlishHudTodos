@@ -1,10 +1,9 @@
-﻿using System;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
 
 namespace TodoList.Components
 {
-    public class TodoCornerIcon : IDisposable
+    public class TodoCornerIcon : ModuleEntity
     {
         private readonly CornerIcon _icon;
         private readonly Container _window;
@@ -12,13 +11,13 @@ namespace TodoList.Components
         public TodoCornerIcon(Resources resources, Container window)
         {
             _window = window;
-            _icon = new CornerIcon
+            _icon = RegisterForDisposal(new CornerIcon
             {
                 IconName = "Todo List",
                 Icon = resources.GetTexture(Textures.CornerIcon),
                 HoverIcon = resources.GetTexture(Textures.CornerIconHovered),
                 Priority = 5
-            };
+            });
             _icon.Click += OnIconClicked;
         }
 
@@ -32,11 +31,6 @@ namespace TodoList.Components
         public void Initialize()
         {
             _icon.Show();
-        }
-        
-        public void Dispose()
-        {
-            _icon.Dispose();
         }
     }
 }

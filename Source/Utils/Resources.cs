@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,7 +14,7 @@ namespace TodoList
         Empty
     }
     
-    public class Resources : ModuleEntity
+    public class Resources : IDisposable
     {
         private readonly ContentsManager _contents;
         private readonly IDictionary<Textures, Texture2D> _loadedTextures = new Dictionary<Textures, Texture2D>();
@@ -30,7 +31,7 @@ namespace TodoList
         public Texture2D GetTexture(Textures texture)
         {
             if (!_loadedTextures.ContainsKey(texture))
-                _loadedTextures.Add(texture, RegisterForDisposal(_contents.GetTexture(_texturePaths[texture])));
+                _loadedTextures.Add(texture, _contents.GetTexture(_texturePaths[texture]));
             return _loadedTextures[texture];
         }
         
@@ -39,8 +40,10 @@ namespace TodoList
             _contents = contents;
         }
 
-        protected override void CustomDispose()
+        public void Dispose()
         {
+            foreach (var texture in _loadedTextures.Values)
+                texture.Dispose();
             _loadedTextures.Clear();
         }
     }

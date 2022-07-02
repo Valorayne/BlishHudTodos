@@ -1,10 +1,11 @@
-﻿using Blish_HUD;
+﻿using System;
+using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 
 namespace TodoList.Components
 {
-    public class TodoCornerIcon : ModuleEntity
+    public class TodoCornerIcon : IDisposable
     {
         private readonly CornerIcon _icon;
         private readonly Container _window;
@@ -14,11 +15,8 @@ namespace TodoList.Components
         {
             _window = window;
             _settings = settings;
-            _icon = RegisterForDisposal(CreateIcon(resources));
-        }
-        
-        protected override void Initialize()
-        {
+            _icon = CreateIcon(resources);
+            
             _icon.Click += OnIconClicked;
             _settings.ShowMenuIcon.SettingChanged += OnShowMenuIconChanged;
             OnShowMenuIconChanged(this, new ValueChangedEventArgs<bool>(false, _settings.ShowMenuIcon.Value));
@@ -49,8 +47,9 @@ namespace TodoList.Components
             else _icon.Hide();
         }
 
-        protected override void CustomDispose()
+        public void Dispose()
         {
+            _icon.Dispose();
             _settings.ShowMenuIcon.SettingChanged -= OnShowMenuIconChanged;
         }
     }

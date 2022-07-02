@@ -69,7 +69,6 @@
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoWindow.cs" />
     <Compile Include="Source\TodoModule.cs" />
-    <Compile Include="Source\Utils\ModuleEntity.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
     <Compile Include="Source\Utils\Settings.cs" />
   </ItemGroup>

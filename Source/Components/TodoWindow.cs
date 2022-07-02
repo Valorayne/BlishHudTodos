@@ -6,8 +6,11 @@ namespace TodoList.Components
 {
     public class TodoWindow : ModuleEntity
     {
+        private const int HORIZONTAL_PADDING = 5;
+        private const int VERTICAL_PADDING = 5;
+        
         private readonly Settings _settings;
-        private readonly TabbedWindow2 _window;
+        private readonly WindowBase2 _window;
 
         public Container Window => _window;
 
@@ -15,14 +18,21 @@ namespace TodoList.Components
         {
             _settings = settings;
             _window = RegisterForDisposal(CreateWindow(resources));
+            var scrollView = new TodoScrollView(_window, resources, settings).View;
+            //var scrollBar = new TodoScrollBar(_window, scrollView);
         }
 
-        private TabbedWindow2 CreateWindow(Resources resources)
+        private WindowBase2 CreateWindow(Resources resources)
         {
-            var windowRec = new Rectangle(-20, 20, 500, 400);
-            var contentRec = new Rectangle(windowRec.X + 47, windowRec.Y + 5, windowRec.Width - 5, windowRec.Height - 10);
+            var windowRec = new Rectangle(-20, 10, 500, 400);
+            var contentRec = new Rectangle(
+                windowRec.X + HORIZONTAL_PADDING, 
+                windowRec.Y + VERTICAL_PADDING, 
+                windowRec.Width - 2*HORIZONTAL_PADDING, 
+                windowRec.Height - 2*VERTICAL_PADDING
+            );
             var texture = resources.GetTexture(Textures.Empty);
-            return new TabbedWindow2(texture, windowRec, contentRec)
+            return new StandardWindow(texture, windowRec, contentRec)
             {
                 Parent = GameService.Graphics.SpriteScreen,
                 Title = "Todo List",
@@ -40,6 +50,8 @@ namespace TodoList.Components
             _settings.OverlayBackgroundGreen.SettingChanged += OnBackgroundColorsChanged;
             _settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
             _settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
+            
+            _window.Show();
         }
 
         private Color GetBackgroundColor => new Color(

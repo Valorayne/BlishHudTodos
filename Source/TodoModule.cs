@@ -16,7 +16,8 @@ namespace TodoList
 		{
 			var resources = new Resources(ModuleParameters.ContentsManager);
 			var settings = new Settings(ModuleParameters.SettingsManager.ModuleSettings);
-			var window = new TodoWindow(resources);
+			var window = new TodoWindow(resources, settings);
+			//var overlay = new TodoOverlay(resources, settings);
 			var cornerIcon = new TodoCornerIcon(resources, window.Window, settings);
 		}
 

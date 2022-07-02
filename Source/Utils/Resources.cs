@@ -9,7 +9,8 @@ namespace TodoList
         WindowEmblem,
         WindowBackground,
         CornerIcon,
-        CornerIconHovered
+        CornerIconHovered,
+        Empty
     }
     
     public class Resources : ModuleEntity
@@ -22,7 +23,8 @@ namespace TodoList
             { Textures.CornerIcon, @"textures\icon.png"},
             { Textures.CornerIconHovered, @"textures\icon-active.png"},
             { Textures.WindowBackground, @"textures\155985.png" },
-            { Textures.WindowEmblem, @"textures\parchment.png" }
+            { Textures.WindowEmblem, @"textures\parchment.png" },
+            { Textures.Empty, @"textures\empty.png" }
         };
         
         public Texture2D GetTexture(Textures texture)

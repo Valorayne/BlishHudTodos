@@ -1,5 +1,4 @@
 ﻿using Blish_HUD.Controls;
-using Blish_HUD.Input;
 using TodoList.Models;
 
 namespace TodoList.Components.Details
@@ -7,14 +6,11 @@ namespace TodoList.Components.Details
     public sealed class TodoDetailsMenuBar : FlowPanel
     {
         public const int PADDING = 5;
-        
-        private readonly Todo _todo;
+
         public StandardButton SaveButton { get; }
 
-        public TodoDetailsMenuBar(Todo todo, bool isNew)
+        public TodoDetailsMenuBar(Todo todo)
         {
-            _todo = todo;
-            
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.RightToLeft;
@@ -23,7 +19,7 @@ namespace TodoList.Components.Details
             SaveButton = new StandardButton
             {
                 Parent = this,
-                Text = isNew ? "Create" : "Save",
+                Text = todo.IsDraft ? "Create" : "Save",
                 Width = 100
             };
         }

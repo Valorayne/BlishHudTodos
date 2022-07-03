@@ -14,6 +14,8 @@ namespace TodoList
         public static SettingEntry<float> OverlayBackgroundBlue { get; private set; }
         public static SettingEntry<float> OverlayBackgroundGreen { get; private set; }
         public static SettingEntry<float> OverlayBackgroundAlpha { get; private set; }
+        
+        public static SettingEntry<string> Data { get; private set; }
 
         public static Color OverlayBackgroundColor => new Color(
             OverlayBackgroundRed.Value, OverlayBackgroundGreen.Value,
@@ -41,6 +43,8 @@ namespace TodoList
             OverlayBackgroundBlue.SetRange(0, 1f);
             OverlayBackgroundGreen = overlaySettings.DefineSetting("Background.Green", 0f, () => "Background Green");
             OverlayBackgroundGreen.SetRange(0, 1f);
+
+            Data = settings.DefineSetting("Data.Todos", "{}");
         }
 
         public static void Dispose()
@@ -53,6 +57,8 @@ namespace TodoList
             OverlayBackgroundGreen = null;
             OverlayBackgroundBlue = null;
             OverlayBackgroundAlpha = null;
+
+            Data = null;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using TodoList.Models;
 
 namespace TodoList.Components
 {
@@ -19,17 +20,34 @@ namespace TodoList.Components
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
+            SpawnEntries();
+
+            Data.TodoAdded += RedrawAllEntries;
+        }
+
+        private void RedrawAllEntries(object sender, Todo todo)
+        {
+            ClearEntries();
+            SpawnEntries();
+        }
+
+        private void SpawnEntries()
+        {
             var width = Settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
             foreach (var todo in Data.Todos)
                 _entries.Add(new TodoEntry(todo, width) { Parent = this });
         }
 
-        protected override void DisposeControl()
+        private void ClearEntries()
         {
             foreach (var entry in _entries)
                 entry.Dispose();
             _entries.Clear();
+        }
 
+        protected override void DisposeControl()
+        {
+            ClearEntries();
             base.DisposeControl();
         }
     }

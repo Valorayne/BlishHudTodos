@@ -7,23 +7,42 @@ namespace TodoList.Components
 {
     public sealed class TodoEntry : FlowPanel
     {
-        private readonly TodoCheckbox _checkbox;
-        private readonly TodoTitle _todoTitle;
-        private readonly TodoEditButton _editButton;
+        private readonly Todo _todo;
+        
+        private TodoCheckbox _checkbox;
+        private TodoTitle _todoTitle;
+        private TodoEditButton _editButton;
 
         public TodoEntry(Todo todo, int width)
         {
+            _todo = todo;
             Width = width;
             BackgroundTexture = Resources.GetTexture(Textures.Header);
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
-            _checkbox = new TodoCheckbox { Parent = this };
-            _todoTitle = new TodoTitle(todo, width - _checkbox.Width - TodoEditButton.WIDTH) { Parent = this };
-            _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
+            SpawnComponents(todo, width);
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;
+
+            Data.TodoModified += OnTodoModified;
+        }
+
+        private void OnTodoModified(object sender, Todo todo)
+        {
+            if (todo == _todo)
+            {
+                DespawnComponents();
+                SpawnComponents(todo, Width);
+            }
+        }
+
+        private void SpawnComponents(Todo todo, int width)
+        {
+            _checkbox = new TodoCheckbox { Parent = this };
+            _todoTitle = new TodoTitle(todo, width - _checkbox.Width - TodoEditButton.WIDTH) { Parent = this };
+            _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
         }
 
         private void OnMouseEntered(object target, MouseEventArgs args)
@@ -38,11 +57,16 @@ namespace TodoList.Components
             _editButton.Hide();
         }
 
-        protected override void DisposeControl()
+        private void DespawnComponents()
         {
             _checkbox.Dispose();
             _todoTitle.Dispose();
             _editButton.Dispose();
+        }
+
+        protected override void DisposeControl()
+        {
+            DespawnComponents();
 
             MouseEntered -= OnMouseEntered;
             MouseLeft -= OnMouseLeft;

@@ -1,6 +1,5 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
-using Microsoft.Xna.Framework;
 using TodoList.Models;
 
 namespace TodoList.Components.Details
@@ -11,14 +10,14 @@ namespace TodoList.Components.Details
         private readonly TodoDetailsInputArea _inputAreaArea;
         private readonly TodoDetailsMenuBar _menuBar;
 
-        public TodoDetailsPanel(Todo todo, bool isNew, int width, int height)
+        public TodoDetailsPanel(Todo todo, int width, int height)
         {
             _todo = todo;
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.Fill;
             FlowDirection = ControlFlowDirection.SingleBottomToTop;
 
-            _menuBar = new TodoDetailsMenuBar(todo, isNew) { Parent = this };
+            _menuBar = new TodoDetailsMenuBar(todo) { Parent = this };
             _inputAreaArea = new TodoDetailsInputArea(todo, width)
             {
                 Parent = this, 
@@ -31,6 +30,7 @@ namespace TodoList.Components.Details
         private void OnSave(object target, MouseEventArgs args)
         {
             _todo.Text = _inputAreaArea.Text;
+            _todo.Save();
             TodoDetailsWindowPool.Dispose();
         }
 

@@ -36,7 +36,7 @@ namespace TodoList.Components.Details
             Title = isNew ? "Add New Todo" : "Edit Todo";
             Location = location;
 
-            _panel = new TodoDetailsPanel(existingTodo ?? new Todo(), isNew, contentRegion.Width, contentRegion.Height) { Parent = this };
+            _panel = new TodoDetailsPanel(existingTodo ?? Todo.CreateDraft(), contentRegion.Width, contentRegion.Height) { Parent = this };
             _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
         }
 

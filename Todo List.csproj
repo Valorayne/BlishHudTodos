@@ -70,6 +70,7 @@
     <Compile Include="Source\Components\Entry\Header\TodoHeader.cs" />
     <Compile Include="Source\Components\Entry\Header\TodoTitle.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
+    <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
     <Compile Include="Source\Components\TodoScrollBar.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />

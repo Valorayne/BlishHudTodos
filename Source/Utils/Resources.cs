@@ -14,7 +14,8 @@ namespace TodoList
         Header,
         HeaderHovered,
         CollapseArrowDown, 
-        CollapseArrowRight
+        CollapseArrowRight,
+        AddNewIcon
     }
     
     public static class Resources
@@ -33,6 +34,7 @@ namespace TodoList
             { Textures.HeaderHovered, @"textures\1032324.png" },
             { Textures.CollapseArrowDown, @"textures\155953.png" },
             { Textures.CollapseArrowRight, @"textures\155953_rotated.png" },
+            { Textures.AddNewIcon, @"textures\155914.png" }
         };
         
         public static Texture2D GetTexture(Textures texture)

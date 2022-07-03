@@ -1,6 +1,7 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using TodoList.Components.Menu;
 
 namespace TodoList.Components
 {
@@ -13,6 +14,7 @@ namespace TodoList.Components
         
         private readonly TodoScrollView _scrollView;
         private readonly TodoScrollBar _scrollBar;
+        private readonly AddNewTodoButton _addNewButton;
 
         public static TodoWindow Create()
         {
@@ -42,6 +44,7 @@ namespace TodoList.Components
             
             _scrollView = new TodoScrollView { Parent = this };
             _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
+            _addNewButton = new AddNewTodoButton { Parent = this };
         }
         
         private void OnBackgroundColorsChanged(object target, ValueChangedEventArgs<float> args)
@@ -53,6 +56,7 @@ namespace TodoList.Components
         {
             _scrollBar.Dispose();
             _scrollView.Dispose();
+            _addNewButton.Dispose();
             
             Settings.OverlayBackgroundRed.SettingChanged -= OnBackgroundColorsChanged;
             Settings.OverlayBackgroundGreen.SettingChanged -= OnBackgroundColorsChanged;

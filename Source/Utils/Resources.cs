@@ -13,7 +13,9 @@ namespace TodoList
         CornerIconHovered,
         Empty,
         Header,
-        HeaderHovered
+        HeaderHovered,
+        CollapseArrowDown, 
+        CollapseArrowRight
     }
     
     public class Resources : IDisposable
@@ -29,7 +31,9 @@ namespace TodoList
             { Textures.WindowEmblem, @"textures\parchment.png" },
             { Textures.Empty, @"textures\empty.png" },
             { Textures.Header, @"textures\1032325.png" },
-            { Textures.HeaderHovered, @"textures\1032324.png" }
+            { Textures.HeaderHovered, @"textures\1032324.png" },
+            { Textures.CollapseArrowDown, @"textures\155953.png" },
+            { Textures.CollapseArrowRight, @"textures\155953_rotated.png" },
         };
         
         public Texture2D GetTexture(Textures texture)

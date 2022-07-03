@@ -8,7 +8,7 @@ namespace TodoList.Components
     {
         private const int OUTER_PADDING = 5;
         private const int INNER_PADDING = 5;
-        private const int SCROLLBAR_WIDTH = 15;
+        private const int SCROLLBAR_WIDTH = 20;
         
         private readonly List<TodoEntry> _entries = new List<TodoEntry>();
         

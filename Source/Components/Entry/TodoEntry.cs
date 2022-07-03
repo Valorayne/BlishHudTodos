@@ -20,7 +20,7 @@ namespace TodoList.Components
 
             _checkbox = new TodoCheckbox { Parent = this };
             _todoTitle = new TodoTitle(todo, width - _checkbox.Width - TodoEditButton.WIDTH) { Parent = this };
-            _editButton = new TodoEditButton { Parent = this, Visible = false };
+            _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;

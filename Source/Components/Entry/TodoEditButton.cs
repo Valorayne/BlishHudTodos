@@ -1,6 +1,8 @@
-﻿using Blish_HUD.Content;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
+using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
+using TodoList.Components.Details;
+using TodoList.Models;
 
 namespace TodoList.Components
 {
@@ -9,10 +11,12 @@ namespace TodoList.Components
         public const int WIDTH = 45;
         private const int PADDING_RIGHT = 5;
 
+        private readonly Todo _todo;
         private readonly StandardButton _editButton;
 
-        public TodoEditButton()
+        public TodoEditButton(Todo todo)
         {
+            _todo = todo;
             Height = HEADER_HEIGHT;
             Width = WIDTH;
             
@@ -23,10 +27,17 @@ namespace TodoList.Components
                 Width = WIDTH - PADDING_RIGHT,
                 Location = new Point(0, 6)
             };
+            _editButton.Click += OnButtonClicked;
+        }
+        
+        private void OnButtonClicked(object target, MouseEventArgs args)
+        {
+            TodoDetailsWindowFactory.Show(args.MousePosition, _todo);
         }
 
         protected override void DisposeControl()
         {
+            _editButton.Click -= OnButtonClicked;
             _editButton.Dispose();
             base.DisposeControl();
         }

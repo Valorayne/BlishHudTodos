@@ -1,50 +1,43 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
-using TodoList.Components.Menu;
+using TodoList.Models;
 
-namespace TodoList.Components
+namespace TodoList.Components.Details
 {
-    public class TodoWindow : StandardWindow
+    public sealed class TodoDetailsWindow : StandardWindow
     {
+        public const int WIDTH = 400;
+        private const int HEIGHT = 200;
         private const int WINDOW_X = -20;
         private const int WINDOW_Y = 10;
         private const int HORIZONTAL_PADDING = 5;
         private const int VERTICAL_PADDING = 5;
         
-        private readonly TodoScrollView _scrollView;
-        private readonly TodoScrollBar _scrollBar;
-        private readonly AddNewTodoButton _addNewButton;
-
-        public static TodoWindow Create()
+        public static TodoDetailsWindow Create(Point location, Todo existingTodo = null)
         {
             var hp = HORIZONTAL_PADDING;
             var vp = VERTICAL_PADDING;
-            var width = Settings.OverlayWidth.Value;
-            var height = Settings.OverlayHeight.Value;
-            var windowRegion = new Rectangle(WINDOW_X, WINDOW_Y, width, height);
-            var contentRegion = new Rectangle(WINDOW_X + hp, WINDOW_Y + vp, width - 2 * hp, height - 2 * vp);
-            return new TodoWindow(windowRegion, contentRegion);
+            var windowRegion = new Rectangle(WINDOW_X, WINDOW_Y, WIDTH, HEIGHT);
+            var contentRegion = new Rectangle(WINDOW_X + hp, WINDOW_Y + vp, WIDTH - 2 * hp, HEIGHT - 2 * vp);
+            return new TodoDetailsWindow(windowRegion, contentRegion, location, existingTodo);
         }
-
-        private TodoWindow(Rectangle windowRegion, Rectangle contentRegion) 
-                : base(Resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
+        
+        private TodoDetailsWindow(Rectangle windowRegion, Rectangle contentRegion, Point location,
+            Todo existingTodo = null) : base(Resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
-            Title = "Todo List";
+            CanClose = true;
             BackgroundColor = Settings.OverlayBackgroundColor;
-            SavesPosition = true;
-            Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
-            CanClose = false;
+            //SavesPosition = true;
+            //Id = "e5b47462-7eb9-4a91-b733-da220eccbf98";
+            Title = existingTodo != null ? "Edit Todo" : "Add New Todo";
+            Location = location;
             
             Settings.OverlayBackgroundRed.SettingChanged += OnBackgroundColorsChanged;
             Settings.OverlayBackgroundGreen.SettingChanged += OnBackgroundColorsChanged;
             Settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
             Settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
-            
-            _scrollView = new TodoScrollView { Parent = this };
-            _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
-            _addNewButton = new AddNewTodoButton { Parent = this };
         }
         
         private void OnBackgroundColorsChanged(object target, ValueChangedEventArgs<float> args)
@@ -54,15 +47,10 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
-            _scrollBar.Dispose();
-            _scrollView.Dispose();
-            _addNewButton.Dispose();
-            
             Settings.OverlayBackgroundRed.SettingChanged -= OnBackgroundColorsChanged;
             Settings.OverlayBackgroundGreen.SettingChanged -= OnBackgroundColorsChanged;
             Settings.OverlayBackgroundBlue.SettingChanged -= OnBackgroundColorsChanged;
             Settings.OverlayBackgroundAlpha.SettingChanged -= OnBackgroundColorsChanged;
-            
             base.DisposeControl();
         }
     }

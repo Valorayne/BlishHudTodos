@@ -6,6 +6,7 @@ using Blish_HUD;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using TodoList.Components;
+using TodoList.Components.Details;
 
 namespace TodoList
 {
@@ -15,7 +16,7 @@ namespace TodoList
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
-		private TodoWindow _window;
+		private TodoListWindow _window;
 		private TodoCornerIcon _cornerIcon;
 
 		protected override void DefineSettings(SettingCollection settings)
@@ -29,7 +30,7 @@ namespace TodoList
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			Data.Initialize();
 			
-			_window = TodoWindow.Create();
+			_window = TodoListWindow.Create();
 			_cornerIcon = new TodoCornerIcon(_window);
 			return Task.CompletedTask;
 		}
@@ -47,7 +48,7 @@ namespace TodoList
 		private void OverlayDimensionsChanged(object target, ValueChangedEventArgs<int> args)
 		{
 			_window.Dispose();
-			_window = TodoWindow.Create();
+			_window = TodoListWindow.Create();
 			_window.Show();
 		}
 
@@ -58,13 +59,16 @@ namespace TodoList
 
 		protected override void Unload()
 		{
+			_window.Dispose();
+			_cornerIcon.Dispose();
+			
 			Settings.OverlayWidth.SettingChanged -= OverlayDimensionsChanged;
 			Settings.OverlayHeight.SettingChanged -= OverlayDimensionsChanged;
 			Settings.Dispose();
-			Resources.Dispose();
+			
+			TodoDetailsWindowFactory.Dispose();
 			Data.Dispose();
-			_window.Dispose();
-			_cornerIcon.Dispose();
+			Resources.Dispose();
 		}
 	}
 }

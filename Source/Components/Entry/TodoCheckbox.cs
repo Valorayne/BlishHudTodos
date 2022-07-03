@@ -1,20 +1,21 @@
 ﻿using Blish_HUD.Controls;
+using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
 {
-    public sealed class TodoEntry : FlowPanel
+    public class TodoCheckbox : Panel
     {
         private readonly Checkbox _checkbox;
-        
-        public TodoEntry()
-        {
-            FlowDirection = ControlFlowDirection.SingleLeftToRight;
-            WidthSizingMode = SizingMode.Fill;
 
+        public TodoCheckbox()
+        {
+            Width = HEADER_HEIGHT;
+            Height = HEADER_HEIGHT;
+            
             _checkbox = new Checkbox
             {
                 Parent = this, 
-                Text = "Test it like beckham",
+                Location = new Point(10, 10)
             };
         }
 

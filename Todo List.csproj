@@ -64,8 +64,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Components\Entry\TodoCheckbox.cs" />
+    <Compile Include="Source\Components\Entry\TodoEntry.cs" />
+    <Compile Include="Source\Components\Entry\TodoEntryHeader.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
-    <Compile Include="Source\Components\TodoEntry.cs" />
     <Compile Include="Source\Components\TodoScrollBar.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoWindow.cs" />

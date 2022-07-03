@@ -6,10 +6,10 @@ namespace TodoList.Components.Details
 {
     public sealed class TodoDetailsMenuBar : FlowPanel
     {
-        private const int PADDING = 5;
+        public const int PADDING = 5;
         
         private readonly Todo _todo;
-        private readonly StandardButton _saveButton;
+        public StandardButton SaveButton { get; }
 
         public TodoDetailsMenuBar(Todo todo, bool isNew)
         {
@@ -20,22 +20,17 @@ namespace TodoList.Components.Details
             FlowDirection = ControlFlowDirection.RightToLeft;
             Padding = new Thickness(PADDING);
 
-            _saveButton = new StandardButton
+            SaveButton = new StandardButton
             {
                 Parent = this,
                 Text = isNew ? "Create" : "Save",
                 Width = 100
             };
         }
-        
-        private void OnButtonClicked(object target, MouseEventArgs args)
-        {
-            TodoDetailsWindowPool.Spawn(args.MousePosition, _todo);
-        }
 
         protected override void DisposeControl()
         {
-            _saveButton.Dispose();
+            SaveButton.Dispose();
             base.DisposeControl();
         }
     }

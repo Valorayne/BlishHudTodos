@@ -2,7 +2,7 @@
 {
     public class Todo
     {
-        public string Text { get; private set; }
+        public string Text { get; set; }
 
         public Todo()
         {

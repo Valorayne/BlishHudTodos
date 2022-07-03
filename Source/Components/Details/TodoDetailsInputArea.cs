@@ -1,5 +1,4 @@
 ﻿using Blish_HUD.Controls;
-using Microsoft.Xna.Framework;
 using TodoList.Models;
 
 namespace TodoList.Components.Details
@@ -8,6 +7,8 @@ namespace TodoList.Components.Details
     {
         private readonly Todo _todo;
         private readonly TextBox _textBox;
+
+        public string Text => _textBox.Text;
 
         public TodoDetailsInputArea(Todo todo, int width)
         {

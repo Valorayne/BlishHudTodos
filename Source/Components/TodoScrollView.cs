@@ -11,7 +11,8 @@ namespace TodoList.Components
         private const int INNER_PADDING = 5;
         private const int SCROLLBAR_WIDTH = 20;
         
-        private readonly List<TodoEntry> _entries = new List<TodoEntry>();
+        private readonly Dictionary<Todo, TodoEntry> _entries = new Dictionary<Todo, TodoEntry>();
+        private readonly int _width;
         
         public TodoScrollView()
         {
@@ -20,34 +21,31 @@ namespace TodoList.Components
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
-            SpawnEntries();
-
-            Data.TodoAdded += RedrawAllEntries;
-        }
-
-        private void RedrawAllEntries(object sender, Todo todo)
-        {
-            ClearEntries();
-            SpawnEntries();
-        }
-
-        private void SpawnEntries()
-        {
-            var width = Settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
+            _width = Settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
+            
             foreach (var todo in Data.Todos)
-                _entries.Add(new TodoEntry(todo, width) { Parent = this });
+                SpawnEntry(this, todo);
+
+            Data.TodoAdded += SpawnEntry;
+            Data.TodoDeleted += DeleteEntry;
         }
 
-        private void ClearEntries()
+        private void DeleteEntry(object sender, Todo todo)
         {
-            foreach (var entry in _entries)
-                entry.Dispose();
-            _entries.Clear();
+            _entries[todo].Dispose();
+            _entries.Remove(todo);
+        }
+
+        private void SpawnEntry(object sender, Todo todo)
+        {
+            _entries.Add(todo, new TodoEntry(todo, _width) { Parent = this });
         }
 
         protected override void DisposeControl()
         {
-            ClearEntries();
+            foreach (var entry in _entries.Values)
+                entry.Dispose();
+            _entries.Clear();
             base.DisposeControl();
         }
     }

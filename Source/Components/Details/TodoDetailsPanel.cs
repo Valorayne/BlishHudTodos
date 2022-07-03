@@ -25,6 +25,8 @@ namespace TodoList.Components.Details
             };
 
             _menuBar.SaveButton.Click += OnSave;
+            if (_menuBar.DeleteButton != null)
+                _menuBar.DeleteButton.Click += OnDelete;
         }
         
         private void OnSave(object target, MouseEventArgs args)
@@ -33,9 +35,17 @@ namespace TodoList.Components.Details
             _todo.Save();
             TodoDetailsWindowPool.Dispose();
         }
+        
+        private void OnDelete(object target, MouseEventArgs args)
+        {
+            _todo.Delete();
+            TodoDetailsWindowPool.Dispose();
+        }
 
         protected override void DisposeControl()
         {
+            if (_menuBar.DeleteButton != null)
+                _menuBar.DeleteButton.Click -= OnDelete;
             _menuBar.SaveButton.Click -= OnSave;
             _inputAreaArea.Dispose();
             _menuBar.Dispose();

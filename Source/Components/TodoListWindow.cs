@@ -19,6 +19,7 @@ namespace TodoList.Components
         private readonly Scrollbar _scrollBar;
         private readonly AddNewTodoButton _addNewButton;
         private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
+        private readonly Image _eyeButton;
 
         public static TodoListWindow Create()
         {
@@ -46,6 +47,11 @@ namespace TodoList.Components
             _scrollBar = AddScrollBar(contentRegion, scrollHeight);
             var buttonLocation = new Point(windowRegion.Width - 140, scrollHeight + MENU_BAR_PADDING);
             _addNewButton = new AddNewTodoButton { Parent = this, Location = buttonLocation };
+            _eyeButton = new Image(Resources.GetTexture(Textures.EyeIcon))
+            {
+                Parent = this,
+                Location = new Point(buttonLocation.X-200, buttonLocation.Y)
+            };
 
             _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
         }
@@ -62,6 +68,7 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
+            _eyeButton.Dispose();
             _scrollBar.Dispose();
             _scrollView.Dispose();
             _addNewButton.Dispose();

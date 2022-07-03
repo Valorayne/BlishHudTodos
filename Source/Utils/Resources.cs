@@ -6,8 +6,6 @@ namespace TodoList
 {
     public enum Textures
     {
-        WindowEmblem,
-        WindowBackground,
         CornerIcon,
         CornerIconHovered,
         Empty,
@@ -15,7 +13,10 @@ namespace TodoList
         HeaderHovered,
         CollapseArrowDown, 
         CollapseArrowRight,
-        AddNewIcon
+        AddNewIcon,
+        EyeIcon,
+        EditIcon,
+        EditIconHovered,
     }
     
     public static class Resources
@@ -25,16 +26,17 @@ namespace TodoList
 
         private static readonly IReadOnlyDictionary<Textures, string> PATHS = new Dictionary<Textures, string>
         {
-            { Textures.CornerIcon, @"textures\icon.png"},
-            { Textures.CornerIconHovered, @"textures\icon-active.png"},
-            { Textures.WindowBackground, @"textures\155985.png" },
-            { Textures.WindowEmblem, @"textures\parchment.png" },
+            { Textures.CornerIcon, @"textures\156701.png"},
+            { Textures.CornerIconHovered, @"textures\156702.png"},
             { Textures.Empty, @"textures\empty.png" },
             { Textures.Header, @"textures\1032325.png" },
             { Textures.HeaderHovered, @"textures\1032324.png" },
             { Textures.CollapseArrowDown, @"textures\155953.png" },
             { Textures.CollapseArrowRight, @"textures\155953_rotated.png" },
-            { Textures.AddNewIcon, @"textures\155914.png" }
+            { Textures.AddNewIcon, @"textures\155914.png" },
+            { Textures.EyeIcon, @"textures\eye.png" },
+            { Textures.EditIcon, @"textures\104168.png" },
+            { Textures.EditIconHovered, @"textures\104168_hovered.png" },
         };
         
         public static Texture2D GetTexture(Textures texture)

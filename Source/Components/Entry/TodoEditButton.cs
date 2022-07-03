@@ -8,36 +8,29 @@ namespace TodoList.Components
 {
     public sealed class TodoEditButton : Panel
     {
-        public const int WIDTH = 45;
+        public const int WIDTH = HEADER_HEIGHT;
         private const int PADDING_RIGHT = 5;
 
-        private readonly Todo _todo;
-        private readonly StandardButton _editButton;
+        private readonly HoverButton _editButton;
 
         public TodoEditButton(Todo todo)
         {
-            _todo = todo;
-            Height = HEADER_HEIGHT;
+            Height = WIDTH;
             Width = WIDTH;
             
-            _editButton = new StandardButton
+            _editButton = new HoverButton(
+                Resources.GetTexture(Textures.EditIcon), 
+                Resources.GetTexture(Textures.EditIconHovered), 
+                WIDTH, WIDTH, 
+                args => TodoDetailsWindowPool.Spawn(args.MousePosition, todo))
             {
                 Parent = this,
-                Text = "Edit",
-                Width = WIDTH - PADDING_RIGHT,
-                Location = new Point(0, 6)
+                Location = new Point(0, 2),
             };
-            _editButton.Click += OnButtonClicked;
-        }
-        
-        private void OnButtonClicked(object target, MouseEventArgs args)
-        {
-            TodoDetailsWindowPool.Spawn(args.MousePosition, _todo);
         }
 
         protected override void DisposeControl()
         {
-            _editButton.Click -= OnButtonClicked;
             _editButton.Dispose();
             base.DisposeControl();
         }

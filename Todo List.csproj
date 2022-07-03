@@ -80,6 +80,7 @@
     <Compile Include="Source\Models\Todo.cs" />
     <Compile Include="Source\TodoModule.cs" />
     <Compile Include="Source\Utils\Data.cs" />
+    <Compile Include="Source\Utils\HoverButton.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
     <Compile Include="Source\Utils\Settings.cs" />
     <Compile Include="Source\Utils\Subscriptions.cs" />

@@ -3,24 +3,24 @@ using Microsoft.Xna.Framework;
 
 namespace TodoList
 {
-    public class Settings
+    public static class Settings
     {
-        public SettingEntry<bool> ShowMenuIcon { get; }
-        
-        public SettingEntry<int> OverlayWidth { get; }
-        public SettingEntry<int> OverlayHeight { get; }
+        public static SettingEntry<bool> ShowMenuIcon { get; private set; }
 
-        public SettingEntry<float> OverlayBackgroundRed { get; }
-        public SettingEntry<float> OverlayBackgroundBlue { get; }
-        public SettingEntry<float> OverlayBackgroundGreen { get; }
-        public SettingEntry<float> OverlayBackgroundAlpha { get; }
+        public static SettingEntry<int> OverlayWidth { get; private set; }
+        public static SettingEntry<int> OverlayHeight { get; private set; }
 
-        public Color OverlayBackgroundColor => new Color(
+        public static SettingEntry<float> OverlayBackgroundRed { get; private set; }
+        public static SettingEntry<float> OverlayBackgroundBlue { get; private set; }
+        public static SettingEntry<float> OverlayBackgroundGreen { get; private set; }
+        public static SettingEntry<float> OverlayBackgroundAlpha { get; private set; }
+
+        public static Color OverlayBackgroundColor => new Color(
             OverlayBackgroundRed.Value, OverlayBackgroundGreen.Value,
             OverlayBackgroundBlue.Value, OverlayBackgroundAlpha.Value
         );
 
-        public Settings(SettingCollection settings)
+        public static void Initialize(SettingCollection settings)
         {
             ShowMenuIcon = settings.DefineSetting("Menu.Icon.Show", true, () => "Show Menu Icon", () => "Whether or not to show the menu icon in the top left bar");
             
@@ -41,6 +41,18 @@ namespace TodoList
             OverlayBackgroundBlue.SetRange(0, 1f);
             OverlayBackgroundGreen = overlaySettings.DefineSetting("Background.Green", 0f, () => "Background Green");
             OverlayBackgroundGreen.SetRange(0, 1f);
+        }
+
+        public static void Dispose()
+        {
+            ShowMenuIcon = null;
+            OverlayWidth = null;
+            OverlayHeight = null;
+            
+            OverlayBackgroundRed = null;
+            OverlayBackgroundGreen = null;
+            OverlayBackgroundBlue = null;
+            OverlayBackgroundAlpha = null;
         }
     }
 }

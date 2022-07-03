@@ -9,7 +9,7 @@ namespace TodoList.Components
         private readonly TodoTitle _todoTitle;
         private readonly TodoCollapseArrow _collapseArrow;
 
-        public TodoHeader(Settings settings, int width)
+        public TodoHeader(int width)
         {
             BackgroundTexture = Resources.GetTexture(Textures.Header);
             WidthSizingMode = SizingMode.Fill;
@@ -17,7 +17,7 @@ namespace TodoList.Components
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
             _checkbox = new TodoCheckbox { Parent = this };
-            _todoTitle = new TodoTitle(settings) { Parent = this };
+            _todoTitle = new TodoTitle { Parent = this };
             _collapseArrow = new TodoCollapseArrow { Parent = this };
             _todoTitle.Width = width - 2 * HEADER_HEIGHT;
 

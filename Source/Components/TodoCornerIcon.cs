@@ -9,17 +9,15 @@ namespace TodoList.Components
     {
         private readonly CornerIcon _icon;
         private readonly Container _window;
-        private readonly Settings _settings;
 
-        public TodoCornerIcon(Container window, Settings settings)
+        public TodoCornerIcon(Container window)
         {
             _window = window;
-            _settings = settings;
             _icon = CreateIcon();
             
             _icon.Click += OnIconClicked;
-            _settings.ShowMenuIcon.SettingChanged += OnShowMenuIconChanged;
-            OnShowMenuIconChanged(this, new ValueChangedEventArgs<bool>(false, _settings.ShowMenuIcon.Value));
+            Settings.ShowMenuIcon.SettingChanged += OnShowMenuIconChanged;
+            OnShowMenuIconChanged(this, new ValueChangedEventArgs<bool>(false, Settings.ShowMenuIcon.Value));
         }
 
         private static CornerIcon CreateIcon()
@@ -50,7 +48,7 @@ namespace TodoList.Components
         public void Dispose()
         {
             _icon.Dispose();
-            _settings.ShowMenuIcon.SettingChanged -= OnShowMenuIconChanged;
+            Settings.ShowMenuIcon.SettingChanged -= OnShowMenuIconChanged;
         }
     }
 }

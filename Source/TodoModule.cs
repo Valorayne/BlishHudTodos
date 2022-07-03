@@ -15,21 +15,20 @@ namespace TodoList
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
-		private Settings _settings;
 		private TodoWindow _window;
 		private TodoCornerIcon _cornerIcon;
 
 		protected override void DefineSettings(SettingCollection settings)
 		{
-			_settings = new Settings(settings);
+			Settings.Initialize(settings);
 		}
 
 		protected override Task LoadAsync()
 		{
 			// put here in case anything becomes async in the future
 			Resources.Initialize(ModuleParameters.ContentsManager);
-			_window = TodoWindow.Create(_settings);
-			_cornerIcon = new TodoCornerIcon(_window, _settings);
+			_window = TodoWindow.Create();
+			_cornerIcon = new TodoCornerIcon(_window);
 			return Task.CompletedTask;
 		}
 
@@ -37,8 +36,8 @@ namespace TodoList
 		{
 			_window.Show();
 
-			_settings.OverlayWidth.SettingChanged += OverlayDimensionsChanged;
-			_settings.OverlayHeight.SettingChanged += OverlayDimensionsChanged;
+			Settings.OverlayWidth.SettingChanged += OverlayDimensionsChanged;
+			Settings.OverlayHeight.SettingChanged += OverlayDimensionsChanged;
 			
 			base.OnModuleLoaded(e);
 		}
@@ -46,7 +45,7 @@ namespace TodoList
 		private void OverlayDimensionsChanged(object target, ValueChangedEventArgs<int> args)
 		{
 			_window.Dispose();
-			_window = TodoWindow.Create(_settings);
+			_window = TodoWindow.Create();
 			_window.Show();
 		}
 
@@ -57,8 +56,9 @@ namespace TodoList
 
 		protected override void Unload()
 		{
-			_settings.OverlayWidth.SettingChanged -= OverlayDimensionsChanged;
-			_settings.OverlayHeight.SettingChanged -= OverlayDimensionsChanged;
+			Settings.OverlayWidth.SettingChanged -= OverlayDimensionsChanged;
+			Settings.OverlayHeight.SettingChanged -= OverlayDimensionsChanged;
+			Settings.Dispose();
 			Resources.Dispose();
 			_window.Dispose();
 			_cornerIcon.Dispose();

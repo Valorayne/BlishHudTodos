@@ -1,5 +1,4 @@
-﻿using Blish_HUD;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 
 namespace TodoList.Components
 {
@@ -7,7 +6,7 @@ namespace TodoList.Components
     {
         private readonly Label _label;
         
-        public TodoTitle(Settings settings)
+        public TodoTitle()
         {
             Height = HEADER_HEIGHT;
             _label = new Label

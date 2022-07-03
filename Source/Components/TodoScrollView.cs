@@ -12,7 +12,7 @@ namespace TodoList.Components
         
         private readonly List<TodoEntry> _entries = new List<TodoEntry>();
         
-        public TodoScrollView(Settings settings)
+        public TodoScrollView()
         {
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
@@ -20,9 +20,9 @@ namespace TodoList.Components
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
-            var width = settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
+            var width = Settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
             for (var i = 0; i < 5; i++)
-                _entries.Add(new TodoEntry(settings, width) { Parent = this });
+                _entries.Add(new TodoEntry(width) { Parent = this });
         }
 
         protected override void DisposeControl()

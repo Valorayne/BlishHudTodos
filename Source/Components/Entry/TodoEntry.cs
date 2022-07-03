@@ -6,13 +6,13 @@ namespace TodoList.Components
     {
         private readonly TodoHeader _header;
 
-        public TodoEntry(Settings settings, int width)
+        public TodoEntry(int width)
         {
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             HeightSizingMode = SizingMode.AutoSize;
             Width = width;
 
-            _header = new TodoHeader(settings, width) { Parent = this };
+            _header = new TodoHeader(width) { Parent = this };
         }
 
         protected override void DisposeControl()

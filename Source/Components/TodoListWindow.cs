@@ -12,8 +12,11 @@ namespace TodoList.Components
         private const int HORIZONTAL_PADDING = 5;
         private const int VERTICAL_PADDING = 5;
         
+        private const int MENU_BAR_HEIGHT = 30;
+        private const int MENU_BAR_PADDING = 5;
+        
         private readonly TodoScrollView _scrollView;
-        private readonly TodoScrollBar _scrollBar;
+        private readonly Scrollbar _scrollBar;
         private readonly AddNewTodoButton _addNewButton;
         private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
 
@@ -37,12 +40,24 @@ namespace TodoList.Components
             SavesPosition = true;
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanClose = false;
-            
-            _scrollView = new TodoScrollView { Parent = this };
-            _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
-            _addNewButton = new AddNewTodoButton { Parent = this };
+
+            var scrollHeight = contentRegion.Height - MENU_BAR_HEIGHT;
+            _scrollView = new TodoScrollView { Parent = this, Height = scrollHeight };
+            _scrollBar = AddScrollBar(contentRegion, scrollHeight);
+            var buttonLocation = new Point(windowRegion.Width - 140, scrollHeight + MENU_BAR_PADDING);
+            _addNewButton = new AddNewTodoButton { Parent = this, Location = buttonLocation };
 
             _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
+        }
+
+        private Scrollbar AddScrollBar(Rectangle contentRegion, int scrollHeight)
+        {
+            return new Scrollbar(_scrollView)
+            {
+                Parent = this,
+                Height = scrollHeight,
+                Location = new Point(contentRegion.Width - 10, 0)
+            };
         }
 
         protected override void DisposeControl()

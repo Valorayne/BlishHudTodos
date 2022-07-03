@@ -1,6 +1,5 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
-using Microsoft.Xna.Framework;
 using TodoList.Components.Details;
 
 namespace TodoList.Components.Menu
@@ -10,8 +9,6 @@ namespace TodoList.Components.Menu
         public AddNewTodoButton()
         {
             Text = "Add New Todo";
-            Location = new Point(Settings.OverlayWidth.Value - 150, Settings.OverlayHeight.Value - 40);
-
             Click += OnButtonClicked;
         }
 

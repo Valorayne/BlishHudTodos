@@ -16,7 +16,6 @@ namespace TodoList.Components
         {
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
-            HeightSizingMode = SizingMode.Fill;
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 

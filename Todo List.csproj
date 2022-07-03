@@ -72,7 +72,6 @@
     <Compile Include="Source\Components\Entry\TodoTitle.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
-    <Compile Include="Source\Components\TodoScrollBar.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
     <Compile Include="Source\Models\Todo.cs" />

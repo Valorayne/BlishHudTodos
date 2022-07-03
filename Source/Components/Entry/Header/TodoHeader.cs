@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
 using Blish_HUD.Input;
 
 namespace TodoList.Components
@@ -8,6 +9,8 @@ namespace TodoList.Components
         private readonly TodoCheckbox _checkbox;
         private readonly TodoTitle _todoTitle;
         private readonly TodoCollapseArrow _collapseArrow;
+
+        public event EventHandler<MouseEventArgs> HeaderClicked;
 
         public TodoHeader(int width)
         {
@@ -23,7 +26,8 @@ namespace TodoList.Components
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;
-            Click += OnMouseClick;
+            _todoTitle.Click += OnMouseClick;
+            _collapseArrow.Click += OnMouseClick;
         }
 
         private void OnMouseEntered(object target, MouseEventArgs args)
@@ -39,6 +43,7 @@ namespace TodoList.Components
         private void OnMouseClick(object target, MouseEventArgs args)
         {
             _collapseArrow.Expanded = !_collapseArrow.Expanded;
+            HeaderClicked?.Invoke(target, args);
         }
 
         protected override void DisposeControl()
@@ -49,7 +54,8 @@ namespace TodoList.Components
 
             MouseEntered -= OnMouseEntered;
             MouseLeft -= OnMouseLeft;
-            Click -= OnMouseClick;
+            _todoTitle.Click -= OnMouseClick;
+            _collapseArrow.Click -= OnMouseClick;
             
             base.DisposeControl();
         }

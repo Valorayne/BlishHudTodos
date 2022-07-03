@@ -27,6 +27,8 @@ namespace TodoList
 		{
 			// put here in case anything becomes async in the future
 			Resources.Initialize(ModuleParameters.ContentsManager);
+			Data.Initialize();
+			
 			_window = TodoWindow.Create();
 			_cornerIcon = new TodoCornerIcon(_window);
 			return Task.CompletedTask;
@@ -60,6 +62,7 @@ namespace TodoList
 			Settings.OverlayHeight.SettingChanged -= OverlayDimensionsChanged;
 			Settings.Dispose();
 			Resources.Dispose();
+			Data.Dispose();
 			_window.Dispose();
 			_cornerIcon.Dispose();
 		}

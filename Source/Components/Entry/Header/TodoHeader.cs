@@ -1,6 +1,7 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
+using TodoList.Models;
 
 namespace TodoList.Components
 {
@@ -12,7 +13,7 @@ namespace TodoList.Components
 
         public event EventHandler<MouseEventArgs> HeaderClicked;
 
-        public TodoHeader(int width)
+        public TodoHeader(Todo todo, int width)
         {
             BackgroundTexture = Resources.GetTexture(Textures.Header);
             WidthSizingMode = SizingMode.Fill;
@@ -20,9 +21,8 @@ namespace TodoList.Components
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
             _checkbox = new TodoCheckbox { Parent = this };
-            _todoTitle = new TodoTitle { Parent = this };
+            _todoTitle = new TodoTitle(todo, width - 2 * HEADER_HEIGHT) { Parent = this };
             _collapseArrow = new TodoCollapseArrow { Parent = this };
-            _todoTitle.Width = width - 2 * HEADER_HEIGHT;
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;

@@ -1,6 +1,7 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using TodoList.Components.Body;
+using TodoList.Models;
 
 namespace TodoList.Components
 {
@@ -9,13 +10,13 @@ namespace TodoList.Components
         private readonly TodoHeader _header;
         private TodoBody _body;
 
-        public TodoEntry(int width)
+        public TodoEntry(Todo todo, int width)
         {
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             HeightSizingMode = SizingMode.AutoSize;
             Width = width;
 
-            _header = new TodoHeader(width) { Parent = this };
+            _header = new TodoHeader(todo, width) { Parent = this };
 
             _header.HeaderClicked += OnHeaderClicked;
         }

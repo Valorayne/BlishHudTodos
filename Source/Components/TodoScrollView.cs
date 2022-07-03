@@ -21,8 +21,8 @@ namespace TodoList.Components
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
             var width = Settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
-            for (var i = 0; i < 5; i++)
-                _entries.Add(new TodoEntry(width) { Parent = this });
+            foreach (var todo in Data.Todos)
+                _entries.Add(new TodoEntry(todo, width) { Parent = this });
         }
 
         protected override void DisposeControl()

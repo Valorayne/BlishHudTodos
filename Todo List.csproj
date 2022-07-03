@@ -64,8 +64,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Components\Details\TodoDetailsInputArea.cs" />
+    <Compile Include="Source\Components\Details\TodoDetailsMenuBar.cs" />
+    <Compile Include="Source\Components\Details\TodoDetailsPanel.cs" />
     <Compile Include="Source\Components\Details\TodoDetailsWindow.cs" />
-    <Compile Include="Source\Components\Details\TodoDetailsWindowFactory.cs" />
+    <Compile Include="Source\Components\Details\TodoDetailsWindowPool.cs" />
     <Compile Include="Source\Components\Entry\TodoCheckbox.cs" />
     <Compile Include="Source\Components\Entry\TodoEditButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />

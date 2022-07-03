@@ -4,9 +4,9 @@
     {
         public string Text { get; private set; }
 
-        public Todo(string text)
+        public Todo()
         {
-            Text = text;
+            Text = "This is some test content";
         }
     }
 }

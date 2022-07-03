@@ -32,7 +32,7 @@ namespace TodoList.Components
         
         private void OnButtonClicked(object target, MouseEventArgs args)
         {
-            TodoDetailsWindowFactory.Show(args.MousePosition, _todo);
+            TodoDetailsWindowPool.Spawn(args.MousePosition, _todo);
         }
 
         protected override void DisposeControl()

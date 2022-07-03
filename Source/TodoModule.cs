@@ -66,7 +66,7 @@ namespace TodoList
 			Settings.OverlayHeight.SettingChanged -= OverlayDimensionsChanged;
 			Settings.Dispose();
 			
-			TodoDetailsWindowFactory.Dispose();
+			TodoDetailsWindowPool.Dispose();
 			Data.Dispose();
 			Resources.Dispose();
 		}

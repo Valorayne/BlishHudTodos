@@ -14,7 +14,7 @@ namespace TodoList.Components.Menu
 
         private static void OnButtonClicked(object target, MouseEventArgs args)
         {
-            TodoDetailsWindowFactory.Show(args.MousePosition);
+            TodoDetailsWindowPool.Spawn(args.MousePosition);
         }
 
         protected override void DisposeControl()

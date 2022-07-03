@@ -13,7 +13,7 @@ namespace TodoList
 
             for (var i = 0; i < 50; i++)
             {
-                todos.Add(new Todo("Some test content with super long text"));
+                todos.Add(new Todo());
             }
 
             Todos = todos;

@@ -24,23 +24,25 @@ namespace TodoList.Components.Details
         }
 
         private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
+        private readonly TodoDetailsPanel _panel;
 
         private TodoDetailsWindow(Rectangle windowRegion, Rectangle contentRegion, Point location,
             Todo existingTodo = null) : base(Resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
         {
+            var isNew = existingTodo == null;
             Parent = GameService.Graphics.SpriteScreen;
             CanClose = true;
             BackgroundColor = Settings.OverlayBackgroundColor;
-            //SavesPosition = true;
-            //Id = "e5b47462-7eb9-4a91-b733-da220eccbf98";
-            Title = existingTodo != null ? "Edit Todo" : "Add New Todo";
+            Title = isNew ? "Add New Todo" : "Edit Todo";
             Location = location;
 
+            _panel = new TodoDetailsPanel(existingTodo ?? new Todo(), isNew, contentRegion.Width, contentRegion.Height) { Parent = this };
             _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
         }
 
         protected override void DisposeControl()
         {
+            _panel.Dispose();
             _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }

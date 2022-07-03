@@ -3,11 +3,11 @@ using TodoList.Models;
 
 namespace TodoList.Components.Details
 {
-    public static class TodoDetailsWindowFactory
+    public static class TodoDetailsWindowPool
     {
         private static TodoDetailsWindow _instance;
         
-        public static void Show(Point location, Todo existingTodo = null)
+        public static void Spawn(Point location, Todo existingTodo = null)
         {
             _instance?.Dispose();
             _instance = TodoDetailsWindow.Create(new Point(location.X - TodoDetailsWindow.WIDTH, location.Y), existingTodo);
@@ -19,6 +19,5 @@ namespace TodoList.Components.Details
             _instance?.Dispose();
             _instance = null;
         }
-        
     }
 }

@@ -15,6 +15,7 @@ namespace TodoList.Components
         private readonly TodoScrollView _scrollView;
         private readonly TodoScrollBar _scrollBar;
         private readonly AddNewTodoButton _addNewButton;
+        private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
 
         public static TodoListWindow Create()
         {
@@ -37,19 +38,11 @@ namespace TodoList.Components
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanClose = false;
             
-            Settings.OverlayBackgroundRed.SettingChanged += OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundGreen.SettingChanged += OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
-            
             _scrollView = new TodoScrollView { Parent = this };
             _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
             _addNewButton = new AddNewTodoButton { Parent = this };
-        }
-        
-        private void OnBackgroundColorsChanged(object target, ValueChangedEventArgs<float> args)
-        {
-            BackgroundColor = Settings.OverlayBackgroundColor;
+
+            _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
         }
 
         protected override void DisposeControl()
@@ -57,12 +50,7 @@ namespace TodoList.Components
             _scrollBar.Dispose();
             _scrollView.Dispose();
             _addNewButton.Dispose();
-            
-            Settings.OverlayBackgroundRed.SettingChanged -= OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundGreen.SettingChanged -= OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundBlue.SettingChanged -= OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundAlpha.SettingChanged -= OnBackgroundColorsChanged;
-            
+            _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }
     }

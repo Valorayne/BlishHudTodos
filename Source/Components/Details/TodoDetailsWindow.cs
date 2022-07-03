@@ -22,7 +22,9 @@ namespace TodoList.Components.Details
             var contentRegion = new Rectangle(WINDOW_X + hp, WINDOW_Y + vp, WIDTH - 2 * hp, HEIGHT - 2 * vp);
             return new TodoDetailsWindow(windowRegion, contentRegion, location, existingTodo);
         }
-        
+
+        private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
+
         private TodoDetailsWindow(Rectangle windowRegion, Rectangle contentRegion, Point location,
             Todo existingTodo = null) : base(Resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
         {
@@ -33,24 +35,13 @@ namespace TodoList.Components.Details
             //Id = "e5b47462-7eb9-4a91-b733-da220eccbf98";
             Title = existingTodo != null ? "Edit Todo" : "Add New Todo";
             Location = location;
-            
-            Settings.OverlayBackgroundRed.SettingChanged += OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundGreen.SettingChanged += OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
-        }
-        
-        private void OnBackgroundColorsChanged(object target, ValueChangedEventArgs<float> args)
-        {
-            BackgroundColor = Settings.OverlayBackgroundColor;
+
+            _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
         }
 
         protected override void DisposeControl()
         {
-            Settings.OverlayBackgroundRed.SettingChanged -= OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundGreen.SettingChanged -= OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundBlue.SettingChanged -= OnBackgroundColorsChanged;
-            Settings.OverlayBackgroundAlpha.SettingChanged -= OnBackgroundColorsChanged;
+            _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }
     }

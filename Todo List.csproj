@@ -67,7 +67,6 @@
     <Compile Include="Source\Components\Entry\TodoCheckbox.cs" />
     <Compile Include="Source\Components\Entry\TodoEditButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
-    <Compile Include="Source\Components\Entry\TodoHeader.cs" />
     <Compile Include="Source\Components\Entry\TodoTitle.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />

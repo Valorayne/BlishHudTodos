@@ -11,7 +11,7 @@ namespace TodoList
         {
             var todos = new List<Todo>();
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 50; i++)
             {
                 todos.Add(new Todo("Some test content with super long text"));
             }

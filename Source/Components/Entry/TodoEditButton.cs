@@ -25,8 +25,6 @@ namespace TodoList.Components
             };
         }
 
-        public bool Expanded { get; set; }
-
         protected override void DisposeControl()
         {
             _editButton.Dispose();

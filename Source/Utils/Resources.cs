@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,12 +17,12 @@ namespace TodoList
         CollapseArrowRight
     }
     
-    public class Resources : IDisposable
+    public static class Resources
     {
-        private readonly ContentsManager _contents;
-        private readonly IDictionary<Textures, Texture2D> _loadedTextures = new Dictionary<Textures, Texture2D>();
+        private static ContentsManager _contents;
+        private static IDictionary<Textures, Texture2D> _loadedTextures;
 
-        private readonly IDictionary<Textures, string> _texturePaths = new Dictionary<Textures, string>
+        private static readonly IReadOnlyDictionary<Textures, string> PATHS = new Dictionary<Textures, string>
         {
             { Textures.CornerIcon, @"textures\icon.png"},
             { Textures.CornerIconHovered, @"textures\icon-active.png"},
@@ -36,23 +35,26 @@ namespace TodoList
             { Textures.CollapseArrowRight, @"textures\155953_rotated.png" },
         };
         
-        public Texture2D GetTexture(Textures texture)
+        public static Texture2D GetTexture(Textures texture)
         {
             if (!_loadedTextures.ContainsKey(texture))
-                _loadedTextures.Add(texture, _contents.GetTexture(_texturePaths[texture]));
+                _loadedTextures.Add(texture, _contents.GetTexture(PATHS[texture]));
             return _loadedTextures[texture];
         }
         
-        public Resources(ContentsManager contents)
+        public static void Initialize(ContentsManager contents)
         {
             _contents = contents;
+            _loadedTextures = new Dictionary<Textures, Texture2D>();
         }
 
-        public void Dispose()
+        public static void Dispose()
         {
             foreach (var texture in _loadedTextures.Values)
                 texture.Dispose();
             _loadedTextures.Clear();
+            _loadedTextures = null;
+            _contents = null;
         }
     }
 }

@@ -11,24 +11,24 @@ namespace TodoList.Components
         private readonly Container _window;
         private readonly Settings _settings;
 
-        public TodoCornerIcon(Resources resources, Container window, Settings settings)
+        public TodoCornerIcon(Container window, Settings settings)
         {
             _window = window;
             _settings = settings;
-            _icon = CreateIcon(resources);
+            _icon = CreateIcon();
             
             _icon.Click += OnIconClicked;
             _settings.ShowMenuIcon.SettingChanged += OnShowMenuIconChanged;
             OnShowMenuIconChanged(this, new ValueChangedEventArgs<bool>(false, _settings.ShowMenuIcon.Value));
         }
 
-        private static CornerIcon CreateIcon(Resources resources)
+        private static CornerIcon CreateIcon()
         {
             return new CornerIcon
             {
                 IconName = "Todo List",
-                Icon = resources.GetTexture(Textures.CornerIcon),
-                HoverIcon = resources.GetTexture(Textures.CornerIconHovered),
+                Icon = Resources.GetTexture(Textures.CornerIcon),
+                HoverIcon = Resources.GetTexture(Textures.CornerIconHovered),
                 Priority = 5
             };
         }

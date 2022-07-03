@@ -4,15 +4,15 @@ namespace TodoList.Components
 {
     public sealed class TodoEntry : FlowPanel
     {
-        private readonly TodoEntryHeader _header;
+        private readonly TodoHeader _header;
 
-        public TodoEntry(Resources resources, Settings settings, int width)
+        public TodoEntry(Settings settings, int width)
         {
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             HeightSizingMode = SizingMode.AutoSize;
             Width = width;
 
-            _header = new TodoEntryHeader(resources, settings, width) { Parent = this };
+            _header = new TodoHeader(settings, width) { Parent = this };
         }
 
         protected override void DisposeControl()

@@ -3,24 +3,22 @@ using Blish_HUD.Input;
 
 namespace TodoList.Components
 {
-    public sealed class TodoEntryHeader : FlowPanel
+    public sealed class TodoHeader : FlowPanel
     {
         private readonly TodoCheckbox _checkbox;
         private readonly TodoTitle _todoTitle;
-        private readonly Resources _resources;
         private readonly TodoCollapseArrow _collapseArrow;
 
-        public TodoEntryHeader(Resources resources, Settings settings, int width)
+        public TodoHeader(Settings settings, int width)
         {
-            _resources = resources;
-            BackgroundTexture = resources.GetTexture(Textures.Header);
+            BackgroundTexture = Resources.GetTexture(Textures.Header);
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
             _checkbox = new TodoCheckbox { Parent = this };
             _todoTitle = new TodoTitle(settings) { Parent = this };
-            _collapseArrow = new TodoCollapseArrow(resources) { Parent = this };
+            _collapseArrow = new TodoCollapseArrow { Parent = this };
             _todoTitle.Width = width - 2 * HEADER_HEIGHT;
 
             MouseEntered += OnMouseEntered;
@@ -30,12 +28,12 @@ namespace TodoList.Components
 
         private void OnMouseEntered(object target, MouseEventArgs args)
         {
-            BackgroundTexture = _resources.GetTexture(Textures.HeaderHovered);
+            BackgroundTexture = Resources.GetTexture(Textures.HeaderHovered);
         }
         
         private void OnMouseLeft(object target, MouseEventArgs args)
         {
-            BackgroundTexture = _resources.GetTexture(Textures.Header);
+            BackgroundTexture = Resources.GetTexture(Textures.Header);
         }
 
         private void OnMouseClick(object target, MouseEventArgs args)

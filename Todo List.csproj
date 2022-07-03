@@ -64,11 +64,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Components\Entry\TodoCheckbox.cs" />
-    <Compile Include="Source\Components\Entry\TodoCollapseArrow.cs" />
+    <Compile Include="Source\Components\Entry\Body\TodoBody.cs" />
+    <Compile Include="Source\Components\Entry\Header\TodoCheckbox.cs" />
+    <Compile Include="Source\Components\Entry\Header\TodoCollapseArrow.cs" />
+    <Compile Include="Source\Components\Entry\Header\TodoHeader.cs" />
+    <Compile Include="Source\Components\Entry\Header\TodoTitle.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
-    <Compile Include="Source\Components\Entry\TodoEntryHeader.cs" />
-    <Compile Include="Source\Components\Entry\TodoTitle.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
     <Compile Include="Source\Components\TodoScrollBar.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />

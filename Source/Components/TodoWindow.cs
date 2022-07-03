@@ -15,7 +15,7 @@ namespace TodoList.Components
         private readonly TodoScrollView _scrollView;
         private readonly TodoScrollBar _scrollBar;
 
-        public static TodoWindow Create(Resources resources, Settings settings)
+        public static TodoWindow Create(Settings settings)
         {
             var hp = HORIZONTAL_PADDING;
             var vp = VERTICAL_PADDING;
@@ -23,11 +23,11 @@ namespace TodoList.Components
             var height = settings.OverlayHeight.Value;
             var windowRegion = new Rectangle(WINDOW_X, WINDOW_Y, width, height);
             var contentRegion = new Rectangle(WINDOW_X + hp, WINDOW_Y + vp, width - 2 * hp, height - 2 * vp);
-            return new TodoWindow(windowRegion, contentRegion, resources, settings);
+            return new TodoWindow(windowRegion, contentRegion, settings);
         }
 
-        private TodoWindow(Rectangle windowRegion, Rectangle contentRegion, Resources resources, Settings settings) 
-                : base(resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
+        private TodoWindow(Rectangle windowRegion, Rectangle contentRegion, Settings settings) 
+                : base(Resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
         {
             _settings = settings;
             
@@ -43,7 +43,7 @@ namespace TodoList.Components
             settings.OverlayBackgroundBlue.SettingChanged += OnBackgroundColorsChanged;
             settings.OverlayBackgroundAlpha.SettingChanged += OnBackgroundColorsChanged;
             
-            _scrollView = new TodoScrollView(resources, settings) { Parent = this };
+            _scrollView = new TodoScrollView(settings) { Parent = this };
             _scrollBar = new TodoScrollBar(_scrollView, contentRegion.Width, contentRegion.Height) { Parent = this };
         }
         

@@ -11,13 +11,13 @@ namespace TodoList.Components
         private readonly AsyncTexture2D _downArrow;
         private readonly AsyncTexture2D _rightArrow;
         
-        public TodoCollapseArrow(Resources resources)
+        public TodoCollapseArrow()
         {
             Height = HEADER_HEIGHT;
             Width = HEADER_HEIGHT;
             
-            _downArrow = resources.GetTexture(Textures.CollapseArrowDown);
-            _rightArrow = resources.GetTexture(Textures.CollapseArrowRight);
+            _downArrow = Resources.GetTexture(Textures.CollapseArrowDown);
+            _rightArrow = Resources.GetTexture(Textures.CollapseArrowRight);
             
             _arrow = new Image(_rightArrow)
             {

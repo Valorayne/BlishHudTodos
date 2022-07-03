@@ -9,7 +9,7 @@ namespace TodoList.Components
     {
         private readonly TodoCheckbox _checkbox;
         private readonly TodoTitle _todoTitle;
-        private readonly TodoCollapseArrow _collapseArrow;
+        private readonly TodoEditButton _editButton;
 
         public event EventHandler<MouseEventArgs> HeaderClicked;
 
@@ -21,28 +21,31 @@ namespace TodoList.Components
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
             _checkbox = new TodoCheckbox { Parent = this };
-            _todoTitle = new TodoTitle(todo, width - 2 * HEADER_HEIGHT) { Parent = this };
-            _collapseArrow = new TodoCollapseArrow { Parent = this };
+            _todoTitle = new TodoTitle(todo, width - _checkbox.Width - TodoEditButton.WIDTH) { Parent = this };
+            _editButton = new TodoEditButton { Parent = this };
+            _editButton.Hide();
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;
             _todoTitle.Click += OnMouseClick;
-            _collapseArrow.Click += OnMouseClick;
+            _checkbox.Click += OnMouseClick;
         }
 
         private void OnMouseEntered(object target, MouseEventArgs args)
         {
             BackgroundTexture = Resources.GetTexture(Textures.HeaderHovered);
+            _editButton.Show();
         }
         
         private void OnMouseLeft(object target, MouseEventArgs args)
         {
             BackgroundTexture = Resources.GetTexture(Textures.Header);
+            _editButton.Hide();
         }
 
         private void OnMouseClick(object target, MouseEventArgs args)
         {
-            _collapseArrow.Expanded = !_collapseArrow.Expanded;
+            _editButton.Expanded = !_editButton.Expanded;
             HeaderClicked?.Invoke(target, args);
         }
 
@@ -50,12 +53,12 @@ namespace TodoList.Components
         {
             _checkbox.Dispose();
             _todoTitle.Dispose();
-            _collapseArrow.Dispose();
+            _editButton.Dispose();
 
             MouseEntered -= OnMouseEntered;
             MouseLeft -= OnMouseLeft;
             _todoTitle.Click -= OnMouseClick;
-            _collapseArrow.Click -= OnMouseClick;
+            _checkbox.Click -= OnMouseClick;
             
             base.DisposeControl();
         }

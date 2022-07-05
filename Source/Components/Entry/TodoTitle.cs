@@ -9,17 +9,17 @@ namespace TodoList.Components
         private readonly Todo _todo;
         private readonly Label _label;
         
-        public TodoTitle(Todo todo, int width)
+        public TodoTitle(Todo todo)
         {
             _todo = todo;
             Height = HEADER_HEIGHT;
-            Width = width;
+            WidthSizingMode = SizingMode.AutoSize;
             _label = new Label
             {
                 Parent = this,
                 StrokeText = true,
                 Text = todo.Text,
-                Width = width,
+                AutoSizeWidth = true,
                 Location = new Point(0, 8)
             };
             Data.TodoModified += OnTodoModified;

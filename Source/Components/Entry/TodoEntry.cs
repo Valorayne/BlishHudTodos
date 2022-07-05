@@ -8,7 +8,6 @@ namespace TodoList.Components
     public sealed class TodoEntry : FlowPanel
     {
         private readonly TodoCheckbox _checkbox;
-        private readonly TodoTitle _todoTitle;
         private readonly HoverButton _editButton;
         private readonly HoverButton _deleteButton;
 
@@ -16,18 +15,17 @@ namespace TodoList.Components
 
         public event EventHandler<bool> VisibilityChanged;
 
-        public TodoEntry(Todo todo, int width)
+        public TodoEntry(Todo todo)
         {
-            Width = width;
+            WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
             
             _checkbox = new TodoCheckbox(todo) { Parent = this };
             new TodoScheduleIcon(todo) {Parent = this};
-            var titleWidth = width - _checkbox.Width - TodoEditButton.WIDTH - TodoDeleteButton.WIDTH - TodoScheduleIcon.WIDTH;
-            _todoTitle = new TodoTitle(todo, titleWidth) { Parent = this };
+            new TodoTitle(todo) { Parent = this };
             _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
-            _deleteButton = new TodoDeleteButton(todo) { Parent = this, Visible = false };
+            _deleteButton = new TodoDeleteButton(todo) { Parent = this, Visible = false, Right = 0 };
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;
@@ -67,10 +65,6 @@ namespace TodoList.Components
             _hoverSubscription.Dispose();
 
             _checkbox.Changed -= OnCheckboxChanged;
-            _checkbox.Dispose();
-            _todoTitle.Dispose();
-            _editButton.Dispose();
-            _deleteButton.Dispose();
 
             MouseEntered -= OnMouseEntered;
             MouseLeft -= OnMouseLeft;

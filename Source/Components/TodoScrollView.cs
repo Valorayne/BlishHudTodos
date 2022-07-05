@@ -11,10 +11,8 @@ namespace TodoList.Components
     {
         private const int OUTER_PADDING = 5;
         private const int INNER_PADDING = 5;
-        private const int SCROLLBAR_WIDTH = 20;
         
         private readonly Dictionary<Todo, TodoEntry> _entries = new Dictionary<Todo, TodoEntry>();
-        private readonly int _width;
         
         public TodoScrollView()
         {
@@ -26,8 +24,6 @@ namespace TodoList.Components
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
             CanScroll = true;
 
-            _width = Settings.OverlayWidth.Value - 2 * OUTER_PADDING - SCROLLBAR_WIDTH;
-            
             foreach (var todo in Data.Todos)
                 SpawnEntry(this, todo);
 
@@ -52,7 +48,7 @@ namespace TodoList.Components
         private void SpawnEntry(object sender, Todo todo)
         {
             var showAlreadyDoneTasks = Settings.ShowAlreadyDoneTasks.Value;
-            var entry = new TodoEntry(todo, _width)
+            var entry = new TodoEntry(todo)
             {
                 Parent = this,
                 Visible = showAlreadyDoneTasks || !todo.Done

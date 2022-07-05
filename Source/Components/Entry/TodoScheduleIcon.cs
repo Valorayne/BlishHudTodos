@@ -58,5 +58,11 @@ namespace TodoList.Components
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        protected override void DisposeControl()
+        {
+            Data.TodoModified -= OnTodoModified;
+            base.DisposeControl();
+        }
     }
 }

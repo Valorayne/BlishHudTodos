@@ -13,10 +13,25 @@ namespace TodoList.Models
         
         [JsonProperty]
         public DateTime CreatedAt { get; private set; }
+        
+        [JsonProperty]
+        public DateTime? LastExecution { get; private set; }
+
+        public bool Done
+        {
+            get => LastExecution.HasValue;
+            set
+            {
+                if (value)
+                    LastExecution = DateTime.Now;
+                else
+                    LastExecution = null;
+            }
+        }
 
         public static Todo CreateDraft()
         {
-            return new Todo(DateTime.Now)
+            return new Todo(DateTime.Now, null)
             {
                 IsDraft = true,
                 Text = "This is some test content"
@@ -24,9 +39,10 @@ namespace TodoList.Models
         }
 
         [JsonConstructor]
-        private Todo(DateTime createdAt)
+        private Todo(DateTime createdAt, DateTime? lastExecution)
         {
             CreatedAt = createdAt;
+            LastExecution = lastExecution;
         }
         
         public void Save()

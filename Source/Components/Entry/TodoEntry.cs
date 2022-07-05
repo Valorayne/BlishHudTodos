@@ -19,7 +19,7 @@ namespace TodoList.Components
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
-            _checkbox = new TodoCheckbox { Parent = this };
+            _checkbox = new TodoCheckbox(todo) { Parent = this };
             var titleWidth = width - _checkbox.Width - TodoEditButton.WIDTH - TodoDeleteButton.WIDTH;
             _todoTitle = new TodoTitle(todo, titleWidth) { Parent = this };
             _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };

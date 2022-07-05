@@ -44,17 +44,7 @@ namespace TodoList.Components
             
             var since = DateTime.Now - lastExecution.Value;
             return
-                $"Last done: {GetDayString(since.Days)}, {_todo.LastExecution?.ToShortTimeString()}";
-        }
-
-        private static string GetDayString(int days)
-        {
-            switch (days)
-            {
-                case 0: return "today";
-                case 1: return "yesterday";
-                default: return $"{days} days ago";
-            }
+                $"Last done: {DateUtils.GetPastDayString(since.Days)}, {_todo.LastExecution?.ToShortTimeString()}";
         }
 
         protected override void DisposeControl()

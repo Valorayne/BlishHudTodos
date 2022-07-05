@@ -74,6 +74,7 @@
     <Compile Include="Source\Components\Entry\TodoDeleteButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEditButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
+    <Compile Include="Source\Components\Entry\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\TodoTitle.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\TodoShowAlreadyDoneToggle.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Source\Models\TodoScheduleType.cs" />
     <Compile Include="Source\TodoModule.cs" />
     <Compile Include="Source\Utils\Data.cs" />
+    <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\HoverButton.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
     <Compile Include="Source\Utils\Settings.cs" />

@@ -50,9 +50,9 @@ namespace TodoList.Components
             _eyeButton = new TodoShowAlreadyDoneToggle
             {
                 Parent = this, 
-                Location = new Point(buttonLocation.X-36, buttonLocation.Y-4),
-                Width = 36,
-                Height = 36
+                Location = new Point(buttonLocation.X-32, buttonLocation.Y),
+                Width = 32,
+                Height = 32
             };
 
             _backgroundColorSubscription = new BackgroundColorSubscription(this);

@@ -58,11 +58,5 @@ namespace TodoList.Components
                     throw new ArgumentOutOfRangeException();
             }
         }
-            
-        protected override void DisposeControl()
-        {
-            _icon.Dispose();
-            base.DisposeControl();
-        }
     }
 }

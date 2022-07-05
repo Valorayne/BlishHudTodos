@@ -13,7 +13,6 @@ namespace TodoList.Components
         private readonly HoverButton _deleteButton;
 
         private readonly BackgroundTextureSubscription _hoverSubscription;
-        private readonly TodoScheduleIcon _scheduleIcon;
 
         public event EventHandler<bool> VisibilityChanged;
 
@@ -22,9 +21,9 @@ namespace TodoList.Components
             Width = width;
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
-
+            
             _checkbox = new TodoCheckbox(todo) { Parent = this };
-            _scheduleIcon = new TodoScheduleIcon(todo) { Parent = this };
+            new TodoScheduleIcon(todo) {Parent = this};
             var titleWidth = width - _checkbox.Width - TodoEditButton.WIDTH - TodoDeleteButton.WIDTH - TodoScheduleIcon.WIDTH;
             _todoTitle = new TodoTitle(todo, titleWidth) { Parent = this };
             _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
@@ -64,9 +63,9 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
+            
             _hoverSubscription.Dispose();
 
-            _scheduleIcon.Dispose();
             _checkbox.Changed -= OnCheckboxChanged;
             _checkbox.Dispose();
             _todoTitle.Dispose();

@@ -23,11 +23,5 @@ namespace TodoList.Components.Details
                 Width = 100
             };
         }
-
-        protected override void DisposeControl()
-        {
-            SaveButton.Dispose();
-            base.DisposeControl();
-        }
     }
 }

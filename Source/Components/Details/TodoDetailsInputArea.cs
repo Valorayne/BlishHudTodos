@@ -25,12 +25,5 @@ namespace TodoList.Components.Details
 
             _schedule = new TodoScheduleTypeInput(todo, width) { Parent = this };
         }
-
-        protected override void DisposeControl()
-        {
-            _textBox.Dispose();
-            _schedule.Dispose();
-            base.DisposeControl();
-        }
     }
 }

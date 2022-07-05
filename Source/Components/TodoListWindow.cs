@@ -21,7 +21,6 @@ namespace TodoList.Components
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanClose = false;
             CanResize = true;
-            Padding = Thickness.Zero;
 
             _panel = new TodoListPanel { Parent = this };
             _backgroundColorSubscription = new BackgroundColorSubscription(this);

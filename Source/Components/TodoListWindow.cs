@@ -18,7 +18,7 @@ namespace TodoList.Components
         private readonly TodoScrollView _scrollView;
         private readonly Scrollbar _scrollBar;
         private readonly AddNewTodoButton _addNewButton;
-        private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
+        private readonly BackgroundColorSubscription _backgroundColorSubscription;
         private readonly Image _eyeButton;
 
         public static TodoListWindow Create()
@@ -53,7 +53,7 @@ namespace TodoList.Components
                 Location = new Point(buttonLocation.X-200, buttonLocation.Y)
             };
 
-            _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
+            _backgroundColorSubscription = new BackgroundColorSubscription(this);
         }
 
         private Scrollbar AddScrollBar(Rectangle contentRegion, int scrollHeight)

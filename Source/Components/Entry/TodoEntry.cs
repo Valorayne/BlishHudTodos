@@ -11,7 +11,7 @@ namespace TodoList.Components
         private readonly HoverButton _editButton;
         private readonly HoverButton _deleteButton;
 
-        private readonly Subscriptions.BackgroundTexture _hoverSubscription;
+        private readonly BackgroundTextureSubscription _hoverSubscription;
 
         public TodoEntry(Todo todo, int width)
         {
@@ -28,7 +28,7 @@ namespace TodoList.Components
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;
 
-            _hoverSubscription = new Subscriptions.BackgroundTexture(this, Resources.GetTexture(Textures.Header),
+            _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));
         }
 

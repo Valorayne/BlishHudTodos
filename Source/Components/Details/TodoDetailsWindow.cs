@@ -23,7 +23,7 @@ namespace TodoList.Components.Details
             return new TodoDetailsWindow(windowRegion, contentRegion, location, existingTodo);
         }
 
-        private readonly Subscriptions.BackgroundColor _backgroundColorSubscription;
+        private readonly BackgroundColorSubscription _backgroundColorSubscription;
         private readonly TodoDetailsPanel _panel;
 
         private TodoDetailsWindow(Rectangle windowRegion, Rectangle contentRegion, Point location,
@@ -37,7 +37,7 @@ namespace TodoList.Components.Details
             Location = location;
 
             _panel = new TodoDetailsPanel(existingTodo ?? Todo.CreateDraft(), contentRegion.Width, contentRegion.Height) { Parent = this };
-            _backgroundColorSubscription = new Subscriptions.BackgroundColor(this);
+            _backgroundColorSubscription = new BackgroundColorSubscription(this);
         }
 
         protected override void DisposeControl()

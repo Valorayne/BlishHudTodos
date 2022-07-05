@@ -10,6 +10,8 @@ namespace TodoList.Components.Menu
         {
             Texture = EyeTexture;
             BasicTooltipText = EyeTooltip;
+            Height = 32;
+            Width = 32;
 
             Click += OnClick;
         }

@@ -30,12 +30,8 @@ namespace TodoList
             
             var overlaySettings = settings.AddSubCollection("Overlay Settings", true, false);
 
-            OverlayWidth = overlaySettings.DefineSetting("Width", 500, () => "Overlay Width",
-                () => "An easier way to resize the window will be added in the future");
-            OverlayWidth.SetRange(250, 1000);
-            OverlayHeight = overlaySettings.DefineSetting("Height", 400, () => "Overlay Height",
-                () => "An easier way to resize the window will be added in the future");
-            OverlayHeight.SetRange(100, 1000);
+            OverlayWidth = overlaySettings.DefineSetting("Width", 500);
+            OverlayHeight = overlaySettings.DefineSetting("Height", 400);
             
             OverlayBackgroundAlpha = overlaySettings.DefineSetting("Background.Alpha", 0.2f, () => "Background Alpha");
             OverlayBackgroundAlpha.SetRange(0, 1f);

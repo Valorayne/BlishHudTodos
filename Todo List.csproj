@@ -77,8 +77,10 @@
     <Compile Include="Source\Components\Entry\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\TodoTitle.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
+    <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />
     <Compile Include="Source\Components\Menu\TodoShowAlreadyDoneToggle.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
+    <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
     <Compile Include="Source\Models\Todo.cs" />

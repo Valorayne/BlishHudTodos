@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using TodoList.Models;
 
@@ -12,6 +13,8 @@ namespace TodoList.Components
         private readonly HoverButton _deleteButton;
 
         private readonly BackgroundTextureSubscription _hoverSubscription;
+
+        public event EventHandler<bool> VisibilityChanged;
 
         public TodoEntry(Todo todo, int width)
         {
@@ -30,6 +33,17 @@ namespace TodoList.Components
 
             _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));
+
+            _checkbox.Changed += OnCheckboxChanged;
+        }
+
+        private void OnCheckboxChanged(object sender, bool done)
+        {
+            if (done && !Settings.ShowAlreadyDoneTasks.Value)
+            {
+                Hide();
+                VisibilityChanged?.Invoke(this, false);
+            }
         }
 
         private void OnMouseEntered(object target, MouseEventArgs args)
@@ -49,7 +63,8 @@ namespace TodoList.Components
         protected override void DisposeControl()
         {
             _hoverSubscription.Dispose();
-            
+
+            _checkbox.Changed -= OnCheckboxChanged;
             _checkbox.Dispose();
             _todoTitle.Dispose();
             _editButton.Dispose();

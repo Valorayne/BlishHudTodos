@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using Blish_HUD;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using TodoList.Components;
@@ -30,7 +29,7 @@ namespace TodoList
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			Data.Initialize();
 			
-			_window = TodoListWindow.Create();
+			_window = new TodoListWindow();
 			_cornerIcon = new TodoCornerIcon(_window);
 			return Task.CompletedTask;
 		}
@@ -38,18 +37,7 @@ namespace TodoList
 		protected override void OnModuleLoaded(EventArgs e)
 		{
 			_window.Show();
-
-			Settings.OverlayWidth.SettingChanged += OverlayDimensionsChanged;
-			Settings.OverlayHeight.SettingChanged += OverlayDimensionsChanged;
-			
 			base.OnModuleLoaded(e);
-		}
-
-		private void OverlayDimensionsChanged(object target, ValueChangedEventArgs<int> args)
-		{
-			_window.Dispose();
-			_window = TodoListWindow.Create();
-			_window.Show();
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -62,8 +50,6 @@ namespace TodoList
 			_window.Dispose();
 			_cornerIcon.Dispose();
 			
-			Settings.OverlayWidth.SettingChanged -= OverlayDimensionsChanged;
-			Settings.OverlayHeight.SettingChanged -= OverlayDimensionsChanged;
 			Settings.Dispose();
 			
 			TodoDetailsWindowPool.Dispose();

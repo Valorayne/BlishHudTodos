@@ -1,7 +1,6 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
-using Microsoft.Xna.Framework;
 using TodoList.Models;
 
 namespace TodoList.Components
@@ -26,7 +25,7 @@ namespace TodoList.Components
 
             _checkbox = new TodoCheckbox(todo) { Parent = this };
             _scheduleIcon = new TodoScheduleIcon(todo) { Parent = this };
-            var titleWidth = width - _checkbox.Width - TodoEditButton.WIDTH - TodoDeleteButton.WIDTH;
+            var titleWidth = width - _checkbox.Width - TodoEditButton.WIDTH - TodoDeleteButton.WIDTH - TodoScheduleIcon.WIDTH;
             _todoTitle = new TodoTitle(todo, titleWidth) { Parent = this };
             _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
             _deleteButton = new TodoDeleteButton(todo) { Parent = this, Visible = false };

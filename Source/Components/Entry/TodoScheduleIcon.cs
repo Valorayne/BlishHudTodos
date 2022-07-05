@@ -8,14 +8,16 @@ namespace TodoList.Components
 {
     public class TodoScheduleIcon : Panel
     {
+        public const int WIDTH = HEADER_HEIGHT;
+        
         private readonly Todo _todo;
         private readonly Image _icon;
 
         public TodoScheduleIcon(Todo todo)
         {
             _todo = todo;
-            Width = HEADER_HEIGHT;
-            Height = HEADER_HEIGHT;
+            Width = WIDTH;
+            Height = WIDTH;
             _icon = new Image(IconTexture)
             {
                 Parent = this,

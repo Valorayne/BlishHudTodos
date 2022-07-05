@@ -17,6 +17,8 @@ namespace TodoList
         EyeIcon,
         EditIcon,
         EditIconHovered,
+        DeleteIcon,
+        DeleteIconHovered
     }
     
     public static class Resources
@@ -37,6 +39,8 @@ namespace TodoList
             { Textures.EyeIcon, @"textures\eye.png" },
             { Textures.EditIcon, @"textures\104168.png" },
             { Textures.EditIconHovered, @"textures\104168_hovered.png" },
+            { Textures.DeleteIcon, @"textures\156012.png" },
+            { Textures.DeleteIconHovered, @"textures\156012.png" },
         };
         
         public static Texture2D GetTexture(Textures texture)

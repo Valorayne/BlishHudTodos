@@ -8,7 +8,6 @@ namespace TodoList.Components.Details
         public const int PADDING = 5;
 
         public StandardButton SaveButton { get; }
-        public StandardButton DeleteButton { get; }
 
         public TodoDetailsMenuBar(Todo todo)
         {
@@ -23,20 +22,11 @@ namespace TodoList.Components.Details
                 Text = todo.IsDraft ? "Create" : "Save",
                 Width = 100
             };
-            
-            if (!todo.IsDraft)
-                DeleteButton = new StandardButton
-                {
-                    Parent = this,
-                    Text = "Delete",
-                    Width = 100
-                };
         }
 
         protected override void DisposeControl()
         {
             SaveButton.Dispose();
-            DeleteButton?.Dispose();
             base.DisposeControl();
         }
     }

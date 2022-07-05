@@ -1,5 +1,4 @@
-﻿using System;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using TodoList.Models;
 
@@ -7,66 +6,54 @@ namespace TodoList.Components
 {
     public sealed class TodoEntry : FlowPanel
     {
-        private readonly Todo _todo;
-        
-        private TodoCheckbox _checkbox;
-        private TodoTitle _todoTitle;
-        private TodoEditButton _editButton;
+        private readonly TodoCheckbox _checkbox;
+        private readonly TodoTitle _todoTitle;
+        private readonly HoverButton _editButton;
+        private readonly HoverButton _deleteButton;
+
+        private readonly Subscriptions.BackgroundTexture _hoverSubscription;
 
         public TodoEntry(Todo todo, int width)
         {
-            _todo = todo;
             Width = width;
-            BackgroundTexture = Resources.GetTexture(Textures.Header);
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
-            SpawnComponents(todo, width);
+            _checkbox = new TodoCheckbox { Parent = this };
+            var titleWidth = width - _checkbox.Width - TodoEditButton.WIDTH - TodoDeleteButton.WIDTH;
+            _todoTitle = new TodoTitle(todo, titleWidth) { Parent = this };
+            _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
+            _deleteButton = new TodoDeleteButton(todo) { Parent = this, Visible = false };
 
             MouseEntered += OnMouseEntered;
             MouseLeft += OnMouseLeft;
 
-            Data.TodoModified += OnTodoModified;
-        }
-
-        private void OnTodoModified(object sender, Todo todo)
-        {
-            if (todo == _todo)
-            {
-                DespawnComponents();
-                SpawnComponents(todo, Width);
-            }
-        }
-
-        private void SpawnComponents(Todo todo, int width)
-        {
-            _checkbox = new TodoCheckbox { Parent = this };
-            _todoTitle = new TodoTitle(todo, width - _checkbox.Width - TodoEditButton.WIDTH) { Parent = this };
-            _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
+            _hoverSubscription = new Subscriptions.BackgroundTexture(this, Resources.GetTexture(Textures.Header),
+                Resources.GetTexture(Textures.HeaderHovered));
         }
 
         private void OnMouseEntered(object target, MouseEventArgs args)
         {
-            BackgroundTexture = Resources.GetTexture(Textures.HeaderHovered);
             _editButton.Show();
+            _deleteButton.Show();
+            RecalculateLayout();
         }
         
         private void OnMouseLeft(object target, MouseEventArgs args)
         {
-            BackgroundTexture = Resources.GetTexture(Textures.Header);
             _editButton.Hide();
-        }
-
-        private void DespawnComponents()
-        {
-            _checkbox.Dispose();
-            _todoTitle.Dispose();
-            _editButton.Dispose();
+            _deleteButton.Hide();
+            RecalculateLayout();
         }
 
         protected override void DisposeControl()
         {
-            DespawnComponents();
+            _hoverSubscription.Dispose();
+            
+            _checkbox.Dispose();
+            _todoTitle.Dispose();
+            _editButton.Dispose();
+            _deleteButton.Dispose();
 
             MouseEntered -= OnMouseEntered;
             MouseLeft -= OnMouseLeft;

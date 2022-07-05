@@ -7,7 +7,6 @@ namespace TodoList.Components
     public class TodoListWindow : StandardWindow
     {
         private readonly BackgroundColorSubscription _backgroundColorSubscription;
-        private readonly TodoListPanel _panel;
 
         private static Rectangle GetWindowRegion => new Rectangle(0, -28, Settings.OverlayWidth.Value, Settings.OverlayHeight.Value);
         private static Rectangle GetContentRegion => new Rectangle(0, -28, GetWindowRegion.Width, GetWindowRegion.Height + 33);
@@ -19,10 +18,10 @@ namespace TodoList.Components
             BackgroundColor = Settings.OverlayBackgroundColor;
             SavesPosition = true;
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
-            CanClose = false;
             CanResize = true;
+            CanClose = false;
 
-            _panel = new TodoListPanel { Parent = this };
+            new TodoListPanel { Parent = this };
             _backgroundColorSubscription = new BackgroundColorSubscription(this);
         }
 
@@ -39,7 +38,6 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
-            _panel.Dispose();
             _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }

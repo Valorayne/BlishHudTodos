@@ -1,17 +1,28 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TodoList.Components.Menu
 {
-    public class TodoShowAlreadyDoneToggle : Image
+    public class TodoShowAlreadyDoneToggle : Panel
     {
+        private readonly Image _icon;
+
         public TodoShowAlreadyDoneToggle()
         {
-            Texture = EyeTexture;
-            BasicTooltipText = EyeTooltip;
-            Height = 32;
-            Width = 32;
+            _icon = new Image
+            {
+                Parent = this,
+                Height = 36,
+                Width = 36, 
+                Location = new Point(2, 2),
+                BasicTooltipText = EyeTooltip,
+                Texture = EyeTexture
+            };
+            
+            Height = 40;
+            Width = 40;
 
             Click += OnClick;
         }
@@ -27,8 +38,8 @@ namespace TodoList.Components.Menu
         private void OnClick(object sender, MouseEventArgs args)
         {
             Settings.ShowAlreadyDoneTasks.Value = !Settings.ShowAlreadyDoneTasks.Value;
-            Texture = EyeTexture;
-            BasicTooltipText = EyeTooltip;
+            _icon.Texture = EyeTexture;
+            _icon.BasicTooltipText = EyeTooltip;
         }
 
         protected override void DisposeControl()

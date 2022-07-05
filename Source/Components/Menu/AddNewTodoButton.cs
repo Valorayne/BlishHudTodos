@@ -4,11 +4,13 @@ using TodoList.Components.Details;
 
 namespace TodoList.Components.Menu
 {
-    public class AddNewTodoButton : StandardButton
+    public class AddNewTodoButton : Image
     {
-        public AddNewTodoButton()
+        public AddNewTodoButton() : base(Resources.GetTexture(Textures.AddNewIcon))
         {
-            Text = "Add New Todo";
+            Width = 40;
+            Height = 40;
+            BasicTooltipText = "Add new Todo";
             Click += OnButtonClicked;
         }
 

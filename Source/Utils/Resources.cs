@@ -37,7 +37,7 @@ namespace TodoList
             { Textures.HeaderHovered, @"textures\1032324.png" },
             { Textures.CollapseArrowDown, @"textures\155953.png" },
             { Textures.CollapseArrowRight, @"textures\155953_rotated.png" },
-            { Textures.AddNewIcon, @"textures\155914.png" },
+            { Textures.AddNewIcon, @"textures\157259.png" },
             { Textures.EyeIcon, @"textures\605021.png" },
             { Textures.EyeIconClosed, @"textures\605020.png" },
             { Textures.EditIcon, @"textures\104168.png" },

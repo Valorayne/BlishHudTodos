@@ -69,6 +69,7 @@
     <Compile Include="Source\Components\Details\TodoDetailsPanel.cs" />
     <Compile Include="Source\Components\Details\TodoDetailsWindow.cs" />
     <Compile Include="Source\Components\Details\TodoDetailsWindowPool.cs" />
+    <Compile Include="Source\Components\Details\TodoScheduleTypeInput.cs" />
     <Compile Include="Source\Components\Entry\TodoCheckbox.cs" />
     <Compile Include="Source\Components\Entry\TodoDeleteButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEditButton.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
     <Compile Include="Source\Models\Todo.cs" />
+    <Compile Include="Source\Models\TodoSchedule.cs" />
+    <Compile Include="Source\Models\TodoScheduleType.cs" />
     <Compile Include="Source\TodoModule.cs" />
     <Compile Include="Source\Utils\Data.cs" />
     <Compile Include="Source\Utils\HoverButton.cs" />

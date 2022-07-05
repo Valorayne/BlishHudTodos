@@ -8,24 +8,25 @@ namespace TodoList.Models
     {
         public bool IsDraft { get; private set; }
         
-        [JsonProperty]
-        public string Text { get; set; }
-        
-        [JsonProperty]
-        public DateTime CreatedAt { get; private set; }
-        
-        [JsonProperty]
-        public DateTime? LastExecution { get; private set; }
+        [JsonProperty] public string Text { get; set; }
+        [JsonProperty] public DateTime CreatedAt { get; private set; }
+        [JsonProperty] public DateTime? LastExecution { get; private set; }
+        [JsonProperty] public TodoSchedule? Schedule { get; set; }
 
+        [JsonConstructor]
+        private Todo(DateTime createdAt, DateTime? lastExecution)
+        {
+            CreatedAt = createdAt;
+            LastExecution = lastExecution;
+        }
+        
         public bool Done
         {
             get => LastExecution.HasValue;
             set
             {
-                if (value)
-                    LastExecution = DateTime.Now;
-                else
-                    LastExecution = null;
+                if (value) LastExecution = DateTime.Now;
+                else LastExecution = null;
             }
         }
 
@@ -36,14 +37,7 @@ namespace TodoList.Models
                 IsDraft = true,
                 Text = "This is some test content"
             };
-        }
-
-        [JsonConstructor]
-        private Todo(DateTime createdAt, DateTime? lastExecution)
-        {
-            CreatedAt = createdAt;
-            LastExecution = lastExecution;
-        }
+        } 
         
         public void Save()
         {

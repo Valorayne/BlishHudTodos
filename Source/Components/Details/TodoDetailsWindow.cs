@@ -35,6 +35,8 @@ namespace TodoList.Components.Details
             BackgroundColor = Settings.OverlayBackgroundColor;
             Title = isNew ? "Add New Todo" : "Edit Todo";
             Location = location;
+            SavesPosition = true;
+            Id = "53eca010-6e42-491d-9cf4-6f9f358a3d8f";
 
             _panel = new TodoDetailsPanel(existingTodo ?? Todo.CreateDraft(), contentRegion.Width, contentRegion.Height) { Parent = this };
             _backgroundColorSubscription = new BackgroundColorSubscription(this);

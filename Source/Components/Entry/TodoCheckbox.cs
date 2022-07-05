@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using TodoList.Models;
 
@@ -19,7 +20,8 @@ namespace TodoList.Components
             {
                 Parent = this, 
                 Location = new Point(10, 10),
-                Checked = todo.Done
+                Checked = todo.Done,
+                BasicTooltipText = GetTooltipText(todo.LastExecution)
             };
 
             _checkbox.CheckedChanged += OnClick;
@@ -29,6 +31,27 @@ namespace TodoList.Components
         {
             _todo.Done = e.Checked;
             _todo.Save();
+            _checkbox.BasicTooltipText = GetTooltipText(_todo.LastExecution);
+        }
+
+        private string GetTooltipText(DateTime? lastExecution)
+        {
+            if (!lastExecution.HasValue)
+                return null;
+            
+            var since = DateTime.Now - lastExecution.Value;
+            return
+                $"Last done: {GetDayString(since.Days)}, {_todo.LastExecution?.ToShortTimeString()}";
+        }
+
+        private static string GetDayString(int days)
+        {
+            switch (days)
+            {
+                case 0: return "today";
+                case 1: return "yesterday";
+                default: return $"{days} days ago";
+            }
         }
 
         protected override void DisposeControl()

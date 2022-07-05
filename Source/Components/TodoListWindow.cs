@@ -47,10 +47,12 @@ namespace TodoList.Components
             _scrollBar = AddScrollBar(contentRegion, scrollHeight);
             var buttonLocation = new Point(windowRegion.Width - 140, scrollHeight + MENU_BAR_PADDING);
             _addNewButton = new AddNewTodoButton { Parent = this, Location = buttonLocation };
-            _eyeButton = new Image(Resources.GetTexture(Textures.EyeIcon))
+            _eyeButton = new TodoShowAlreadyDoneToggle
             {
-                Parent = this,
-                Location = new Point(buttonLocation.X-200, buttonLocation.Y)
+                Parent = this, 
+                Location = new Point(buttonLocation.X-36, buttonLocation.Y-4),
+                Width = 36,
+                Height = 36
             };
 
             _backgroundColorSubscription = new BackgroundColorSubscription(this);

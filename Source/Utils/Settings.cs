@@ -16,6 +16,8 @@ namespace TodoList
         public static SettingEntry<float> OverlayBackgroundAlpha { get; private set; }
         
         public static SettingEntry<string> Data { get; private set; }
+        
+        public static SettingEntry<bool> ShowAlreadyDoneTasks { get; private set; }
 
         public static Color OverlayBackgroundColor => new Color(
             OverlayBackgroundRed.Value, OverlayBackgroundGreen.Value,
@@ -45,6 +47,8 @@ namespace TodoList
             OverlayBackgroundGreen.SetRange(0, 1f);
 
             Data = settings.DefineSetting("Data.Todos", "{}");
+
+            ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShoAlreadyDoneTasks", false);
         }
 
         public static void Dispose()
@@ -59,6 +63,8 @@ namespace TodoList
             OverlayBackgroundAlpha = null;
 
             Data = null;
+
+            ShowAlreadyDoneTasks = null;
         }
     }
 }

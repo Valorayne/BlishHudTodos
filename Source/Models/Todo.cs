@@ -34,10 +34,9 @@ namespace TodoList.Models
         {
             return new Todo(DateTime.Now, null)
             {
-                IsDraft = true,
-                Text = "This is some test content"
+                IsDraft = true
             };
-        } 
+        }
         
         public void Save()
         {

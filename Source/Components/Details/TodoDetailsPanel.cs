@@ -1,5 +1,4 @@
 ﻿using Blish_HUD.Controls;
-using Blish_HUD.Input;
 using TodoList.Models;
 
 namespace TodoList.Components.Details
@@ -8,7 +7,6 @@ namespace TodoList.Components.Details
     {
         private readonly Todo _todo;
         private readonly TodoDetailsInputArea _inputAreaArea;
-        private readonly TodoDetailsMenuBar _menuBar;
 
         public TodoDetailsPanel(Todo todo, int width, int height)
         {
@@ -17,30 +15,20 @@ namespace TodoList.Components.Details
             HeightSizingMode = SizingMode.Fill;
             FlowDirection = ControlFlowDirection.SingleBottomToTop;
 
-            _menuBar = new TodoDetailsMenuBar(todo) { Parent = this };
+            var menuBar = new TodoDetailsMenuBar(todo, OnSave) { Parent = this };
             _inputAreaArea = new TodoDetailsInputArea(todo, width)
             {
-                Parent = this, 
-                Height = height - _menuBar.Height - TodoDetailsMenuBar.PADDING
+                Parent = this,
+                Height = height - menuBar.Height - TodoDetailsMenuBar.PADDING
             };
-
-            _menuBar.SaveButton.Click += OnSave;
         }
-        
-        private void OnSave(object target, MouseEventArgs args)
+
+        private void OnSave()
         {
             _todo.Text = _inputAreaArea.Text;
             _todo.Schedule = _inputAreaArea.Schedule;
             _todo.Save();
             TodoDetailsWindowPool.Dispose();
-        }
-
-        protected override void DisposeControl()
-        {
-            _menuBar.SaveButton.Click -= OnSave;
-            _inputAreaArea.Dispose();
-            _menuBar.Dispose();
-            base.DisposeControl();
         }
     }
 }

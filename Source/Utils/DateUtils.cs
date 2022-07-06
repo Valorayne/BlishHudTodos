@@ -25,8 +25,10 @@ namespace TodoList
             return $"{dayString}{hourString}{minuteString}";
         }
 
+        public static DateTime LastDailyReset => DateTime.UtcNow.Date;
         public static DateTime NextDailyReset => DateTime.UtcNow.Date + TimeSpan.FromDays(1);
 
+        public static DateTime LastWeeklyReset => NextWeeklyReset - TimeSpan.FromDays(7);
         public static DateTime NextWeeklyReset
         {
             get

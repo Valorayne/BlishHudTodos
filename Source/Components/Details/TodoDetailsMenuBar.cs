@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
 using TodoList.Models;
 
 namespace TodoList.Components.Details
@@ -9,19 +10,14 @@ namespace TodoList.Components.Details
 
         public StandardButton SaveButton { get; }
 
-        public TodoDetailsMenuBar(Todo todo)
+        public TodoDetailsMenuBar(Todo todo, Action onSave)
         {
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.RightToLeft;
             Padding = new Thickness(PADDING);
 
-            SaveButton = new StandardButton
-            {
-                Parent = this,
-                Text = todo.IsDraft ? "Create" : "Save",
-                Width = 100
-            };
+            SaveButton = new TodoDetailsSaveButton(todo, onSave) { Parent = this };
         }
     }
 }

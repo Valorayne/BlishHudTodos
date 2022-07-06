@@ -46,19 +46,11 @@ namespace TodoList.Components
 
         private void SpawnEntry(object sender, Todo todo)
         {
-            var showAlreadyDoneTasks = Settings.ShowAlreadyDoneTasks.Value;
-            var entry = new TodoEntry(todo)
+            _entries.Add(todo, new TodoEntry(todo)
             {
                 Parent = this,
-                Visible = showAlreadyDoneTasks || !todo.Done
-            };
-            _entries.Add(todo, entry);
-            entry.EntryContent.VisibilityChanged += OnEntryVisibilityChanged;
-        }
-
-        private void OnEntryVisibilityChanged(object sender, bool e)
-        {
-            Invalidate();
+                Visible = Settings.ShowAlreadyDoneTasks.Value || !todo.Done
+            });
         }
 
         protected override void DisposeControl()
@@ -68,10 +60,7 @@ namespace TodoList.Components
             Data.TodoDeleted -= DeleteEntry;
 
             foreach (var entry in _entries.Values)
-            {
-                entry.EntryContent.VisibilityChanged -= OnEntryVisibilityChanged;
                 entry.Dispose();
-            }
 
             _entries.Clear();
             base.DisposeControl();

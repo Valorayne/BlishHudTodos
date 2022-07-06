@@ -10,8 +10,6 @@ namespace TodoList.Components
         private readonly Todo _todo;
         private readonly Checkbox _checkbox;
 
-        public event EventHandler<bool> Changed;
-
         public TodoCheckbox(Todo todo)
         {
             _todo = todo;
@@ -34,7 +32,6 @@ namespace TodoList.Components
             _todo.Done = e.Checked;
             _todo.Save();
             _checkbox.BasicTooltipText = GetTooltipText(_todo.LastExecution);
-            Changed?.Invoke(this, e.Checked);
         }
 
         private string GetTooltipText(DateTime? lastExecution)

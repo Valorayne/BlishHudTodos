@@ -7,21 +7,28 @@ namespace TodoList.Components
 {
     public sealed class TodoEntry : Panel
     {
-        private readonly BackgroundTextureSubscription _hoverSubscription;
+        private readonly Todo _todo;
         private readonly TodoEntryHoverMenu _hoverMenu;
-
-        public TodoEntryContent EntryContent { get; }
 
         public TodoEntry(Todo todo)
         {
+            _todo = todo;
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
 
-            EntryContent = new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
+            new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
             _hoverMenu = new TodoEntryHoverMenu(todo) { Parent = this, Visible = false };
-            
-            _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
-                Resources.GetTexture(Textures.HeaderHovered));
+
+            Data.TodoModified += OnTodoModified;
+        }
+
+        private void OnTodoModified(object sender, Todo todo)
+        {
+            if (todo == _todo && todo.Done && !Settings.ShowAlreadyDoneTasks.Value)
+            {
+                Hide();
+                Parent.Invalidate();
+            }
         }
 
         private void RepositionHoverMenu()
@@ -50,7 +57,7 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
-            _hoverSubscription.Dispose();
+            Data.TodoModified -= OnTodoModified;
             base.DisposeControl();
         }
     }

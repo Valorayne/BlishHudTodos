@@ -40,7 +40,7 @@ namespace TodoList
             OverlayBackgroundGreen = overlaySettings.DefineSetting("Background.Green", 0f, () => "Background Green");
             OverlayBackgroundGreen.SetRange(0, 1f);
 
-            Data = settings.DefineSetting("Data.Todos", "{}");
+            Data = settings.DefineSetting("Data.Todos.1", "{}");
 
             ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true);
         }

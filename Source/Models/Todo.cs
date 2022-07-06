@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace TodoList.Models
@@ -10,29 +12,31 @@ namespace TodoList.Models
         
         [JsonProperty] public string Text { get; set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
-        [JsonProperty] public DateTime? LastExecution { get; private set; }
+        [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
 
         [JsonConstructor]
-        private Todo(DateTime createdAt, DateTime? lastExecution)
+        private Todo(DateTime createdAt, List<DateTime> executions)
         {
             CreatedAt = createdAt;
-            LastExecution = lastExecution;
+            Executions = executions;
         }
+
+        public DateTime? LastExecution => Executions.Count > 0 ? Executions.Last() : (DateTime?)null;
         
         public bool Done
         {
-            get => LastExecution.HasValue;
+            get => Executions.Count > 0;
             set
             {
-                if (value) LastExecution = DateTime.Now;
-                else LastExecution = null;
+                if (value) Executions.Add(DateTime.Now);
+                else Executions.RemoveAt(Executions.Count - 1);
             }
         }
 
         public static Todo CreateDraft()
         {
-            return new Todo(DateTime.Now, null)
+            return new Todo(DateTime.Now, new List<DateTime>())
             {
                 IsDraft = true
             };

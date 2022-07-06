@@ -52,8 +52,6 @@ namespace TodoList.Components
                     return $"Daily reset in {DateUtils.NextDailyReset.ToDurationString()}";
                 case TodoScheduleType.WeeklyServer:
                     return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
-                case TodoScheduleType.CustomLocal:
-                    return "Bla";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

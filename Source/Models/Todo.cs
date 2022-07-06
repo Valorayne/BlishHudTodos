@@ -8,6 +8,11 @@ namespace TodoList.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Todo
     {
+        public static Todo CreateDraft()
+        {
+            return new Todo(DateTime.Now, new List<DateTime>()) { IsDraft = true };
+        }
+
         public bool IsDraft { get; private set; }
         
         [JsonProperty] public string Text { get; set; }
@@ -26,20 +31,26 @@ namespace TodoList.Models
         
         public bool Done
         {
-            get => Executions.Count > 0;
+            get
+            {
+                if (!Schedule.HasValue)
+                    return LastExecution.HasValue;
+
+                switch (Schedule.Value.Type)
+                {
+                    case TodoScheduleType.DailyServer:
+                        return LastExecution.HasValue && LastExecution.Value < DateUtils.LastDailyReset;
+                    case TodoScheduleType.WeeklyServer:
+                        return LastExecution.HasValue && LastExecution.Value < DateUtils.LastWeeklyReset;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
             set
             {
                 if (value) Executions.Add(DateTime.Now);
                 else Executions.RemoveAt(Executions.Count - 1);
             }
-        }
-
-        public static Todo CreateDraft()
-        {
-            return new Todo(DateTime.Now, new List<DateTime>())
-            {
-                IsDraft = true
-            };
         }
         
         public void Save()

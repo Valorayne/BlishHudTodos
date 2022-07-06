@@ -30,8 +30,7 @@ namespace TodoList.Components.Details
                 {
                     TodoScheduleTypeExtensions.NO_RESET,
                     TodoScheduleTypeExtensions.DAILY_SERVER_RESET,
-                    TodoScheduleTypeExtensions.WEEKLY_SERVER_RESET,
-                    TodoScheduleTypeExtensions.CUSTOM_LOCAL_TIME,
+                    TodoScheduleTypeExtensions.WEEKLY_SERVER_RESET
                 },
                 Width = width / 2,
                 SelectedItem = todo.Schedule.HasValue ? todo.Schedule.Value.Type.ToDropdownEntry() : TodoScheduleTypeExtensions.NO_RESET

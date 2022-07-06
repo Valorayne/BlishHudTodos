@@ -25,7 +25,7 @@ namespace TodoList.Components.Details
 
         private void OnSave()
         {
-            _todo.Text = _inputAreaArea.Text;
+            _todo.Description = _inputAreaArea.Text;
             _todo.Schedule = _inputAreaArea.Schedule;
             _todo.Save();
             TodoDetailsWindowPool.Dispose();

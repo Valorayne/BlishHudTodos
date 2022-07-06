@@ -14,8 +14,8 @@ namespace TodoList.Models
         }
 
         public bool IsDraft { get; private set; }
-        
-        [JsonProperty] public string Text { get; set; }
+
+        [JsonProperty] public string Description { get; set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }

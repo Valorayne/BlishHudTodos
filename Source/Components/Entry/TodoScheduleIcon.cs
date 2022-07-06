@@ -22,6 +22,8 @@ namespace TodoList.Components
             {
                 Parent = this,
                 Location = new Point(0, 2),
+                Width = 32,
+                Height = 32,
                 BasicTooltipText = GetIconTooltip()
             };
 

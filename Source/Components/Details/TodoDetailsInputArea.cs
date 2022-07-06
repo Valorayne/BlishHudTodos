@@ -19,7 +19,7 @@ namespace TodoList.Components.Details
             _textBox = new TextBox
             {
                 Parent = this,
-                Text = todo.Text,
+                Text = todo.Description,
                 Width = width
             };
 

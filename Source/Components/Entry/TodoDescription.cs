@@ -4,12 +4,12 @@ using TodoList.Models;
 
 namespace TodoList.Components
 {
-    public sealed class TodoTitle : Panel
+    public sealed class TodoDescription : Panel
     {
         private readonly Todo _todo;
         private readonly Label _label;
-        
-        public TodoTitle(Todo todo)
+
+        public TodoDescription(Todo todo)
         {
             _todo = todo;
             Height = HEADER_HEIGHT;
@@ -18,7 +18,7 @@ namespace TodoList.Components
             {
                 Parent = this,
                 StrokeText = true,
-                Text = todo.Text,
+                Text = todo.Description,
                 AutoSizeWidth = true,
                 Location = new Point(0, 8)
             };
@@ -28,7 +28,7 @@ namespace TodoList.Components
         private void OnTodoModified(object sender, Todo todo)
         {
             if (todo == _todo)
-                _label.Text = todo.Text;
+                _label.Text = todo.Description;
         }
 
         protected override void DisposeControl()

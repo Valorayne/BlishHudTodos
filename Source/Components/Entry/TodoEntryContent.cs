@@ -18,7 +18,7 @@ namespace TodoList.Components
 
             _checkbox = new TodoCheckbox(todo) { Parent = this };
             new TodoScheduleIcon(todo) { Parent = this };
-            new TodoTitle(todo) { Parent = this };
+            new TodoDescription(todo) { Parent = this };
 
             _checkbox.Changed += OnCheckboxChanged;
         }

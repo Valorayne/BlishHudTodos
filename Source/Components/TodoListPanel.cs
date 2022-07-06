@@ -19,17 +19,8 @@ namespace TodoList.Components
             HeightSizingMode = SizingMode.Fill;
 
             _menuBar = new TodoListMenuBar { Parent = this };
-
-            var mainPanel = new FlowPanel
-            {
-                Parent = this,
-                FlowDirection = ControlFlowDirection.SingleLeftToRight,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.Fill
-            };
-
-            _scrollView = new TodoScrollView { Parent = mainPanel };
-            _scrollBar = new Scrollbar(_scrollView) { Parent = mainPanel };
+            _scrollView = new TodoScrollView { Parent = this };
+            _scrollBar = new Scrollbar(_scrollView) { Parent = this };
         }
 
         private void ResizeComponents()
@@ -37,14 +28,14 @@ namespace TodoList.Components
             if (_scrollBar != null)
             {
                 _scrollBar.Height = Height - _menuBar.Height;
-                _scrollBar.Location = new Point(Width - SCROLL_BAR_WIDTH, 0);
+                _scrollBar.Location = new Point(Width - SCROLL_BAR_WIDTH, TodoListMenuBar.HEIGHT);
             }
 
             if (_scrollView != null)
             {
                 _scrollView.Height = Height - _menuBar.Height;
                 _scrollView.Width = Width - SCROLL_BAR_WIDTH;
-                _scrollView.Invalidate();
+                _scrollView.Location = new Point(0, TodoListMenuBar.HEIGHT);
             }
         }
 

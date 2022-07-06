@@ -8,12 +8,15 @@ namespace TodoList.Components
     public class TodoListWindow : StandardWindow
     {
         private const int MIN_WIDTH = 300;
+        private const int MAX_WIDTH = 1000;
+        private const int MIN_HEIGHT = 150;
         private const int MAX_HEIGHT = 1000;
         
         private readonly BackgroundColorSubscription _backgroundColorSubscription;
 
         private static Rectangle GetWindowRegion => new Rectangle(0, -28,
-            Math.Max(MIN_WIDTH, Settings.OverlayWidth.Value), Math.Min(MAX_HEIGHT, Settings.OverlayHeight.Value));
+            Math.Max(MIN_WIDTH, Math.Min(MAX_WIDTH, Settings.OverlayWidth.Value)),
+            Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, Settings.OverlayHeight.Value)));
         private static Rectangle GetContentRegion => new Rectangle(0, -28, GetWindowRegion.Width, GetWindowRegion.Height + 33);
 
         public TodoListWindow() : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)

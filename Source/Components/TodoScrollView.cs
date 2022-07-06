@@ -17,11 +17,8 @@ namespace TodoList.Components
         public TodoScrollView()
         {
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
-            WidthSizingMode = SizingMode.Fill;
-            HeightSizingMode = SizingMode.Fill;
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
-            CanScroll = true;
 
             foreach (var todo in Data.Todos)
                 SpawnEntry(this, todo);
@@ -35,7 +32,7 @@ namespace TodoList.Components
         {
             foreach (var entry in _entries.Where(entry => entry.Key.Done))
                 entry.Value.Visible = change.NewValue;
-            Invalidate();
+            RecalculateLayout();
         }
 
         private void DeleteEntry(object sender, Todo todo)

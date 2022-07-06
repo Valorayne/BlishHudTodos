@@ -6,6 +6,8 @@ namespace TodoList.Components
 {
     public class TodoListWindow : StandardWindow
     {
+        private const int MIN_WIDTH = 300;
+        
         private readonly BackgroundColorSubscription _backgroundColorSubscription;
 
         private static Rectangle GetWindowRegion => new Rectangle(0, -28, Settings.OverlayWidth.Value, Settings.OverlayHeight.Value);
@@ -30,11 +32,17 @@ namespace TodoList.Components
             // hacky check to prevent infinite recursive call
             if (!Size.Equals(new Point(GetWindowRegion.Width, GetWindowRegion.Height + 40)))
                 ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
-            
+
             Settings.OverlayWidth.Value = e.CurrentSize.X;
             Settings.OverlayHeight.Value = e.CurrentSize.Y; 
             
             base.OnResized(e);
+
+            if (e.CurrentSize.X < MIN_WIDTH)
+            {
+                Settings.OverlayWidth.Value = MIN_WIDTH;
+                ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
+            }
         } 
 
         protected override void DisposeControl()

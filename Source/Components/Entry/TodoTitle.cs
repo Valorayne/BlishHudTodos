@@ -4,7 +4,7 @@ using TodoList.Models;
 
 namespace TodoList.Components
 {
-    public class TodoTitle : Panel
+    public sealed class TodoTitle : Panel
     {
         private readonly Todo _todo;
         private readonly Label _label;

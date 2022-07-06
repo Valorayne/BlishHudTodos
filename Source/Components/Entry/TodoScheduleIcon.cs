@@ -49,9 +49,9 @@ namespace TodoList.Components
             switch (_todo.Schedule.Value.Type)
             {
                 case TodoScheduleType.DailyServer:
-                    return $"Daily reset in {DateUtils.GetDurationString(DateUtils.NextDailyReset)}";
+                    return $"Daily reset in {DateUtils.NextDailyReset.ToDurationString()}";
                 case TodoScheduleType.WeeklyServer:
-                    return $"Weekly reset in {DateUtils.GetDurationString(DateUtils.NextWeeklyReset)}";
+                    return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
                 case TodoScheduleType.CustomLocal:
                     return "Bla";
                 default:

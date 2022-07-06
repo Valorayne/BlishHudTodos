@@ -4,22 +4,24 @@ namespace TodoList
 {
     public static class DateUtils
     {
-        public static string GetPastDayString(int days)
+        public static string ToDaysSinceString(this DateTime since)
         {
-            switch (days)
-            {
-                case 0: return "today";
-                case 1: return "yesterday";
-                default: return $"{days} days ago";
-            }
+            var daysSince = (DateTime.Today - since.Date).Days;
+            return daysSince == 0
+                ? "today" 
+                : daysSince == 1
+                    ? "yesterday" 
+                    : $"{daysSince} days ago";
         }
         
-        public static string GetDurationString(DateTime target)
+        public static string ToDurationString(this DateTime target)
         {
             var until = target - DateTime.Now;
             var dayString = until.Days == 0 ? "" : until.Days == 1 ? "1 day, " : $"{until.Days} days, ";
             var hourString = until.Hours == 0 ? "" : $"{until.Hours}h ";
-            var minuteString = until.Minutes == 0 ? "less than a minute" : $"{until.Minutes}min";
+            var minuteString = until.Minutes == 0 
+                ? dayString.Length > 0 || hourString.Length > 0 ? "" : "less than a minute" 
+                : $"{until.Minutes}min";
             return $"{dayString}{hourString}{minuteString}";
         }
 

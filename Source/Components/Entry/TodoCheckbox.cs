@@ -39,12 +39,9 @@ namespace TodoList.Components
 
         private string GetTooltipText(DateTime? lastExecution)
         {
-            if (!lastExecution.HasValue)
-                return null;
-            
-            var since = DateTime.Now - lastExecution.Value;
-            return
-                $"Last done: {DateUtils.GetPastDayString(since.Days)}, {_todo.LastExecution?.ToShortTimeString()}";
+            return lastExecution.HasValue 
+                ? $"Last done: {lastExecution.Value.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
+                : null;
         }
 
         protected override void DisposeControl()

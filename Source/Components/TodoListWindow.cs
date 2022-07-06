@@ -1,4 +1,5 @@
-﻿using Blish_HUD;
+﻿using System;
+using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 
@@ -7,10 +8,12 @@ namespace TodoList.Components
     public class TodoListWindow : StandardWindow
     {
         private const int MIN_WIDTH = 300;
+        private const int MAX_HEIGHT = 1000;
         
         private readonly BackgroundColorSubscription _backgroundColorSubscription;
 
-        private static Rectangle GetWindowRegion => new Rectangle(0, -28, Settings.OverlayWidth.Value, Settings.OverlayHeight.Value);
+        private static Rectangle GetWindowRegion => new Rectangle(0, -28,
+            Math.Max(MIN_WIDTH, Settings.OverlayWidth.Value), Math.Min(MAX_HEIGHT, Settings.OverlayHeight.Value));
         private static Rectangle GetContentRegion => new Rectangle(0, -28, GetWindowRegion.Width, GetWindowRegion.Height + 33);
 
         public TodoListWindow() : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
@@ -37,12 +40,6 @@ namespace TodoList.Components
             Settings.OverlayHeight.Value = e.CurrentSize.Y; 
             
             base.OnResized(e);
-
-            if (e.CurrentSize.X < MIN_WIDTH)
-            {
-                Settings.OverlayWidth.Value = MIN_WIDTH;
-                ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
-            }
         } 
 
         protected override void DisposeControl()

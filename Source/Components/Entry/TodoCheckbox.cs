@@ -36,8 +36,8 @@ namespace TodoList.Components
 
         private string GetTooltipText(DateTime? lastExecution)
         {
-            return lastExecution.HasValue 
-                ? $"Last done: {lastExecution.Value.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
+            return lastExecution.HasValue
+                ? $"Done: {lastExecution.Value.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
                 : null;
         }
 

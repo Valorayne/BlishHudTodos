@@ -1,7 +1,7 @@
-﻿using Blish_HUD.Modules;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using Blish_HUD.Modules;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using TodoList.Components;
@@ -41,6 +41,7 @@ namespace TodoList
 		protected override void Update(GameTime gameTime)
 		{
 			// GameService.GameIntegration.Gw2Instance.IsInGame && !GameService.Gw2Mumble.UI.IsMapOpen
+			TimeService.ProgressTimer(gameTime);
 		}
 
 		protected override void Unload()
@@ -48,7 +49,8 @@ namespace TodoList
 			_window.Dispose();
 			
 			Settings.Dispose();
-			
+
+			TimeService.Dispose();
 			TodoDetailsWindowPool.Dispose();
 			Data.Dispose();
 			Resources.Dispose();

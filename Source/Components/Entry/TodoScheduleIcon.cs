@@ -28,6 +28,12 @@ namespace TodoList.Components
             };
 
             Data.TodoModified += OnTodoModified;
+            TimeService.NewMinute += OnNewMinute;
+        }
+
+        private void OnNewMinute(object sender, GameTime e)
+        {
+            _icon.BasicTooltipText = GetIconTooltip();
         }
 
         private void OnTodoModified(object sender, Todo todo)
@@ -62,6 +68,7 @@ namespace TodoList.Components
         protected override void DisposeControl()
         {
             Data.TodoModified -= OnTodoModified;
+            TimeService.NewMinute -= OnNewMinute;
             base.DisposeControl();
         }
     }

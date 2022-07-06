@@ -39,9 +39,9 @@ namespace TodoList.Models
                 switch (Schedule.Value.Type)
                 {
                     case TodoScheduleType.DailyServer:
-                        return LastExecution.HasValue && LastExecution.Value < DateUtils.LastDailyReset;
+                        return LastExecution.HasValue && LastExecution.Value > DateUtils.LastDailyReset;
                     case TodoScheduleType.WeeklyServer:
-                        return LastExecution.HasValue && LastExecution.Value < DateUtils.LastWeeklyReset;
+                        return LastExecution.HasValue && LastExecution.Value > DateUtils.LastWeeklyReset;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

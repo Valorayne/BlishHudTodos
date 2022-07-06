@@ -35,7 +35,7 @@ namespace TodoList.Components
         {
             foreach (var entry in _entries.Where(entry => entry.Key.Done))
                 entry.Value.Visible = change.NewValue;
-            RecalculateLayout();
+            Invalidate();
         }
 
         private void DeleteEntry(object sender, Todo todo)
@@ -58,7 +58,7 @@ namespace TodoList.Components
 
         private void OnEntryVisibilityChanged(object sender, bool e)
         {
-            RecalculateLayout();
+            Invalidate();
         }
 
         protected override void DisposeControl()

@@ -82,6 +82,8 @@
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />
     <Compile Include="Source\Components\Menu\TodoShowAlreadyDoneToggle.cs" />
+    <Compile Include="Source\Components\Messages\AllTodosDoneMessage.cs" />
+    <Compile Include="Source\Components\Messages\NoTodosYetMessage.cs" />
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Source\Models\TodoSchedule.cs" />
     <Compile Include="Source\Models\TodoScheduleType.cs" />
     <Compile Include="Source\TodoModule.cs" />
+    <Compile Include="Source\Utils\CenteredMessage.cs" />
     <Compile Include="Source\Utils\Data.cs" />
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\HoverButton.cs" />

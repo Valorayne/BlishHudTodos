@@ -20,6 +20,9 @@ namespace TodoList.Components
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
+            new AllTodosDoneMessage { Parent = this };
+            new NoTodosYetMessage { Parent = this };
+
             foreach (var todo in Data.Todos)
                 SpawnEntry(this, todo);
 

@@ -24,7 +24,6 @@ namespace TodoList.Components.Details
         }
 
         private readonly BackgroundColorSubscription _backgroundColorSubscription;
-        private readonly TodoDetailsPanel _panel;
 
         private TodoDetailsWindow(Rectangle windowRegion, Rectangle contentRegion, Point location,
             Todo existingTodo = null) : base(Resources.GetTexture(Textures.Empty), windowRegion, contentRegion)
@@ -38,13 +37,13 @@ namespace TodoList.Components.Details
             SavesPosition = true;
             Id = "53eca010-6e42-491d-9cf4-6f9f358a3d8f";
 
-            _panel = new TodoDetailsPanel(existingTodo ?? Todo.CreateDraft(), contentRegion.Width, contentRegion.Height) { Parent = this };
+            new TodoDetailsPanel(existingTodo ?? Todo.CreateDraft(), contentRegion.Width, contentRegion.Height)
+                { Parent = this };
             _backgroundColorSubscription = new BackgroundColorSubscription(this);
         }
 
         protected override void DisposeControl()
         {
-            _panel.Dispose();
             _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }

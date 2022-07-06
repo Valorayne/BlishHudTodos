@@ -26,8 +26,6 @@ namespace TodoList
 
         public static void Initialize(SettingCollection settings)
         {
-            ShowMenuIcon = settings.DefineSetting("Menu.Icon.Show", true, () => "Show Menu Icon", () => "Whether or not to show the menu icon in the top left bar");
-            
             var overlaySettings = settings.AddSubCollection("Overlay Settings", true, false);
 
             OverlayWidth = overlaySettings.DefineSetting("Width", 500);
@@ -44,7 +42,7 @@ namespace TodoList
 
             Data = settings.DefineSetting("Data.Todos", "{}");
 
-            ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShoAlreadyDoneTasks", false);
+            ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true);
         }
 
         public static void Dispose()

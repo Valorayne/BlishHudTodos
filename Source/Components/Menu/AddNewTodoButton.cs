@@ -11,18 +11,12 @@ namespace TodoList.Components.Menu
             Width = 40;
             Height = 40;
             BasicTooltipText = "Add new Todo";
-            Click += OnButtonClicked;
         }
 
-        private static void OnButtonClicked(object target, MouseEventArgs args)
+        protected override void OnClick(MouseEventArgs e)
         {
-            TodoDetailsWindowPool.Spawn(args.MousePosition);
-        }
-
-        protected override void DisposeControl()
-        {
-            Click -= OnButtonClicked;
-            base.DisposeControl();
+            TodoDetailsWindowPool.Spawn(e.MousePosition);
+            base.OnClick(e);
         }
     }
 }

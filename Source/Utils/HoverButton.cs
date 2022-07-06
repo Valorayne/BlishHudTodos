@@ -19,33 +19,24 @@ namespace TodoList
             
             Width = width;
             Height = height;
-
-            MouseEntered += OnMouseEntered;
-            MouseLeft += OnMouseLeft;
-            Click += OnClick;
         }
 
-        private void OnMouseLeft(object sender, MouseEventArgs e)
+        protected override void OnMouseLeft(MouseEventArgs e)
         {
             Texture = _normal;
+            base.OnMouseLeft(e);
         }
 
-        private void OnMouseEntered(object sender, MouseEventArgs e)
+        protected override void OnMouseEntered(MouseEventArgs e)
         {
             Texture = _hovered;
+            base.OnMouseEntered(e);
         }
 
-        private void OnClick(object target, MouseEventArgs args)
+        protected override void OnClick(MouseEventArgs e)
         {
-            _onClick(args);
-        }
-
-        protected override void DisposeControl()
-        {
-            MouseEntered -= OnMouseEntered;
-            MouseLeft -= OnMouseLeft;
-            Click -= OnClick;
-            base.DisposeControl();
+            _onClick(e);
+            base.OnClick(e);
         }
     }
 }

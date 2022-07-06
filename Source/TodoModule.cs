@@ -16,7 +16,6 @@ namespace TodoList
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
 		private TodoListWindow _window;
-		private TodoCornerIcon _cornerIcon;
 
 		protected override void DefineSettings(SettingCollection settings)
 		{
@@ -30,7 +29,6 @@ namespace TodoList
 			Data.Initialize();
 			
 			_window = new TodoListWindow();
-			_cornerIcon = new TodoCornerIcon(_window);
 			return Task.CompletedTask;
 		}
 
@@ -48,7 +46,6 @@ namespace TodoList
 		protected override void Unload()
 		{
 			_window.Dispose();
-			_cornerIcon.Dispose();
 			
 			Settings.Dispose();
 			

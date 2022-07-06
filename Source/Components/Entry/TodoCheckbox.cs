@@ -47,7 +47,6 @@ namespace TodoList.Components
         protected override void DisposeControl()
         {
             _checkbox.CheckedChanged -= OnClick;
-            _checkbox.Dispose();
             base.DisposeControl();
         }
     }

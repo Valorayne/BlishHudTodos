@@ -1,74 +1,56 @@
-﻿using System;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
+using Microsoft.Xna.Framework;
 using TodoList.Models;
 
 namespace TodoList.Components
 {
-    public sealed class TodoEntry : FlowPanel
+    public sealed class TodoEntry : Panel
     {
-        private readonly TodoCheckbox _checkbox;
-        private readonly HoverButton _editButton;
-        private readonly HoverButton _deleteButton;
-
         private readonly BackgroundTextureSubscription _hoverSubscription;
+        private readonly TodoEntryHoverMenu _hoverMenu;
 
-        public event EventHandler<bool> VisibilityChanged;
+        public TodoEntryContent EntryContent { get; }
 
         public TodoEntry(Todo todo)
         {
             WidthSizingMode = SizingMode.Fill;
-            HeightSizingMode = SizingMode.AutoSize;
-            FlowDirection = ControlFlowDirection.SingleLeftToRight;
+            Height = HEADER_HEIGHT;
+
+            EntryContent = new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
+            _hoverMenu = new TodoEntryHoverMenu(todo) { Parent = this, Visible = false };
             
-            _checkbox = new TodoCheckbox(todo) { Parent = this };
-            new TodoScheduleIcon(todo) {Parent = this};
-            new TodoTitle(todo) { Parent = this };
-            _editButton = new TodoEditButton(todo) { Parent = this, Visible = false };
-            _deleteButton = new TodoDeleteButton(todo) { Parent = this, Visible = false, Right = 0 };
-
-            MouseEntered += OnMouseEntered;
-            MouseLeft += OnMouseLeft;
-
             _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));
-
-            _checkbox.Changed += OnCheckboxChanged;
         }
 
-        private void OnCheckboxChanged(object sender, bool done)
+        private void RepositionHoverMenu()
         {
-            if (done && !Settings.ShowAlreadyDoneTasks.Value)
-            {
-                Hide();
-                VisibilityChanged?.Invoke(this, false);
-            }
+            if (_hoverMenu != null)
+                _hoverMenu.Location = new Point(Width - _hoverMenu.Width, 0);
         }
 
-        private void OnMouseEntered(object target, MouseEventArgs args)
+        protected override void OnResized(ResizedEventArgs e)
         {
-            _editButton.Show();
-            _deleteButton.Show();
-            RecalculateLayout();
+            RepositionHoverMenu();
+            base.OnResized(e);
         }
-        
-        private void OnMouseLeft(object target, MouseEventArgs args)
+
+        protected override void OnMouseEntered(MouseEventArgs e)
         {
-            _editButton.Hide();
-            _deleteButton.Hide();
-            RecalculateLayout();
+            _hoverMenu.Show();
+            base.OnMouseEntered(e);
+        }
+
+        protected override void OnMouseLeft(MouseEventArgs e)
+        {
+            _hoverMenu.Hide();
+            base.OnMouseLeft(e);
         }
 
         protected override void DisposeControl()
         {
-            
             _hoverSubscription.Dispose();
-
-            _checkbox.Changed -= OnCheckboxChanged;
-
-            MouseEntered -= OnMouseEntered;
-            MouseLeft -= OnMouseLeft;
-            
             base.DisposeControl();
         }
     }

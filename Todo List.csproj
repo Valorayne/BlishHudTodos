@@ -74,12 +74,13 @@
     <Compile Include="Source\Components\Entry\TodoDeleteButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEditButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
+    <Compile Include="Source\Components\Entry\TodoEntryContent.cs" />
+    <Compile Include="Source\Components\Entry\TodoEntryHoverMenu.cs" />
     <Compile Include="Source\Components\Entry\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\TodoTitle.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />
     <Compile Include="Source\Components\Menu\TodoShowAlreadyDoneToggle.cs" />
-    <Compile Include="Source\Components\TodoCornerIcon.cs" />
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />

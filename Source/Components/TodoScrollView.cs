@@ -19,7 +19,6 @@ namespace TodoList.Components
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.Fill;
-            //BackgroundColor = Color.Aqua;
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
             CanScroll = true;
@@ -54,7 +53,7 @@ namespace TodoList.Components
                 Visible = showAlreadyDoneTasks || !todo.Done
             };
             _entries.Add(todo, entry);
-            entry.VisibilityChanged += OnEntryVisibilityChanged;
+            entry.EntryContent.VisibilityChanged += OnEntryVisibilityChanged;
         }
 
         private void OnEntryVisibilityChanged(object sender, bool e)
@@ -70,7 +69,7 @@ namespace TodoList.Components
 
             foreach (var entry in _entries.Values)
             {
-                entry.VisibilityChanged -= OnEntryVisibilityChanged;
+                entry.EntryContent.VisibilityChanged -= OnEntryVisibilityChanged;
                 entry.Dispose();
             }
 

@@ -23,8 +23,6 @@ namespace TodoList.Components.Menu
             
             Height = 40;
             Width = 40;
-
-            Click += OnClick;
         }
 
         private static Texture2D EyeTexture => Settings.ShowAlreadyDoneTasks.Value
@@ -35,17 +33,12 @@ namespace TodoList.Components.Menu
             ? "Hide already done tasks"
             : "Show already done tasks";
 
-        private void OnClick(object sender, MouseEventArgs args)
+        protected override void OnClick(MouseEventArgs e)
         {
             Settings.ShowAlreadyDoneTasks.Value = !Settings.ShowAlreadyDoneTasks.Value;
             _icon.Texture = EyeTexture;
             _icon.BasicTooltipText = EyeTooltip;
-        }
-
-        protected override void DisposeControl()
-        {
-            Click -= OnClick;
-            base.DisposeControl();
+            base.OnClick(e);
         }
     }
 }

@@ -27,6 +27,7 @@ namespace TodoList.Components
 
         protected override void OnResized(ResizedEventArgs e)
         {
+            // hacky check to prevent infinite recursive call
             if (!Size.Equals(new Point(GetWindowRegion.Width, GetWindowRegion.Height + 40)))
                 ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
             

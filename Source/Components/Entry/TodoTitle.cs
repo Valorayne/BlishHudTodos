@@ -34,7 +34,6 @@ namespace TodoList.Components
         protected override void DisposeControl()
         {
             Data.TodoModified -= OnTodoModified;
-            _label.Dispose();
             base.DisposeControl();
         }
     }

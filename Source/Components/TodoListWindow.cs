@@ -1,6 +1,7 @@
 ﻿using System;
 using Blish_HUD;
 using Blish_HUD.Controls;
+using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
@@ -31,6 +32,13 @@ namespace TodoList.Components
 
             new TodoListPanel { Parent = this };
             _backgroundColorSubscription = new BackgroundColorSubscription(this);
+
+            Click += OnClick;
+        }
+
+        private void OnClick(object sender, MouseEventArgs e)
+        {
+            ConfirmDeletionWindow.Hide();
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -47,6 +55,7 @@ namespace TodoList.Components
 
         protected override void DisposeControl()
         {
+            Click -= OnClick;
             _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }

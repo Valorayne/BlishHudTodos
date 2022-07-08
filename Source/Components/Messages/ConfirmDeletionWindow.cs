@@ -41,13 +41,13 @@ namespace TodoList.Components
 
         private static void OnNo(object sender, MouseEventArgs e)
         {
-            _instance.Hide();
+            Hide();
         }
 
         private void OnYes(object sender, MouseEventArgs e)
         {
             _action();
-            _instance.Hide();
+            Hide();
         }
 
         protected override void DisposeControl()
@@ -56,6 +56,12 @@ namespace TodoList.Components
             _no.Click -= OnNo;
             base.DisposeControl();
         }
+
+        public new static void Hide()
+        {
+            if (_instance.Visible)
+                ((Control)_instance).Hide();
+        } 
 
         public new static void Dispose()
         {

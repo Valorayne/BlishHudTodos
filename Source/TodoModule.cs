@@ -52,6 +52,7 @@ namespace TodoList
 			TimeService.Dispose();
 			Data.Dispose();
 			Resources.Dispose();
+			ConfirmDeletionWindow.Dispose();
 		}
 	}
 }

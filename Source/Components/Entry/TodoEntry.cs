@@ -48,10 +48,13 @@ namespace TodoList.Components
             _editMenu.Focus();
         }
 
-        private void OnDelete()
+        private void OnDelete(Point location)
         {
-            _saveScroll();
-            _todo.Delete();
+            ConfirmDeletionWindow.Spawn(location, () =>
+            {
+                _saveScroll();
+                _todo.Delete();
+            });
         }
 
         private void OnTodoModified(object sender, Todo todo)

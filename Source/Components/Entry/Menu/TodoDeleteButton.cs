@@ -1,5 +1,6 @@
 ﻿using System;
 using Blish_HUD.Controls;
+using Microsoft.Xna.Framework;
 
 namespace TodoList.Components
 {
@@ -7,11 +8,11 @@ namespace TodoList.Components
     {
         public const int WIDTH = Panel.HEADER_HEIGHT;
 
-        public TodoDeleteButton(Action onDelete) : base(
+        public TodoDeleteButton(Action<Point> onDelete) : base(
             Resources.GetTexture(Textures.DeleteIcon),
             Resources.GetTexture(Textures.DeleteIconHovered),
             WIDTH, WIDTH,
-            _ => onDelete()
+            args => onDelete(args.MousePosition)
         )
         {
             BasicTooltipText = "Delete";

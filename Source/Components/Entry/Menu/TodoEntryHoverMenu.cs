@@ -10,7 +10,7 @@ namespace TodoList.Components
         
         public TodoEditButton EditButton { get; }
 
-        public TodoEntryHoverMenu(Action onEdit, Action onDelete)
+        public TodoEntryHoverMenu(Action onEdit, Action<Point> onDelete)
         {
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleRightToLeft;

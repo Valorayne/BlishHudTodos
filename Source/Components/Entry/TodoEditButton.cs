@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
 using TodoList.Components.Details;
 using TodoList.Models;
 
@@ -8,11 +9,11 @@ namespace TodoList.Components
     {
         public const int WIDTH = Panel.HEADER_HEIGHT;
 
-        public TodoEditButton(Todo todo) : base(
+        public TodoEditButton(Action onEdit) : base(
             Resources.GetTexture(Textures.EditIcon),
             Resources.GetTexture(Textures.EditIconHovered),
             WIDTH, WIDTH,
-            args => TodoDetailsWindowPool.Spawn(args.MousePosition, todo)
+            _ => onEdit()
         )
         {
             BasicTooltipText = "Edit";

@@ -8,18 +8,13 @@ namespace TodoList.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Todo
     {
-        public static Todo CreateDraft()
-        {
-            return new Todo(DateTime.Now, new List<DateTime>()) { IsDraft = true };
-        }
-
-        public bool IsDraft { get; private set; }
-
         [JsonProperty] public string Description { get; set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
 
+        public Todo() : this(DateTime.Now, new List<DateTime>()) { }
+        
         [JsonConstructor]
         private Todo(DateTime createdAt, List<DateTime> executions)
         {
@@ -55,12 +50,7 @@ namespace TodoList.Models
         
         public void Save()
         {
-            if (IsDraft)
-                Data.Add(this);
-            else
-                Data.Save(this);
-            
-            IsDraft = false;
+            Data.Save(this);
         }
 
         public void Delete()

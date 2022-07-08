@@ -1,6 +1,6 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
-using TodoList.Components.Details;
+using TodoList.Models;
 
 namespace TodoList.Components.Menu
 {
@@ -15,7 +15,7 @@ namespace TodoList.Components.Menu
 
         protected override void OnClick(MouseEventArgs e)
         {
-            TodoDetailsWindowPool.Spawn(e.MousePosition);
+            Data.Add(new Todo());
             base.OnClick(e);
         }
     }

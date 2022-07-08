@@ -1,12 +1,16 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
+using Microsoft.Xna.Framework;
 using TodoList.Models;
 
 namespace TodoList.Components.Details
 {
     public sealed class TodoDetailsInputArea : FlowPanel
     {
+        private const int PADDING = 5;
+        
         private readonly Todo _todo;
-        private readonly TextBox _textBox;
+        private readonly TextBox _description;
         private readonly Dropdown _schedule;
 
         public TodoDetailsInputArea(Todo todo)
@@ -14,9 +18,11 @@ namespace TodoList.Components.Details
             _todo = todo;
             
             WidthSizingMode = SizingMode.Fill;
+            HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
+            OuterControlPadding = Vector2.One * PADDING;
             
-            _textBox = TodoDetailsRow.For(this, new TextBox { Text = todo.Description, Focused = true }, "Description");
+            _description = TodoDetailsRow.For(this, new TextBox { Text = todo.Description, Focused = true }, "Description");
             _schedule = TodoDetailsRow.For(this, new Dropdown
             {
                 Items =
@@ -27,13 +33,21 @@ namespace TodoList.Components.Details
                 },
                 SelectedItem = todo.Schedule.HasValue ? todo.Schedule.Value.Type.ToDropdownEntry() : TodoScheduleTypeExtensions.NO_RESET
             }, "Reset Schedule");
+
+            _description.TextChanged += OnChange;
+            _schedule.ValueChanged += OnChange;
         }
 
-        public void Save()
+        private void OnChange(object sender, EventArgs e)
         {
-            _todo.Description = _textBox.Text;
+            _todo.Description = _description.Text;
             _todo.Schedule = Schedule;
             _todo.Save();
+        }
+
+        public void Focus()
+        {
+            _description.Focused = true;
         }
         
         private TodoSchedule? Schedule

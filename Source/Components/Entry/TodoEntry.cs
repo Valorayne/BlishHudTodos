@@ -2,6 +2,7 @@
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
+using TodoList.Components.Details;
 using TodoList.Models;
 
 namespace TodoList.Components
@@ -11,6 +12,7 @@ namespace TodoList.Components
         private readonly Todo _todo;
         private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
+        private readonly TodoDetailsInputArea _editMenu;
 
         public TodoEntry(Todo todo, Action saveScroll)
         {
@@ -21,19 +23,23 @@ namespace TodoList.Components
             Height = HEADER_HEIGHT;
 
             new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
-            _hoverMenu = new TodoEntryHoverMenu(todo) { Parent = this, Visible = false };
+            _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
+            _editMenu = new TodoDetailsInputArea(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
 
             Data.TodoModified += OnTodoModified;
         }
 
-        private bool _expanded;
-        
-        protected override void OnClick(MouseEventArgs e)
+        private void OnEdit()
         {
             _saveScroll();
-            Height = _expanded ? Height / 2 : Height * 2;
-            _expanded = !_expanded;
-            base.OnClick(e);
+            Height = Height != HEADER_HEIGHT ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
+            _editMenu.Focus();
+        }
+
+        private void OnDelete()
+        {
+            _saveScroll();
+            _todo.Delete();
         }
 
         private void OnTodoModified(object sender, Todo todo)

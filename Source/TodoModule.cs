@@ -5,7 +5,6 @@ using Blish_HUD.Modules;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using TodoList.Components;
-using TodoList.Components.Details;
 
 namespace TodoList
 {
@@ -51,7 +50,6 @@ namespace TodoList
 			Settings.Dispose();
 
 			TimeService.Dispose();
-			TodoDetailsWindowPool.Dispose();
 			Data.Dispose();
 			Resources.Dispose();
 		}

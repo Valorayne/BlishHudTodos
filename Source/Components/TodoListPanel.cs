@@ -1,5 +1,6 @@
 ﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TodoList.Components.Menu;
 
 namespace TodoList.Components
@@ -19,8 +20,25 @@ namespace TodoList.Components
             HeightSizingMode = SizingMode.Fill;
 
             _menuBar = new TodoListMenuBar { Parent = this };
-            _scrollView = new TodoScrollView { Parent = this };
+            _scrollView = new TodoScrollView(SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
+        }
+
+        private float? _scrollTarget;
+
+        private void SaveScroll()
+        {
+            _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Bottom - _scrollView.ContentBounds.Y);
+        }
+        
+        public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
+        {
+            base.PaintBeforeChildren(spriteBatch, bounds);
+            if (_scrollTarget.HasValue)
+            {
+                _scrollBar.ScrollDistance = _scrollTarget.Value / (_scrollView.Bottom - _scrollView.ContentBounds.Y);
+                _scrollTarget = null;
+            }
         }
 
         private void ResizeComponents()

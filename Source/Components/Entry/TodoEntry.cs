@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System;
+using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using TodoList.Models;
@@ -8,11 +9,14 @@ namespace TodoList.Components
     public sealed class TodoEntry : Panel
     {
         private readonly Todo _todo;
+        private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
 
-        public TodoEntry(Todo todo)
+        public TodoEntry(Todo todo, Action saveScroll)
         {
             _todo = todo;
+            _saveScroll = saveScroll;
+            
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
 
@@ -20,6 +24,16 @@ namespace TodoList.Components
             _hoverMenu = new TodoEntryHoverMenu(todo) { Parent = this, Visible = false };
 
             Data.TodoModified += OnTodoModified;
+        }
+
+        private bool _expanded;
+        
+        protected override void OnClick(MouseEventArgs e)
+        {
+            _saveScroll();
+            Height = _expanded ? Height / 2 : Height * 2;
+            _expanded = !_expanded;
+            base.OnClick(e);
         }
 
         private void OnTodoModified(object sender, Todo todo)

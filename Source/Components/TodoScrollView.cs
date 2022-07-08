@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Blish_HUD;
 using Blish_HUD.Controls;
@@ -9,13 +10,17 @@ namespace TodoList.Components
 {
     public sealed class TodoScrollView : FlowPanel
     {
+        private readonly Action _saveScroll;
+        
         private const int OUTER_PADDING = 5;
         private const int INNER_PADDING = 5;
         
         private readonly Dictionary<Todo, TodoEntry> _entries = new Dictionary<Todo, TodoEntry>();
         
-        public TodoScrollView()
+        public TodoScrollView(Action saveScroll)
         {
+            _saveScroll = saveScroll;
+            
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
@@ -46,7 +51,7 @@ namespace TodoList.Components
 
         private void SpawnEntry(object sender, Todo todo)
         {
-            _entries.Add(todo, new TodoEntry(todo)
+            _entries.Add(todo, new TodoEntry(todo, _saveScroll)
             {
                 Parent = this,
                 Visible = Settings.ShowAlreadyDoneTasks.Value || !todo.Done

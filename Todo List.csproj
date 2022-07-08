@@ -64,16 +64,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Components\Entry\Content\TodoCheckbox.cs" />
+    <Compile Include="Source\Components\Entry\Content\TodoDescription.cs" />
+    <Compile Include="Source\Components\Entry\Content\TodoEntryContent.cs" />
+    <Compile Include="Source\Components\Entry\Content\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoDetailsInputArea.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoDetailsRow.cs" />
-    <Compile Include="Source\Components\Entry\TodoCheckbox.cs" />
-    <Compile Include="Source\Components\Entry\TodoDeleteButton.cs" />
-    <Compile Include="Source\Components\Entry\TodoEditButton.cs" />
+    <Compile Include="Source\Components\Entry\Menu\TodoDeleteButton.cs" />
+    <Compile Include="Source\Components\Entry\Menu\TodoEditButton.cs" />
+    <Compile Include="Source\Components\Entry\Menu\TodoEntryHoverMenu.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
-    <Compile Include="Source\Components\Entry\TodoEntryContent.cs" />
-    <Compile Include="Source\Components\Entry\TodoEntryHoverMenu.cs" />
-    <Compile Include="Source\Components\Entry\TodoScheduleIcon.cs" />
-    <Compile Include="Source\Components\Entry\TodoDescription.cs" />
     <Compile Include="Source\Components\Generic\CenteredMessage.cs" />
     <Compile Include="Source\Components\Generic\HoverButton.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />

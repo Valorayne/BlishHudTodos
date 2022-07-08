@@ -54,7 +54,7 @@ namespace TodoList.Components
             _entries.Add(todo, new TodoEntry(todo, _saveScroll)
             {
                 Parent = this,
-                Visible = Settings.ShowAlreadyDoneTasks.Value || !todo.Done
+                Visible = Settings.ShowAlreadyDoneTasks.Value || !todo.Done,
             });
         }
 

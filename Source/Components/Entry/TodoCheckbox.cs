@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using TodoList.Models;
@@ -21,7 +22,7 @@ namespace TodoList.Components
                 Parent = this, 
                 Location = new Point(10, 10),
                 Checked = todo.Done,
-                BasicTooltipText = GetTooltipText(todo.LastExecution)
+                BasicTooltipText = GetTooltipText(todo)
             };
 
             _checkbox.CheckedChanged += OnClick;
@@ -31,13 +32,13 @@ namespace TodoList.Components
         {
             _todo.Done = e.Checked;
             _todo.Save();
-            _checkbox.BasicTooltipText = GetTooltipText(_todo.LastExecution);
+            _checkbox.BasicTooltipText = GetTooltipText(_todo);
         }
 
-        private string GetTooltipText(DateTime? lastExecution)
+        private string GetTooltipText(Todo todo)
         {
-            return lastExecution.HasValue
-                ? $"Done: {lastExecution.Value.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
+            return todo.Done
+                ? $"Done: {todo.LastExecution?.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
                 : null;
         }
 

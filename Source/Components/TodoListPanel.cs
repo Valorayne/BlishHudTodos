@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TodoList.Components.Menu;
+using TodoList.Models;
 
 namespace TodoList.Components
 {
@@ -22,13 +23,20 @@ namespace TodoList.Components
             _menuBar = new TodoListMenuBar { Parent = this };
             _scrollView = new TodoScrollView(SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
+
+            Data.TodoAdded += OnTodoAdded;
+        }
+
+        private void OnTodoAdded(object sender, Todo todo)
+        {
+            Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
         }
 
         private float? _scrollTarget;
 
         private void SaveScroll()
         {
-            _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Bottom - _scrollView.ContentBounds.Y);
+            _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Height - _scrollView.ContentBounds.Y);
         }
         
         public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
@@ -36,7 +44,7 @@ namespace TodoList.Components
             base.PaintBeforeChildren(spriteBatch, bounds);
             if (_scrollTarget.HasValue)
             {
-                _scrollBar.ScrollDistance = _scrollTarget.Value / (_scrollView.Bottom - _scrollView.ContentBounds.Y);
+                _scrollBar.ScrollDistance = _scrollTarget.Value / (_scrollView.Height - _scrollView.ContentBounds.Y);
                 _scrollTarget = null;
             }
         }
@@ -61,6 +69,12 @@ namespace TodoList.Components
         {
             ResizeComponents();
             base.OnResized(e);
+        }
+
+        protected override void DisposeControl()
+        {
+            Data.TodoAdded -= OnTodoAdded;
+            base.DisposeControl();
         }
     }
 }

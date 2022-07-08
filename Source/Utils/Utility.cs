@@ -5,11 +5,11 @@ namespace TodoList
 {
     public static class Utility
     {
-        public static void NextFrame(Action action)
+        public static void Delay(Action action, int ms = 1)
         {
             Task.Run(async () =>
             {
-                await Task.Delay(1);
+                await Task.Delay(ms);
                 action();
             });
         }

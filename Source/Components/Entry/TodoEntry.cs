@@ -30,7 +30,7 @@ namespace TodoList.Components
             Data.TodoModified += OnTodoModified;
             
             if (todo.IsNew)
-                Utility.NextFrame(OnEdit);
+                Utility.Delay(OnEdit);
         }
 
         private void OnEnterPressed(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace TodoList.Components
         private void OnEdit()
         {
             _saveScroll();
-            Height = IsExpanded ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
+             Height = IsExpanded ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
             _hoverMenu.EditButton.IsExpanded = IsExpanded;
             _editMenu.Focus();
         }

@@ -26,10 +26,16 @@ namespace TodoList.Components
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
 
+            _editMenu.Description.EnterPressed += OnEnterPressed;
             Data.TodoModified += OnTodoModified;
             
             if (todo.IsNew)
                 Utility.NextFrame(OnEdit);
+        }
+
+        private void OnEnterPressed(object sender, EventArgs e)
+        {
+            OnEdit();
         }
 
         public bool IsExpanded => Height != HEADER_HEIGHT;
@@ -84,6 +90,7 @@ namespace TodoList.Components
         protected override void DisposeControl()
         {
             Data.TodoModified -= OnTodoModified;
+            _editMenu.Description.EnterPressed -= OnEnterPressed;
             base.DisposeControl();
         }
     }

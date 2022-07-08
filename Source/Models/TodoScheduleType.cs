@@ -31,5 +31,15 @@
                 default: return NO_RESET;
             }
         }
+
+        public static string GetTooltip(this string entry)
+        {
+            switch (entry)
+            {
+                case DAILY_SERVER_RESET: return "This task will reset every day at 0:00 UTC";
+                case WEEKLY_SERVER_RESET: return "This task will reset every Monday, 7:30 UTC";
+                default: return "This task will not reset automatically";
+            }
+        }
     }
 }

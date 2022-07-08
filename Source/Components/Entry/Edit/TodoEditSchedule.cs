@@ -5,7 +5,7 @@ namespace TodoList.Components.Details
 {
     public class TodoEditSchedule : Dropdown
     {
-        public TodoEditSchedule(Todo todo) : base()
+        public TodoEditSchedule(Todo todo)
         {
             Items.Add(TodoScheduleTypeExtensions.NO_RESET);
             Items.Add(TodoScheduleTypeExtensions.DAILY_SERVER_RESET);
@@ -14,8 +14,16 @@ namespace TodoList.Components.Details
             SelectedItem = todo.Schedule.HasValue
                 ? todo.Schedule.Value.Type.ToDropdownEntry()
                 : TodoScheduleTypeExtensions.NO_RESET;
+
+            BasicTooltipText = SelectedItem.GetTooltip();
         }
-        
+
+        protected override void OnValueChanged(ValueChangedEventArgs e)
+        {
+            BasicTooltipText = SelectedItem.GetTooltip();
+            base.OnValueChanged(e);
+        }
+
         public TodoSchedule? Selected
         {
             get

@@ -25,6 +25,10 @@ namespace TodoList.Models
         {
             CreatedAt = createdAt;
             Executions = executions;
+            Schedule = new TodoSchedule
+            {
+                Type = TodoScheduleType.DailyServer
+            };
         }
 
         public DateTime? LastExecution => Executions.Count > 0 ? Executions.Last() : (DateTime?)null;

@@ -15,7 +15,7 @@ namespace TodoList.Components
 
             new TodoCheckbox(todo) { Parent = this };
             new TodoScheduleIcon(todo) { Parent = this };
-            new TodoDescription(todo) { Parent = this };
+            new TodoTaskLabel(todo) { Parent = this };
 
             _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));

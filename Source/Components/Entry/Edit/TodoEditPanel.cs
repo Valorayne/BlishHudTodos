@@ -7,7 +7,7 @@ namespace TodoList.Components.Details
 {
     public sealed class TodoEditPanel : FlowPanel
     {
-        private const int PADDING = 5;
+        private const int PADDING = 10;
         
         private readonly Todo _todo;
         private readonly TextBox _description;
@@ -22,7 +22,7 @@ namespace TodoList.Components.Details
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             OuterControlPadding = Vector2.One * PADDING;
             
-            _description = TodoEditRow.For(this, new TextBox { Text = todo.Description, Focused = true }, "Description");
+            _description = TodoEditRow.For(this, new TextBox { Text = todo.Task, Focused = true }, "Task");
             _schedule = TodoEditRow.For(this, new TodoEditSchedule(todo), "Reset Schedule");
 
             _description.TextChanged += OnChange;
@@ -31,7 +31,7 @@ namespace TodoList.Components.Details
 
         private void OnChange(object sender, EventArgs e)
         {
-            _todo.Description = _description.Text;
+            _todo.Task = _description.Text;
             _todo.Schedule = _schedule.Selected;
             _todo.Save();
         }

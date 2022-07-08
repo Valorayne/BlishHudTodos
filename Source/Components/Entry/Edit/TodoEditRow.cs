@@ -19,7 +19,7 @@ namespace TodoList.Components.Details
             WidthSizingMode = SizingMode.Fill;
 
             _input = input;
-            _label = new Label { Parent = this, Text = description, BasicTooltipText = tooltip };
+            _label = new Label { Parent = this, Text = description, BasicTooltipText = tooltip, StrokeText = true };
             input.Parent = this;
         }
 

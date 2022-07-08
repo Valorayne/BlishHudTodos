@@ -21,18 +21,24 @@ namespace TodoList.Components
             
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
-
+            
             new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
 
             Data.TodoModified += OnTodoModified;
+            
+            if (todo.IsNew)
+                Utility.NextFrame(OnEdit);
         }
+
+        public bool IsExpanded => Height != HEADER_HEIGHT;
 
         private void OnEdit()
         {
             _saveScroll();
-            Height = Height != HEADER_HEIGHT ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
+            Height = IsExpanded ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
+            _hoverMenu.EditButton.IsExpanded = IsExpanded;
             _editMenu.Focus();
         }
 

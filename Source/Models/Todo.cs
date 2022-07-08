@@ -8,12 +8,17 @@ namespace TodoList.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Todo
     {
-        [JsonProperty] public string Description { get; set; }
+        public bool IsNew { get; set; }
+        
+        [JsonProperty] public string Task { get; set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
 
-        public Todo() : this(DateTime.Now, new List<DateTime>()) { }
+        public Todo() : this(DateTime.Now, new List<DateTime>())
+        {
+            IsNew = true;
+        }
         
         [JsonConstructor]
         private Todo(DateTime createdAt, List<DateTime> executions)

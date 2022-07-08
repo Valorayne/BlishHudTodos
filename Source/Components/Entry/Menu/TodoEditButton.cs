@@ -13,10 +13,17 @@ namespace TodoList.Components
             Resources.GetTexture(Textures.EditIcon),
             Resources.GetTexture(Textures.EditIconHovered),
             WIDTH, WIDTH,
-            _ => onEdit()
-        )
+            _ =>
+            {
+                onEdit();
+            })
         {
-            BasicTooltipText = "Edit";
+            IsExpanded = false;
+        }
+
+        public bool IsExpanded
+        {
+            set => BasicTooltipText = value ? "Stop Editing" : "Edit";
         }
     }
 }

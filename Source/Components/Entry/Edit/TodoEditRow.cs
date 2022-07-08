@@ -3,17 +3,17 @@ using Microsoft.Xna.Framework;
 
 namespace TodoList.Components.Details
 {
-    public sealed class TodoDetailsRow : Panel
+    public sealed class TodoEditRow : Panel
     {
         private readonly Label _label;
         public readonly Control _input;
 
         public static T For<T>(Container parent, T input, string description, string tooltip = null) where T : Control
         {
-            return (T) new TodoDetailsRow(input, description, tooltip) { Parent = parent }._input;
+            return (T) new TodoEditRow(input, description, tooltip) { Parent = parent }._input;
         }
         
-        public TodoDetailsRow(Control input, string description, string tooltip = null)
+        public TodoEditRow(Control input, string description, string tooltip = null)
         {
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.Fill;

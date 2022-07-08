@@ -12,7 +12,7 @@ namespace TodoList.Components
         private readonly Todo _todo;
         private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
-        private readonly TodoDetailsInputArea _editMenu;
+        private readonly TodoEditPanel _editMenu;
 
         public TodoEntry(Todo todo, Action saveScroll)
         {
@@ -24,7 +24,7 @@ namespace TodoList.Components
 
             new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
-            _editMenu = new TodoDetailsInputArea(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
+            _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
 
             Data.TodoModified += OnTodoModified;
         }

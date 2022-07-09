@@ -11,18 +11,17 @@ namespace Todos.Source.Utils
     {
         private static Dictionary<long, Todo> _todos;
         
-        public static IReadOnlyList<Todo> Todos => _todos.Values.ToList();
+        public static IReadOnlyList<Todo> Todos => _todos.Values.OrderBy(todo => todo.CreatedAt).ToList();
 
         public static event EventHandler<Todo> TodoAdded;
         public static event EventHandler<Todo> TodoModified;
         public static event EventHandler<Todo> TodoDeleted;
 
-        public static Task Initialize(DirectoriesManager manager)
+        public static async Task Initialize(DirectoriesManager manager)
         {
             _todos = new Dictionary<long, Todo>();
-            foreach (var todo in new Persistence(manager).LoadAll())
+            foreach (var todo in await new Persistence(manager).LoadAll())
                 _todos.Add(todo.CreatedAt.Ticks, todo);
-            return Task.CompletedTask;
         }
 
         public static void Save(Todo todo)

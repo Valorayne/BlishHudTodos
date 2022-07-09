@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Blish_HUD;
 using Blish_HUD.Modules.Managers;
 using Newtonsoft.Json;
@@ -25,10 +28,11 @@ namespace Todos.Source.Utils
             _directoryPath = manager.GetFullDirectoryPath("todos");
         }
 
-        public List<Todo> LoadAll()
+        public Task<List<Todo>> LoadAll()
         {
-            var todos = new List<Todo>();
-            foreach (var filePath in Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}"))
+            var files = Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}");
+            var todos = new ConcurrentBag<Todo>();
+            var tasks = files.Select(filePath => Task.Run(() =>
             {
                 Try(filePath, "deserialize", file =>
                 {
@@ -37,8 +41,9 @@ namespace Todos.Source.Utils
                     if (todo != null)
                         todos.Add(todo);
                 });
-            }
-            return todos;
+            }));
+            Task.WaitAll(tasks.ToArray());
+            return Task.FromResult(new List<Todo>(todos.ToArray()));
         }
 
         public void Persist(Todo todo)

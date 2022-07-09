@@ -15,9 +15,11 @@ namespace Todos.Source.Components
         private const int MIN_HEIGHT = 150;
         private const int MAX_HEIGHT = 1000;
 
+        private bool _hovered;
+
         private static Rectangle GetWindowRegion => new Rectangle(0, -28,
-            Math.Max(MIN_WIDTH, Math.Min(MAX_WIDTH, Settings.OverlayWidth.Value)),
-            Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, Settings.OverlayHeight.Value)));
+            Math.Max(MIN_WIDTH, Math.Min(MAX_WIDTH, Settings.WindowWidth.Value)),
+            Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, Settings.WindowHeight.Value)));
         private static Rectangle GetContentRegion => new Rectangle(0, -28, GetWindowRegion.Width, GetWindowRegion.Height + 33);
 
         public TodoListWindow() : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
@@ -28,10 +30,32 @@ namespace Todos.Source.Components
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanResize = true;
             CanClose = false;
+            Opacity = Settings.WindowOpacityWhenNotFocussed.Value;
 
             new TodoListPanel { Parent = this };
 
             Click += OnClick;
+            Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
+        }
+
+        protected override void OnMouseEntered(MouseEventArgs e)
+        {
+            _hovered = true;
+            Opacity = 1f;
+            base.OnMouseEntered(e);
+        }
+
+        protected override void OnMouseLeft(MouseEventArgs e)
+        {
+            _hovered = false;
+            Opacity = Settings.WindowOpacityWhenNotFocussed.Value;
+            base.OnMouseLeft(e);
+        }
+
+        private void OnOpacityChanged(object sender, ValueChangedEventArgs<float> e)
+        {
+            if (!_hovered)
+                Opacity = e.NewValue;
         }
 
         private void OnClick(object sender, MouseEventArgs e)
@@ -45,14 +69,15 @@ namespace Todos.Source.Components
             if (!Size.Equals(new Point(GetWindowRegion.Width, GetWindowRegion.Height + 40)))
                 ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
 
-            Settings.OverlayWidth.Value = e.CurrentSize.X;
-            Settings.OverlayHeight.Value = e.CurrentSize.Y; 
+            Settings.WindowWidth.Value = e.CurrentSize.X;
+            Settings.WindowHeight.Value = e.CurrentSize.Y; 
             
             base.OnResized(e);
         }
 
         protected override void DisposeControl()
         {
+            Settings.WindowOpacityWhenNotFocussed.SettingChanged -= OnOpacityChanged;
             Click -= OnClick;
             base.DisposeControl();
         }

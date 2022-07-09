@@ -13,6 +13,7 @@ namespace Todos.Source.Components
     {
         private FlowPanel _panel;
         private IDisposable _showWindowOnMap;
+        private IDisposable _opacityWhenNotFocussed;
 
         protected override void Build(Container buildPanel)
         {
@@ -27,6 +28,8 @@ namespace Todos.Source.Components
             
             _showWindowOnMap = AddBooleanSetting(_panel, Settings.ShowWindowOnMap, "Show Window on Map", 
                 "Whether or not the Todos window should\r\nalso be shown while the map is opened");
+            _opacityWhenNotFocussed = AddSliderSetting(_panel, Settings.WindowOpacityWhenNotFocussed,
+                "Unfocused opacity", "The opacity of the window when you're not currently using it");
             
             base.Build(buildPanel);
         }
@@ -47,10 +50,28 @@ namespace Todos.Source.Components
                 setting.SettingChanged -= settingChangedHandler;
             });
         }
+        
+        private static IDisposable AddSliderSetting(Container parent, SettingEntry<float> setting, string label, string tooltip = null)
+        {
+            var row = TodoEditRow.For(parent, new TrackBar { Value = setting.Value, MinValue = 0, MaxValue = 1, SmallStep = true }, label, tooltip);
+            
+            var interactionHandler = new EventHandler<ValueEventArgs<float>>((sender, e) => setting.Value = e.Value);
+            row.ValueChanged += interactionHandler;
+            
+            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<float>>((sender, e) => row.Value = e.NewValue);
+            setting.SettingChanged += settingChangedHandler;
+            
+            return new SimpleDisposable(() =>
+            {
+                row.ValueChanged -= interactionHandler;
+                setting.SettingChanged -= settingChangedHandler;
+            });
+        }
 
         protected override void Unload()
         {
             _showWindowOnMap.Dispose();
+            _opacityWhenNotFocussed.Dispose();
             _panel.Dispose();
             base.Unload();
         }

@@ -6,9 +6,11 @@ namespace Todos.Source.Utils
     {
         public static SettingEntry<bool> WindowMinimized { get; private set; }
         public static SettingEntry<bool> ShowWindowOnMap { get; private set; }
+        
+        public static SettingEntry<float> WindowOpacityWhenNotFocussed { get; private set; }
 
-        public static SettingEntry<int> OverlayWidth { get; private set; }
-        public static SettingEntry<int> OverlayHeight { get; private set; }
+        public static SettingEntry<int> WindowWidth { get; private set; }
+        public static SettingEntry<int> WindowHeight { get; private set; }
         
         public static SettingEntry<string> Data { get; private set; }
         
@@ -19,8 +21,10 @@ namespace Todos.Source.Utils
             WindowMinimized = settings.DefineSetting("Window.Visibility.Minimized", false);
             ShowWindowOnMap = settings.DefineSetting("Window.Visibility.OnMap", false);
 
-            OverlayWidth = settings.DefineSetting("Window.Dimensions.Width", 400);
-            OverlayHeight = settings.DefineSetting("Window.Dimensions.Height", 200);
+            WindowOpacityWhenNotFocussed = settings.DefineSetting("Window.Visibility.Opacity.WhenNotFocussed", 1f);
+
+            WindowWidth = settings.DefineSetting("Window.Dimensions.Width", 400);
+            WindowHeight = settings.DefineSetting("Window.Dimensions.Height", 200);
 
             Data = settings.DefineSetting("Data.Todos.1", "{}");
 
@@ -32,8 +36,8 @@ namespace Todos.Source.Utils
             WindowMinimized = null;
             ShowWindowOnMap = null;
             
-            OverlayWidth = null;
-            OverlayHeight = null;
+            WindowWidth = null;
+            WindowHeight = null;
 
             Data = null;
 

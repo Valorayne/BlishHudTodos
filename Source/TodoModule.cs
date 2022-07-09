@@ -29,6 +29,7 @@ namespace Todos.Source
 			// put here in case anything becomes async in the future
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			await Data.Initialize(ModuleParameters.DirectoriesManager);
+			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
 			ConfirmDeletionWindow.Initialize();
 
 			_visuals = new TodoVisualsManager();
@@ -48,6 +49,7 @@ namespace Todos.Source
 		protected override void Update(GameTime gameTime)
 		{
 			TimeService.ProgressTimer(gameTime);
+			SaveScheduler.Progress(gameTime);
 		}
 		
 		protected override void Unload()
@@ -57,6 +59,7 @@ namespace Todos.Source
 
 			TimeService.Dispose();
 			Data.Dispose();
+			SaveScheduler.Dispose();
 			Resources.Dispose();
 			ConfirmDeletionWindow.Dispose();
 		}

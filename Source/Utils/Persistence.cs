@@ -41,19 +41,21 @@ namespace Todos.Source.Utils
             return todos;
         }
 
-        public void Add(Todo todo)
+        public void Persist(Todo todo)
         {
-            Try(GetFilePath(todo), "add", 
+            if (todo.IsDeleted)
+                Delete(todo); 
+            else Override(todo);
+        }
+        
+        private void Override(Todo todo)
+        {
+            var path = GetFilePath(todo);
+            Try(path, File.Exists(path) ? "save" : "add", 
                 filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
         }
 
-        public void Save(Todo todo)
-        {
-            Try(GetFilePath(todo), "save", 
-                filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
-        }
-
-        public void Delete(Todo todo)
+        private void Delete(Todo todo)
         {
             Try(GetFilePath(todo), "delete", filePath =>
             {

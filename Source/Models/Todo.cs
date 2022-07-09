@@ -11,7 +11,8 @@ namespace Todos.Source.Models
     {
         public const int CURRENT_VERSION = 1;
         
-        public bool IsNew { get; set; }
+        public bool IsNew { get; private set; }
+        public bool IsDeleted { get; private set; }
         
         [JsonProperty] public int Version { get; private set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
@@ -64,11 +65,13 @@ namespace Todos.Source.Models
         
         public void Save()
         {
+            IsNew = false;
             Data.Save(this);
         }
 
         public void Delete()
         {
+            IsDeleted = true;
             Data.Delete(this);
         }
     }

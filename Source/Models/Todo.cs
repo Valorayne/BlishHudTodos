@@ -10,7 +10,7 @@ namespace TodoList.Models
     {
         public bool IsNew { get; set; }
         
-        [JsonProperty] public string Task { get; set; }
+        [JsonProperty] public string Description { get; set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }

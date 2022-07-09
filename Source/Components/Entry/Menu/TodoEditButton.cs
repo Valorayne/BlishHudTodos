@@ -1,7 +1,5 @@
 ﻿using System;
 using Blish_HUD.Controls;
-using TodoList.Components.Details;
-using TodoList.Models;
 
 namespace TodoList.Components
 {
@@ -18,10 +16,10 @@ namespace TodoList.Components
                 onEdit();
             })
         {
-            IsExpanded = false;
+            IsEditing = false;
         }
 
-        public bool IsExpanded
+        public bool IsEditing
         {
             set => BasicTooltipText = value ? "Stop Editing" : "Edit";
         }

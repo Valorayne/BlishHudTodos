@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using TodoList.Models;
 

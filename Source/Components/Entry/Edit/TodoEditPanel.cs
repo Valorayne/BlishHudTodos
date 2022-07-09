@@ -9,8 +9,6 @@ namespace TodoList.Components.Details
     {
         private const int PADDING = 10;
         
-        public TextBox Description { get; }
-        
         private readonly Todo _todo;
         private readonly TodoEditSchedule _schedule;
 
@@ -23,23 +21,15 @@ namespace TodoList.Components.Details
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             OuterControlPadding = Vector2.One * PADDING;
             
-            Description = TodoEditRow.For(this, new TextBox { Text = todo.Task, Focused = true }, "Task");
             _schedule = TodoEditRow.For(this, new TodoEditSchedule(todo), "Reset Schedule");
 
-            Description.TextChanged += OnChange;
             _schedule.ValueChanged += OnChange;
         }
 
         private void OnChange(object sender, EventArgs e)
         {
-            _todo.Task = Description.Text;
             _todo.Schedule = _schedule.Selected;
             _todo.Save();
-        }
-
-        public void Focus()
-        {
-            Description.Focused = true;
         }
     }
 }

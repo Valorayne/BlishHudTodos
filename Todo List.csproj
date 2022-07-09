@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Components\Entry\Content\TodoCheckbox.cs" />
-    <Compile Include="Source\Components\Entry\Content\TodoTaskLabel.cs" />
+    <Compile Include="Source\Components\Entry\Content\TodoDescription.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoEntryContent.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditPanel.cs" />

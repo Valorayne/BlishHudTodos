@@ -13,6 +13,7 @@ namespace TodoList.Components
         private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly TodoEditPanel _editMenu;
+        private readonly TodoEntryContent _content;
 
         public TodoEntry(Todo todo, Action saveScroll)
         {
@@ -22,11 +23,11 @@ namespace TodoList.Components
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
             
-            new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
+            _content = new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
 
-            _editMenu.Description.EnterPressed += OnEnterPressed;
+            _content.Description.EditField.EnterPressed += OnEnterPressed;
             Data.TodoModified += OnTodoModified;
             
             if (todo.IsNew)
@@ -38,14 +39,14 @@ namespace TodoList.Components
             OnEdit();
         }
 
-        public bool IsExpanded => Height != HEADER_HEIGHT;
+        public bool IsEditing => Height != HEADER_HEIGHT;
 
         private void OnEdit()
         {
             _saveScroll();
-             Height = IsExpanded ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
-            _hoverMenu.EditButton.IsExpanded = IsExpanded;
-            _editMenu.Focus();
+             Height = IsEditing ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
+            _hoverMenu.EditButton.IsEditing = IsEditing;
+            _content.Description.IsEditing = IsEditing;
         }
 
         private void OnDelete(Point location)
@@ -93,7 +94,7 @@ namespace TodoList.Components
         protected override void DisposeControl()
         {
             Data.TodoModified -= OnTodoModified;
-            _editMenu.Description.EnterPressed -= OnEnterPressed;
+            _content.Description.EditField.EnterPressed -= OnEnterPressed;
             base.DisposeControl();
         }
     }

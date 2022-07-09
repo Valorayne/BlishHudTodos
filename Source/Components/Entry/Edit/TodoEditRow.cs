@@ -25,9 +25,9 @@ namespace Todos.Source.Components.Entry.Edit
 
         protected override void OnResized(ResizedEventArgs e)
         {
-            _label.Location = new Point(0, 0);
+            _label.Location = new Point(0, 2);
             _label.Width = Width / 2;
-            _input.Location = new Point(Width / 2, 0);
+            _input.Location = new Point(Width / 2, -1);
             _input.Width = Width / 2;
             base.OnResized(e);
         }

@@ -1,9 +1,10 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
-using TodoList.Models;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Entry.Content
 {
     public sealed class TodoDescription : Panel
     {

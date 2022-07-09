@@ -1,9 +1,10 @@
 ﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using Todos.Source.Utils;
 
 // ReSharper disable VirtualMemberCallInConstructor
 
-namespace TodoList
+namespace Todos.Source.Components.Generic
 {
     public abstract class CenteredMessage : Panel
     {

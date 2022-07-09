@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Todos.Source.Utils;
 
-namespace TodoList.Models
+namespace Todos.Source.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class Todo

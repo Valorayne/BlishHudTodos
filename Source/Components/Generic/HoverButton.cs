@@ -3,7 +3,7 @@ using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TodoList
+namespace Todos.Source.Components.Generic
 {
     public class HoverButton : Image
     {

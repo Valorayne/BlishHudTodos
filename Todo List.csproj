@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C6D867D3-381F-4418-9C6A-76F87B81D9CE}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>kanup.Todo_List</RootNamespace>
-    <AssemblyName>Todo List</AssemblyName>
+    <RootNamespace>Todos</RootNamespace>
+    <AssemblyName>Todos</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

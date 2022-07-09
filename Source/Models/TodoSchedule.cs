@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TodoList.Models
+namespace Todos.Source.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
     public struct TodoSchedule

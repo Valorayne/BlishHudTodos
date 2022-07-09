@@ -2,10 +2,14 @@
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
-using TodoList.Components.Details;
-using TodoList.Models;
+using Todos.Source.Components.Entry.Content;
+using Todos.Source.Components.Entry.Edit;
+using Todos.Source.Components.Entry.Menu;
+using Todos.Source.Components.Messages;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntry : Panel
     {

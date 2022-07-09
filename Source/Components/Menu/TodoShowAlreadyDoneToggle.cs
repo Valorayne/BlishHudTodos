@@ -2,8 +2,9 @@
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Todos.Source.Utils;
 
-namespace TodoList.Components.Menu
+namespace Todos.Source.Components.Menu
 {
     public class TodoShowAlreadyDoneToggle : Panel
     {

@@ -1,7 +1,7 @@
 ﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 
-namespace TodoList.Components.Details
+namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoEditRow : Panel
     {

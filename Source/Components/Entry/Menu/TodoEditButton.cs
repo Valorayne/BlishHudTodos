@@ -1,7 +1,9 @@
 ﻿using System;
 using Blish_HUD.Controls;
+using Todos.Source.Components.Generic;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Entry.Menu
 {
     public sealed class TodoEditButton : HoverButton
     {

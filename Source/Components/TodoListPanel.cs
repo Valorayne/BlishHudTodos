@@ -1,10 +1,11 @@
 ﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TodoList.Components.Menu;
-using TodoList.Models;
+using Todos.Source.Components.Menu;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components
 {
     public sealed class TodoListPanel : FlowPanel
     {

@@ -4,9 +4,12 @@ using System.Linq;
 using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
-using TodoList.Models;
+using Todos.Source.Components.Entry;
+using Todos.Source.Components.Messages;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components
 {
     public sealed class TodoScrollView : FlowPanel
     {

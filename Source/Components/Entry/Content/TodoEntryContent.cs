@@ -1,7 +1,9 @@
 ﻿using Blish_HUD.Controls;
-using TodoList.Models;
+using Todos.Source.Models;
+using Todos.Source.Utils;
+using Todos.Source.Utils.Subscriptions;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Entry.Content
 {
     public sealed class TodoEntryContent : FlowPanel
     {

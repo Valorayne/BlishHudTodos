@@ -2,7 +2,7 @@
 using Blish_HUD;
 using Blish_HUD.Controls;
 
-namespace TodoList
+namespace Todos.Source.Utils.Subscriptions
 {
     public class BackgroundColorSubscription : IDisposable
     {

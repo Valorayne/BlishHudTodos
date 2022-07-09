@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using TodoList.Models;
+using Todos.Source.Models;
 
-namespace TodoList
+namespace Todos.Source.Utils
 {
     public static class Data
     {

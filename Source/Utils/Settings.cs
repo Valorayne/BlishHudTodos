@@ -1,7 +1,7 @@
 ﻿using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 
-namespace TodoList
+namespace Todos.Source.Utils
 {
     public static class Settings
     {

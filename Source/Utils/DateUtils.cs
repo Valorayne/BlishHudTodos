@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TodoList
+namespace Todos.Source.Utils
 {
     public static class DateUtils
     {

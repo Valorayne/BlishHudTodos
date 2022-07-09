@@ -3,8 +3,11 @@ using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
+using Todos.Source.Components.Messages;
+using Todos.Source.Utils;
+using Todos.Source.Utils.Subscriptions;
 
-namespace TodoList.Components
+namespace Todos.Source.Components
 {
     public class TodoListWindow : StandardWindow
     {
@@ -23,7 +26,7 @@ namespace TodoList.Components
         public TodoListWindow() : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
-            Title = "Todo List";
+            Title = "Todos";
             BackgroundColor = Settings.OverlayBackgroundColor;
             SavesPosition = true;
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";

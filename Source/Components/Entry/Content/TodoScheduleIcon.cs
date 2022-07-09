@@ -2,9 +2,10 @@
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TodoList.Models;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Entry.Content
 {
     public class TodoScheduleIcon : Panel
     {

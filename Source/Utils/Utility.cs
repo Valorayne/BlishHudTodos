@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace TodoList
+namespace Todos.Source.Utils
 {
     public static class Utility
     {

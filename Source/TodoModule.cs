@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Blish_HUD.Modules;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
-using TodoList.Components;
+using Todos.Source.Components;
+using Todos.Source.Components.Messages;
+using Todos.Source.Utils;
 
-namespace TodoList
+namespace Todos.Source
 {
 	[Export(typeof(Module))]
 	public class TodoModule : Module

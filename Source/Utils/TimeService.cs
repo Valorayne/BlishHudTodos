@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace TodoList
+namespace Todos.Source.Utils
 {
     public static class TimeService
     {

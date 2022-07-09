@@ -1,8 +1,9 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
-using TodoList.Models;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components.Menu
+namespace Todos.Source.Components.Menu
 {
     public class AddNewTodoButton : Image
     {

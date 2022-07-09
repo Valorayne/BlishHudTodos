@@ -3,8 +3,9 @@ using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Messages
 {
     public sealed class ConfirmDeletionWindow : FlowPanel
     {

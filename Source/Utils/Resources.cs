@@ -2,7 +2,7 @@
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TodoList
+namespace Todos.Source.Utils
 {
     public enum Textures
     {

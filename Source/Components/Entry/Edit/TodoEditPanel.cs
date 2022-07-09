@@ -1,9 +1,9 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
-using TodoList.Models;
+using Todos.Source.Models;
 
-namespace TodoList.Components.Details
+namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoEditPanel : FlowPanel
     {

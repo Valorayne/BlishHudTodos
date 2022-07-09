@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using TodoList.Models;
+using Todos.Source.Components.Generic;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
-namespace TodoList.Components
+namespace Todos.Source.Components.Messages
 {
     public sealed class NoTodosYetMessage : CenteredMessage
     {

@@ -1,7 +1,7 @@
 ﻿using Blish_HUD.Controls;
-using TodoList.Models;
+using Todos.Source.Models;
 
-namespace TodoList.Components.Details
+namespace Todos.Source.Components.Entry.Edit
 {
     public class TodoEditSchedule : Dropdown
     {

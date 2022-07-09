@@ -1,7 +1,7 @@
 ﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 
-namespace TodoList.Components.Menu
+namespace Todos.Source.Components.Menu
 {
     public sealed class TodoListMenuBar : FlowPanel
     {

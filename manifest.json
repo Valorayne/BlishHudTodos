@@ -1,8 +1,8 @@
 {
-  "name": "Todo List",
+  "name": "Todos",
   "version": "0.1.0",
-  "namespace": "valorayne.bh.todo",
-  "package": "Todo List.dll",
+  "namespace": "valorayne.bh.todos",
+  "package": "Todos.dll",
   "manifest_version": 1,
   "description": "Allows to define potentially re-occuring custom Todos",
   "dependencies": {

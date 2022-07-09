@@ -88,6 +88,7 @@
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
+    <Compile Include="Source\Components\TodoVisualsManager.cs" />
     <Compile Include="Source\Models\Todo.cs" />
     <Compile Include="Source\Models\TodoSchedule.cs" />
     <Compile Include="Source\Models\TodoScheduleType.cs" />

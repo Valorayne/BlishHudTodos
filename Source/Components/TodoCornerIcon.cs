@@ -14,7 +14,7 @@ namespace Todos.Source.Components
 
         protected override void OnClick(MouseEventArgs e)
         {
-            Settings.WindowShown.Value = true;
+            Settings.WindowMinimized.Value = false;
             base.OnClick(e);
         }
     }

@@ -13,7 +13,7 @@ namespace Todos.Source.Components.Menu
             Height = 40;
             
             new HoverButton(Resources.GetTexture(Textures.CloseIcon), Resources.GetTexture(Textures.CloseIconHovered), 
-                26, 26, _ => Settings.WindowShown.Value = false)
+                26, 26, _ => Settings.WindowMinimized.Value = true)
             {
                 Parent = this,
                 Location = new Point(7, 7),

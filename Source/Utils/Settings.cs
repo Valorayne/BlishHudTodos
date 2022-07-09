@@ -5,8 +5,8 @@ namespace Todos.Source.Utils
 {
     public static class Settings
     {
-        public static SettingEntry<bool> ShowMenuIcon { get; private set; }
-        public static SettingEntry<bool> WindowShown { get; private set; }
+        public static SettingEntry<bool> WindowMinimized { get; private set; }
+        public static SettingEntry<bool> ShowWindowOnMap { get; private set; }
 
         public static SettingEntry<int> OverlayWidth { get; private set; }
         public static SettingEntry<int> OverlayHeight { get; private set; }
@@ -27,7 +27,8 @@ namespace Todos.Source.Utils
 
         public static void Initialize(SettingCollection settings)
         {
-            WindowShown = settings.DefineSetting("Window.Shown", true);
+            WindowMinimized = settings.DefineSetting("Window.Visibility.Minimized", false);
+            ShowWindowOnMap = settings.DefineSetting("Window.Visibility.OnMap", false);
             
             var overlaySettings = settings.AddSubCollection("Overlay Settings", true, false);
 
@@ -50,8 +51,9 @@ namespace Todos.Source.Utils
 
         public static void Dispose()
         {
-            WindowShown = null;
-            ShowMenuIcon = null;
+            WindowMinimized = null;
+            ShowWindowOnMap = null;
+            
             OverlayWidth = null;
             OverlayHeight = null;
             

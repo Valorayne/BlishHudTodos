@@ -28,7 +28,6 @@ namespace Todos.Source.Components.Entry.Content
 
             _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));
-            
         }
 
         protected override void OnResized(ResizedEventArgs e)

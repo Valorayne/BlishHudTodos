@@ -1,6 +1,7 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Models;
 using Todos.Source.Utils;
 
@@ -8,14 +9,18 @@ namespace Todos.Source.Components.Entry.Content
 {
     public sealed class TodoDescription : Panel
     {
+        private const int PADDING_RIGHT = 5;
+        
         private readonly Todo _todo;
+        private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly Label _label;
         
         public TextBox EditField { get; }
 
-        public TodoDescription(Todo todo)
+        public TodoDescription(Todo todo, TodoEntryHoverMenu hoverMenu)
         {
             _todo = todo;
+            _hoverMenu = hoverMenu;
             Height = HEADER_HEIGHT;
             _label = new Label
             {
@@ -34,6 +39,15 @@ namespace Todos.Source.Components.Entry.Content
             };
             Data.TodoModified += OnTodoModified;
             EditField.TextChanged += OnChange;
+        }
+
+        protected override void OnResized(ResizedEventArgs e)
+        {
+            if (EditField != null)
+                EditField.Width = Width - _hoverMenu.Width - PADDING_RIGHT;
+            if (_label != null)
+                _label.Width = Width - _hoverMenu.Width;
+            base.OnResized(e);
         }
 
         private void OnChange(object sender, EventArgs e)

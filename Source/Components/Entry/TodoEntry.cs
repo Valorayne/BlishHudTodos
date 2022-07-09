@@ -26,9 +26,10 @@ namespace Todos.Source.Components.Entry
             
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
-            
-            _content = new TodoEntryContent(todo) { Parent = this, Location = Point.Zero };
+
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
+            _content = new TodoEntryContent(todo, _hoverMenu) { Parent = this, Location = Point.Zero };
+            _hoverMenu.ZIndex = _content.ZIndex + 1;
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
 
             _content.Description.EditField.EnterPressed += OnEnterPressed;

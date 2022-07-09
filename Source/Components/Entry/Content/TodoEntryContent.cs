@@ -1,4 +1,5 @@
 ﻿using Blish_HUD.Controls;
+using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Models;
 using Todos.Source.Utils;
 using Todos.Source.Utils.Subscriptions;
@@ -7,13 +8,15 @@ namespace Todos.Source.Components.Entry.Content
 {
     public sealed class TodoEntryContent : FlowPanel
     {
+        private const int PADDING_RIGHT = 5;
+        
         private readonly BackgroundTextureSubscription _hoverSubscription;
         private readonly TodoCheckbox _checkbox;
         private readonly TodoScheduleIcon _icon;
         
         public TodoDescription Description { get; }
 
-        public TodoEntryContent(Todo todo)
+        public TodoEntryContent(Todo todo, TodoEntryHoverMenu hoverMenu)
         {
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;
@@ -21,7 +24,7 @@ namespace Todos.Source.Components.Entry.Content
 
             _checkbox = new TodoCheckbox(todo) { Parent = this };
             _icon = new TodoScheduleIcon(todo) { Parent = this };
-            Description = new TodoDescription(todo) { Parent = this };
+            Description = new TodoDescription(todo, hoverMenu) { Parent = this };
 
             _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));
@@ -31,7 +34,7 @@ namespace Todos.Source.Components.Entry.Content
         protected override void OnResized(ResizedEventArgs e)
         {
             if (Description != null)
-                Description.Width = Width - _checkbox.Width - _icon.Width;
+                Description.Width = Width - _checkbox.Width - _icon.Width - PADDING_RIGHT;
             base.OnResized(e);
         }
 

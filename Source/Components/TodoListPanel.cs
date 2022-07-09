@@ -45,7 +45,8 @@ namespace Todos.Source.Components
             base.PaintBeforeChildren(spriteBatch, bounds);
             if (_scrollTarget.HasValue)
             {
-                _scrollBar.ScrollDistance = _scrollTarget.Value / (_scrollView.Height - _scrollView.ContentBounds.Y);
+                var factor = _scrollView.Height - _scrollView.ContentBounds.Y;
+                _scrollBar.ScrollDistance = factor != 0 ? _scrollTarget.Value / factor : 0;
                 _scrollTarget = null;
             }
         }

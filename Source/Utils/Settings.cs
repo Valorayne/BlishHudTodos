@@ -5,6 +5,7 @@ namespace Todos.Source.Utils
     public static class Settings
     {
         public static SettingEntry<bool> WindowMinimized { get; private set; }
+        public static SettingEntry<bool> AlwaysShowWindow { get; private set; }
         public static SettingEntry<bool> ShowWindowOnMap { get; private set; }
         
         public static SettingEntry<float> WindowOpacityWhenNotFocussed { get; private set; }
@@ -19,6 +20,7 @@ namespace Todos.Source.Utils
         public static void Initialize(SettingCollection settings)
         {
             WindowMinimized = settings.DefineSetting("Window.Visibility.Minimized", false);
+            AlwaysShowWindow = settings.DefineSetting("Window.Visibility.Always", false);
             ShowWindowOnMap = settings.DefineSetting("Window.Visibility.OnMap", false);
 
             WindowOpacityWhenNotFocussed = settings.DefineSetting("Window.Visibility.Opacity.WhenNotFocussed", 1f);
@@ -34,7 +36,10 @@ namespace Todos.Source.Utils
         public static void Dispose()
         {
             WindowMinimized = null;
+            AlwaysShowWindow = null;
             ShowWindowOnMap = null;
+
+            WindowOpacityWhenNotFocussed = null;
             
             WindowWidth = null;
             WindowHeight = null;

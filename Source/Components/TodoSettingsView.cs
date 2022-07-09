@@ -14,6 +14,7 @@ namespace Todos.Source.Components
         private FlowPanel _panel;
         private IDisposable _showWindowOnMap;
         private IDisposable _opacityWhenNotFocussed;
+        private IDisposable _alwaysShowWindow;
 
         protected override void Build(Container buildPanel)
         {
@@ -24,9 +25,11 @@ namespace Todos.Source.Components
                 Width = buildPanel.Width / 2, 
                 Height = buildPanel.Height,
                 OuterControlPadding = new Vector2(10, 10)
-            }; 
-            
-            _showWindowOnMap = AddBooleanSetting(_panel, Settings.ShowWindowOnMap, "Show Window on Map", 
+            };
+
+            _alwaysShowWindow = AddBooleanSetting(_panel, Settings.AlwaysShowWindow, "Always visible",
+                "Whether or not the Todos window should also be shown during\r\ncutscenes, the character selection screen and loading screens");
+            _showWindowOnMap = AddBooleanSetting(_panel, Settings.ShowWindowOnMap, "Show on map", 
                 "Whether or not the Todos window should\r\nalso be shown while the map is opened");
             _opacityWhenNotFocussed = AddSliderSetting(_panel, Settings.WindowOpacityWhenNotFocussed,
                 "Unfocused opacity", "The opacity of the window when you're not currently using it");
@@ -70,6 +73,7 @@ namespace Todos.Source.Components
 
         protected override void Unload()
         {
+            _alwaysShowWindow.Dispose();
             _showWindowOnMap.Dispose();
             _opacityWhenNotFocussed.Dispose();
             _panel.Dispose();

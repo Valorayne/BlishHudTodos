@@ -13,7 +13,14 @@ namespace Todos.Source.Utils
         {
             Settings.WindowMinimized.SettingChanged += OnSettingChanged;
             GameService.Gw2Mumble.UI.IsMapOpenChanged += OnMapStatusChanged;
+            GameService.GameIntegration.Gw2Instance.IsInGameChanged += OnInGameChanged;
             Settings.ShowWindowOnMap.SettingChanged += OnSettingChanged;
+            Settings.AlwaysShowWindow.SettingChanged += OnSettingChanged;
+        }
+
+        private void OnInGameChanged(object sender, ValueEventArgs<bool> e)
+        {
+            UpdateDisplay();
         }
 
         public void OnModuleLoaded()
@@ -33,6 +40,13 @@ namespace Todos.Source.Utils
 
         private void UpdateDisplay()
         {
+            var isInGame = GameService.GameIntegration.Gw2Instance.IsInGame;
+            if (!isInGame && !Settings.AlwaysShowWindow.Value)
+            {
+                DisplayNothing();
+                return;
+            }
+            
             var isInMap = GameService.Gw2Mumble.UI.IsMapOpen;
             if (isInMap && !Settings.ShowWindowOnMap.Value)
             {
@@ -84,6 +98,7 @@ namespace Todos.Source.Utils
             Settings.WindowMinimized.SettingChanged -= OnSettingChanged;
             Settings.ShowWindowOnMap.SettingChanged -= OnSettingChanged;
             GameService.Gw2Mumble.UI.IsMapOpenChanged -= OnMapStatusChanged;
+            GameService.GameIntegration.Gw2Instance.IsInGameChanged -= OnInGameChanged;
             _window?.Dispose();
             _cornerIcon?.Dispose();
         }

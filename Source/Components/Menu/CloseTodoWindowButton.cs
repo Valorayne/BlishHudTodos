@@ -1,6 +1,6 @@
 ﻿using Blish_HUD.Controls;
-using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
+using Todos.Source.Components.Generic;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Menu
@@ -12,21 +12,13 @@ namespace Todos.Source.Components.Menu
             Width = 40;
             Height = 40;
             
-            new Image
+            new HoverButton(Resources.GetTexture(Textures.CloseIcon), Resources.GetTexture(Textures.CloseIconHovered), 
+                26, 26, _ => Settings.WindowShown.Value = false)
             {
                 Parent = this,
-                Height = 36,
-                Width = 36, 
-                Location = new Point(2, 2),
+                Location = new Point(7, 7),
                 BasicTooltipText = "Minimize to menu bar",
-                Texture = Resources.GetTexture(Textures.DeleteIcon)
             };
-        }
-
-        protected override void OnClick(MouseEventArgs e)
-        {
-            Settings.WindowShown.Value = false;
-            base.OnClick(e);
         }
     }
 }

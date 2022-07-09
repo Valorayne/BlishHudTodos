@@ -20,6 +20,8 @@ namespace Todos.Source.Utils
         EditIconHovered,
         DeleteIcon,
         DeleteIconHovered,
+        CloseIcon,
+        CloseIconHovered,
         ScheduleIcon,
     }
     
@@ -40,10 +42,12 @@ namespace Todos.Source.Utils
             { Textures.AddNewIcon, @"textures\157259.png" },
             { Textures.EyeIcon, @"textures\605021.png" },
             { Textures.EyeIconClosed, @"textures\605020.png" },
-            { Textures.EditIcon, @"textures\104168.png" },
-            { Textures.EditIconHovered, @"textures\104168_hovered.png" },
-            { Textures.DeleteIcon, @"textures\156012.png" },
-            { Textures.DeleteIconHovered, @"textures\156012.png" },
+            { Textures.EditIcon, @"textures\255277.png" },
+            { Textures.EditIconHovered, @"textures\255279.png" },
+            { Textures.DeleteIcon, @"textures\156674.png" },
+            { Textures.DeleteIconHovered, @"textures\156675.png" },
+            { Textures.CloseIcon, @"textures\2338895.png" },
+            { Textures.CloseIconHovered, @"textures\2338896.png" },
             { Textures.ScheduleIcon, @"textures\784265.png" }
         };
         

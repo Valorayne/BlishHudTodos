@@ -14,7 +14,7 @@ namespace Todos.Source.Components.Menu
             WidthSizingMode = SizingMode.Fill;
             OuterControlPadding = new Vector2(8, 0);
 
-            new CloseTodoWindowButton() { Parent = this };
+            new CloseTodoWindowButton { Parent = this };
             new TodoShowAlreadyDoneToggle { Parent = this };
             new AddNewTodoButton { Parent = this };
         }

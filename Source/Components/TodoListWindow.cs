@@ -5,7 +5,6 @@ using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Messages;
 using Todos.Source.Utils;
-using Todos.Source.Utils.Subscriptions;
 
 namespace Todos.Source.Components
 {
@@ -15,8 +14,6 @@ namespace Todos.Source.Components
         private const int MAX_WIDTH = 1000;
         private const int MIN_HEIGHT = 150;
         private const int MAX_HEIGHT = 1000;
-        
-        private readonly BackgroundColorSubscription _backgroundColorSubscription;
 
         private static Rectangle GetWindowRegion => new Rectangle(0, -28,
             Math.Max(MIN_WIDTH, Math.Min(MAX_WIDTH, Settings.OverlayWidth.Value)),
@@ -27,14 +24,12 @@ namespace Todos.Source.Components
         {
             Parent = GameService.Graphics.SpriteScreen;
             Title = "Todos";
-            BackgroundColor = Settings.OverlayBackgroundColor;
             SavesPosition = true;
             Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanResize = true;
             CanClose = false;
 
             new TodoListPanel { Parent = this };
-            _backgroundColorSubscription = new BackgroundColorSubscription(this);
 
             Click += OnClick;
         }
@@ -59,7 +54,6 @@ namespace Todos.Source.Components
         protected override void DisposeControl()
         {
             Click -= OnClick;
-            _backgroundColorSubscription.Dispose();
             base.DisposeControl();
         }
     }

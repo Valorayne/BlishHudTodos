@@ -10,13 +10,19 @@ namespace Todos.Source.Components.Messages
     public sealed class ConfirmDeletionWindow : FlowPanel
     {
         private const int PADDING = 5;
-        private static ConfirmDeletionWindow _instance = new ConfirmDeletionWindow();
+        private static ConfirmDeletionWindow _instance;
 
         private Action _action;
         
         private readonly StandardButton _yes;
         private readonly StandardButton _no;
 
+        public static void Initialize()
+        {
+            _instance = new ConfirmDeletionWindow();
+            ((Control)_instance).Hide();
+        }
+        
         public static void Spawn(Point location, Action action)
         {
             _instance._action = action;

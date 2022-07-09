@@ -69,7 +69,6 @@
     <Compile Include="Source\Components\Entry\Content\TodoEntryContent.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditPanel.cs" />
-    <Compile Include="Source\Components\Entry\Edit\TodoEditRow.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditSchedule.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoDeleteButton.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoEditButton.cs" />
@@ -77,6 +76,7 @@
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
     <Compile Include="Source\Components\Generic\CenteredMessage.cs" />
     <Compile Include="Source\Components\Generic\HoverButton.cs" />
+    <Compile Include="Source\Components\Generic\TodoEditRow.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\CloseTodoWindowButton.cs" />
     <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />
@@ -88,6 +88,7 @@
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
+    <Compile Include="Source\Components\TodoSettingsView.cs" />
     <Compile Include="Source\Components\TodoVisualsManager.cs" />
     <Compile Include="Source\Models\Todo.cs" />
     <Compile Include="Source\Models\TodoSchedule.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
     <Compile Include="Source\Utils\Settings.cs" />
-    <Compile Include="Source\Utils\Subscriptions\BackgroundColorSubscription.cs" />
+    <Compile Include="Source\Utils\SimpleDisposable.cs" />
     <Compile Include="Source\Utils\Subscriptions\BackgroundTextureSubscription.cs" />
     <Compile Include="Source\Utils\TimeService.cs" />
     <Compile Include="Source\Utils\Utility.cs" />

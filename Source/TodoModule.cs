@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using Blish_HUD;
+using Blish_HUD.Graphics.UI;
 using Blish_HUD.Modules;
 using Blish_HUD.Settings;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Xna.Framework;
+using Todos.Source.Components;
 using Todos.Source.Components.Messages;
 using Todos.Source.Utils;
 
@@ -29,6 +29,7 @@ namespace Todos.Source
 			// put here in case anything becomes async in the future
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			Data.Initialize();
+			ConfirmDeletionWindow.Initialize();
 
 			_visuals = new TodoVisualsManager();
 			
@@ -41,16 +42,15 @@ namespace Todos.Source
 			base.OnModuleLoaded(e);
 		}
 
-		protected override void Update(GameTime gameTime)
+		public override IView GetSettingsView()
 		{
-			if (GameService.Gw2Mumble.UI.IsMapOpen)
-			{
-				var forward = 3;
-			}
-			TimeService.ProgressTimer(gameTime);
+			return new TodoSettingsView();
 		}
 
-		private bool IsInCharacterLoadingScreen => !GameService.Gw2Mumble.PlayerCharacter.Name.IsNullOrEmpty();
+		protected override void Update(GameTime gameTime)
+		{
+			TimeService.ProgressTimer(gameTime);
+		}
 		
 		protected override void Unload()
 		{

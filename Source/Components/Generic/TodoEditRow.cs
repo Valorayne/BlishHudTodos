@@ -27,9 +27,19 @@ namespace Todos.Source.Components.Entry.Edit
         {
             _label.Location = new Point(0, 2);
             _label.Width = Width / 2;
-            _input.Location = new Point(Width / 2, -1);
+            _input.Location = new Point(Width / 2, VerticalOffset);
             _input.Width = Width / 2;
             base.OnResized(e);
+        }
+
+        private int VerticalOffset
+        {
+            get
+            {
+                if (_input is Checkbox)
+                    return 3;
+                return -1;
+            }
         }
     }
 }

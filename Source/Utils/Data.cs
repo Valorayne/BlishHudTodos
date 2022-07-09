@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,19 +33,15 @@ namespace Todos.Source.Utils
         {
             _directoryPath = manager.GetFullDirectoryPath("todos");
             _todos = new Dictionary<long, Todo>();
-            foreach (var file in Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}"))
+            foreach (var filePath in Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}"))
             {
-                try
+                Try(filePath, "deserialize", () =>
                 {
-                    var jsonString = File.ReadAllText(file);
+                    var jsonString = File.ReadAllText(filePath);
                     var todo = JsonConvert.DeserializeObject<Todo>(jsonString, SETTINGS);
                     if (todo != null)
                         _todos.Add(todo.CreatedAt.Ticks, todo);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error($"Could not deserialize file '{Path.Combine(_directoryPath, file)}':\r\n{e.Message}");
-                }
+                });
             }
             return Task.CompletedTask;
         }
@@ -54,14 +49,7 @@ namespace Todos.Source.Utils
         public static void Save(Todo todo)
         {
             var filePath = GetFilePath(todo);
-            try
-            {
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS));
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Could not save file '{filePath}':\r\n{e.Message}");
-            }
+            Try(filePath, "save", () => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
             TodoModified?.Invoke(todo, todo);
         }
 
@@ -69,14 +57,7 @@ namespace Todos.Source.Utils
         {
             _todos.Add(todo.CreatedAt.Ticks, todo);
             var filePath = GetFilePath(todo);
-            try
-            {
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS));
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Could not add file '{filePath}':\r\n{e.Message}");
-            }
+            Try(filePath, "add", () => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
             TodoAdded?.Invoke(todo, todo);
         }
 
@@ -89,16 +70,18 @@ namespace Todos.Source.Utils
         {
             _todos.Remove(todo.CreatedAt.Ticks);
             var filePath = GetFilePath(todo);
-            try
+            Try(filePath, "delete", () =>
             {
-                if (File.Exists(filePath))
+                if (File.Exists(filePath)) 
                     File.Delete(filePath);
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Could not delete file '{filePath}':\r\n{e.Message}");
-            }
+            });
             TodoDeleted?.Invoke(todo, todo);
+        }
+
+        private static void Try(string filePath, string operation, Action action)
+        {
+            try { action(); }
+            catch (Exception e) { Logger.Error($"Could not {operation} file '{filePath}':\r\n{e.Message}"); }
         }
 
         public static void Dispose()

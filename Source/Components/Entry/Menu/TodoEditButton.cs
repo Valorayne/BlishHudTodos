@@ -13,10 +13,7 @@ namespace Todos.Source.Components.Entry.Menu
             Resources.GetTexture(Textures.EditIcon),
             Resources.GetTexture(Textures.EditIconHovered),
             WIDTH, WIDTH,
-            _ =>
-            {
-                onEdit();
-            })
+            _ => onEdit())
         {
             IsEditing = false;
         }

@@ -26,12 +26,10 @@ namespace Todos.Source
 
 		protected override async Task LoadAsync()
 		{
-			// put here in case anything becomes async in the future
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			await Data.Initialize(ModuleParameters.DirectoriesManager);
 			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
 			ConfirmDeletionWindow.Initialize();
-
 			_visuals = new TodoVisualsManager();
 		}
 

@@ -29,7 +29,7 @@ namespace Todos.Source.Components.Generic
             new Label
             {
                 Parent = _panel,
-                Text = text, // "Everything done for today!\r\nTime to get some rest...\r\n...or to simply enjoy the game! :D",
+                Text = text,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 StrokeText = true,

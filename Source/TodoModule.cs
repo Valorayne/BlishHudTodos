@@ -24,16 +24,14 @@ namespace Todos.Source
 			Settings.Initialize(settings);
 		}
 
-		protected override Task LoadAsync()
+		protected override async Task LoadAsync()
 		{
 			// put here in case anything becomes async in the future
 			Resources.Initialize(ModuleParameters.ContentsManager);
-			Data.Initialize();
+			await Data.Initialize(ModuleParameters.DirectoriesManager);
 			ConfirmDeletionWindow.Initialize();
 
 			_visuals = new TodoVisualsManager();
-			
-			return Task.CompletedTask;
 		}
 
 		protected override void OnModuleLoaded(EventArgs e)

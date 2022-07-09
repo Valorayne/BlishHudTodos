@@ -13,8 +13,6 @@ namespace Todos.Source.Utils
         public static SettingEntry<int> WindowWidth { get; private set; }
         public static SettingEntry<int> WindowHeight { get; private set; }
         
-        public static SettingEntry<string> Data { get; private set; }
-        
         public static SettingEntry<bool> ShowAlreadyDoneTasks { get; private set; }
 
         public static void Initialize(SettingCollection settings)
@@ -27,8 +25,6 @@ namespace Todos.Source.Utils
 
             WindowWidth = settings.DefineSetting("Window.Dimensions.Width", 400);
             WindowHeight = settings.DefineSetting("Window.Dimensions.Height", 200);
-
-            Data = settings.DefineSetting("Data.Todos.1", "{}");
 
             ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true);
         }
@@ -43,8 +39,6 @@ namespace Todos.Source.Utils
             
             WindowWidth = null;
             WindowHeight = null;
-
-            Data = null;
 
             ShowAlreadyDoneTasks = null;
         }

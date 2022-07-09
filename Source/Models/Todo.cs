@@ -9,21 +9,25 @@ namespace Todos.Source.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Todo
     {
+        public const int CURRENT_VERSION = 1;
+        
         public bool IsNew { get; set; }
         
-        [JsonProperty] public string Description { get; set; }
+        [JsonProperty] public int Version { get; private set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
+        [JsonProperty] public string Description { get; set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
 
-        public Todo() : this(DateTime.Now, new List<DateTime>())
+        public Todo() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>())
         {
             IsNew = true;
         }
         
         [JsonConstructor]
-        private Todo(DateTime createdAt, List<DateTime> executions)
+        private Todo(int version, DateTime createdAt, List<DateTime> executions)
         {
+            Version = version;
             CreatedAt = createdAt;
             Executions = executions;
             Schedule = new TodoSchedule

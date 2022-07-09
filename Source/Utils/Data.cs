@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Blish_HUD;
 using Blish_HUD.Modules.Managers;
-using Newtonsoft.Json;
 using Todos.Source.Models;
 
 namespace Todos.Source.Utils
 {
     public static class Data
     {
-        private const string FILE_ENDING = ".todo.json";
-        private static readonly JsonSerializerSettings SETTINGS = new JsonSerializerSettings
-        {
-            Formatting = Formatting.Indented
-        };
-        
         private static Dictionary<long, Todo> _todos;
         
         public static IReadOnlyList<Todo> Todos => _todos.Values.ToList();
@@ -26,66 +17,40 @@ namespace Todos.Source.Utils
         public static event EventHandler<Todo> TodoModified;
         public static event EventHandler<Todo> TodoDeleted;
         
-        private static readonly Logger Logger = Logger.GetLogger<TodoModule>();
-        private static string _directoryPath;
+        private static Persistence _persistence;
 
         public static Task Initialize(DirectoriesManager manager)
         {
-            _directoryPath = manager.GetFullDirectoryPath("todos");
+            _persistence = new Persistence(manager);
             _todos = new Dictionary<long, Todo>();
-            foreach (var filePath in Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}"))
-            {
-                Try(filePath, "deserialize", file =>
-                {
-                    var jsonString = File.ReadAllText(file);
-                    var todo = JsonConvert.DeserializeObject<Todo>(jsonString, SETTINGS);
-                    if (todo != null)
-                        _todos.Add(todo.CreatedAt.Ticks, todo);
-                });
-            }
+            foreach (var todo in _persistence.LoadAll())
+                _todos.Add(todo.CreatedAt.Ticks, todo);
             return Task.CompletedTask;
         }
 
         public static void Save(Todo todo)
         {
-            Try(GetFilePath(todo), "save", 
-                filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
+            _persistence.Save(todo);
             TodoModified?.Invoke(todo, todo);
         }
 
         public static void Add(Todo todo)
         {
             _todos.Add(todo.CreatedAt.Ticks, todo);
-            Try(GetFilePath(todo), "add", 
-                filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
+            _persistence.Add(todo);
             TodoAdded?.Invoke(todo, todo);
         }
-
-        private static string GetFilePath(Todo todo)
-        {
-            return Path.Combine(_directoryPath, $"{todo.CreatedAt.Ticks.ToString()}{FILE_ENDING}");
-        }
-
+        
         public static void Delete(Todo todo)
         {
             _todos.Remove(todo.CreatedAt.Ticks);
-            Try(GetFilePath(todo), "delete", filePath =>
-            {
-                if (File.Exists(filePath)) 
-                    File.Delete(filePath);
-            });
+            _persistence.Delete(todo);
             TodoDeleted?.Invoke(todo, todo);
-        }
-
-        private static void Try(string filePath, string operation, Action<string> action)
-        {
-            try { action(filePath); }
-            catch (Exception e) { Logger.Error($"Could not {operation} file '{filePath}':\r\n{e.Message}"); }
         }
 
         public static void Dispose()
         {
-            _directoryPath = null;
+            _persistence = null;
             _todos?.Clear();
             _todos = null;
         }

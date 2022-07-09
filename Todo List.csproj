@@ -96,6 +96,7 @@
     <Compile Include="Source\TodoModule.cs" />
     <Compile Include="Source\Utils\Data.cs" />
     <Compile Include="Source\Utils\DateUtils.cs" />
+    <Compile Include="Source\Utils\Persistence.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
     <Compile Include="Source\Utils\Settings.cs" />
     <Compile Include="Source\Utils\SimpleDisposable.cs" />

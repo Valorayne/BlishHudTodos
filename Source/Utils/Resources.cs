@@ -7,12 +7,9 @@ namespace Todos.Source.Utils
     public enum Textures
     {
         CornerIcon,
-        CornerIconHovered,
         Empty,
         Header,
         HeaderHovered,
-        CollapseArrowDown, 
-        CollapseArrowRight,
         AddNewIcon,
         EyeIcon,
         EyeIconClosed,
@@ -33,12 +30,9 @@ namespace Todos.Source.Utils
         private static readonly IReadOnlyDictionary<Textures, string> PATHS = new Dictionary<Textures, string>
         {
             { Textures.CornerIcon, @"textures\156701.png"},
-            { Textures.CornerIconHovered, @"textures\156702.png"},
             { Textures.Empty, @"textures\empty.png" },
             { Textures.Header, @"textures\1032325.png" },
             { Textures.HeaderHovered, @"textures\1032324.png" },
-            { Textures.CollapseArrowDown, @"textures\155953.png" },
-            { Textures.CollapseArrowRight, @"textures\155953_rotated.png" },
             { Textures.AddNewIcon, @"textures\157259.png" },
             { Textures.EyeIcon, @"textures\605021.png" },
             { Textures.EyeIconClosed, @"textures\605020.png" },

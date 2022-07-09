@@ -35,9 +35,9 @@ namespace Todos.Source.Utils
             _todos = new Dictionary<long, Todo>();
             foreach (var filePath in Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}"))
             {
-                Try(filePath, "deserialize", () =>
+                Try(filePath, "deserialize", file =>
                 {
-                    var jsonString = File.ReadAllText(filePath);
+                    var jsonString = File.ReadAllText(file);
                     var todo = JsonConvert.DeserializeObject<Todo>(jsonString, SETTINGS);
                     if (todo != null)
                         _todos.Add(todo.CreatedAt.Ticks, todo);
@@ -48,16 +48,16 @@ namespace Todos.Source.Utils
 
         public static void Save(Todo todo)
         {
-            var filePath = GetFilePath(todo);
-            Try(filePath, "save", () => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
+            Try(GetFilePath(todo), "save", 
+                filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
             TodoModified?.Invoke(todo, todo);
         }
 
         public static void Add(Todo todo)
         {
             _todos.Add(todo.CreatedAt.Ticks, todo);
-            var filePath = GetFilePath(todo);
-            Try(filePath, "add", () => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
+            Try(GetFilePath(todo), "add", 
+                filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
             TodoAdded?.Invoke(todo, todo);
         }
 
@@ -69,8 +69,7 @@ namespace Todos.Source.Utils
         public static void Delete(Todo todo)
         {
             _todos.Remove(todo.CreatedAt.Ticks);
-            var filePath = GetFilePath(todo);
-            Try(filePath, "delete", () =>
+            Try(GetFilePath(todo), "delete", filePath =>
             {
                 if (File.Exists(filePath)) 
                     File.Delete(filePath);
@@ -78,9 +77,9 @@ namespace Todos.Source.Utils
             TodoDeleted?.Invoke(todo, todo);
         }
 
-        private static void Try(string filePath, string operation, Action action)
+        private static void Try(string filePath, string operation, Action<string> action)
         {
-            try { action(); }
+            try { action(filePath); }
             catch (Exception e) { Logger.Error($"Could not {operation} file '{filePath}':\r\n{e.Message}"); }
         }
 

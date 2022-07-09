@@ -29,12 +29,13 @@ namespace Todos.Source.Components.Messages
             Parent = GameService.Graphics.SpriteScreen;
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.AutoSize;
+            FlowDirection = ControlFlowDirection.SingleLeftToRight;
             Title = "Are you sure?";
             ZIndex = Screen.TOOLTIP_BASEZINDEX;
             OuterControlPadding = Vector2.One * PADDING; 
             
-            _yes = new StandardButton { Parent = this, Text = "Yes" };
-            _no = new StandardButton { Parent = this, Text = "No" };
+            _yes = new StandardButton { Parent = this, Text = "Yes", Width = 50 };
+            _no = new StandardButton { Parent = this, Text = "No", Width = 50 };
 
             _yes.Click += OnYes;
             _no.Click += OnNo;

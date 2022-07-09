@@ -6,6 +6,7 @@ namespace Todos.Source.Utils
     public static class Settings
     {
         public static SettingEntry<bool> ShowMenuIcon { get; private set; }
+        public static SettingEntry<bool> WindowShown { get; private set; }
 
         public static SettingEntry<int> OverlayWidth { get; private set; }
         public static SettingEntry<int> OverlayHeight { get; private set; }
@@ -26,6 +27,8 @@ namespace Todos.Source.Utils
 
         public static void Initialize(SettingCollection settings)
         {
+            WindowShown = settings.DefineSetting("Window.Shown", true);
+            
             var overlaySettings = settings.AddSubCollection("Overlay Settings", true, false);
 
             OverlayWidth = overlaySettings.DefineSetting("Width", 500);
@@ -47,6 +50,7 @@ namespace Todos.Source.Utils
 
         public static void Dispose()
         {
+            WindowShown = null;
             ShowMenuIcon = null;
             OverlayWidth = null;
             OverlayHeight = null;

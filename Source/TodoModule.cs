@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using Blish_HUD;
 using Blish_HUD.Modules;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,7 @@ namespace Todos.Source
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
 		private TodoListWindow _window;
+		private TodoCornerIcon _cornerIcon;
 
 		protected override void DefineSettings(SettingCollection settings)
 		{
@@ -29,14 +31,36 @@ namespace Todos.Source
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			Data.Initialize();
 			
-			_window = new TodoListWindow();
+			if (Settings.WindowShown.Value)
+				_window = new TodoListWindow();
+			else 
+				_cornerIcon = new TodoCornerIcon();
+			
 			return Task.CompletedTask;
 		}
 
 		protected override void OnModuleLoaded(EventArgs e)
 		{
-			_window.Show();
+			_window?.Show();
+
+			Settings.WindowShown.SettingChanged += OnWindowVisibilityChanged;
+			
 			base.OnModuleLoaded(e);
+		}
+
+		private void OnWindowVisibilityChanged(object sender, ValueChangedEventArgs<bool> e)
+		{
+			if (e.NewValue)
+			{
+				_cornerIcon.Dispose();
+				_window = new TodoListWindow();
+				_window.Show();
+			}
+			else
+			{
+				_window.Dispose();
+				_cornerIcon = new TodoCornerIcon();
+			}
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -47,7 +71,10 @@ namespace Todos.Source
 
 		protected override void Unload()
 		{
-			_window.Dispose();
+			Settings.WindowShown.SettingChanged -= OnWindowVisibilityChanged;
+			 
+			_window?.Dispose();
+			_cornerIcon?.Dispose();
 			
 			Settings.Dispose();
 

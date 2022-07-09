@@ -54,7 +54,7 @@ namespace Todos.Source.Components
             Settings.OverlayHeight.Value = e.CurrentSize.Y; 
             
             base.OnResized(e);
-        } 
+        }
 
         protected override void DisposeControl()
         {

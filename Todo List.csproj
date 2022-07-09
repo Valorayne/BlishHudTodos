@@ -78,11 +78,13 @@
     <Compile Include="Source\Components\Generic\CenteredMessage.cs" />
     <Compile Include="Source\Components\Generic\HoverButton.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
+    <Compile Include="Source\Components\Menu\CloseTodoWindowButton.cs" />
     <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />
     <Compile Include="Source\Components\Menu\TodoShowAlreadyDoneToggle.cs" />
     <Compile Include="Source\Components\Messages\AllTodosDoneMessage.cs" />
     <Compile Include="Source\Components\Messages\ConfirmDeletionWindow.cs" />
     <Compile Include="Source\Components\Messages\NoTodosYetMessage.cs" />
+    <Compile Include="Source\Components\TodoCornerIcon.cs" />
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />

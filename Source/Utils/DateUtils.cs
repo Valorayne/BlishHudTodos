@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.IdentityModel.Tokens;
 using Todos.Source.Models;
 
 namespace Todos.Source.Utils
@@ -23,12 +24,15 @@ namespace Todos.Source.Utils
         public static string ToDurationString(this DateTime target)
         {
             var until = target - DateTime.Now;
-            var dayString = until.Days == 0 ? "" : until.Days == 1 ? "1 day, " : $"{until.Days} days, ";
+            var dayString = until.Days == 0 ? "" : until.Days == 1 ? "1 day" : $"{until.Days} days";
             var hourString = until.Hours == 0 ? "" : $"{until.Hours}h ";
             var minuteString = until.Minutes == 0 
                 ? dayString.Length > 0 || hourString.Length > 0 ? "" : "less than a minute" 
                 : $"{until.Minutes}min";
-            return $"{dayString}{hourString}{minuteString}";
+            var separator = !dayString.IsNullOrEmpty() && (!hourString.IsNullOrEmpty() || !minuteString.IsNullOrEmpty())
+                ? ", "
+                : "";
+            return $"{dayString}{separator}{hourString}{minuteString}";
         }
 
         public static DateTime LastDailyReset => DateTime.UtcNow.Date;
@@ -56,6 +60,16 @@ namespace Todos.Source.Utils
         {
             var resetToday = DateTime.Today + schedule.LocalTime;
             return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
+        }
+        
+        public static DateTime NextDurationReset(Todo todo)
+        {
+            return (todo.LastExecution ?? DateTime.Now) + todo.Schedule?.Duration ?? DateTime.Now;
+        }
+
+        public static DateTime LastDurationReset(TodoSchedule schedule)
+        {
+            return DateTime.Now - schedule.Duration; 
         }
     }
 }

@@ -26,7 +26,8 @@ namespace Todos.Source.Models
             IsNew = true;
             Schedule = new TodoSchedule
             {
-                Type = TodoScheduleType.DailyServer
+                Type = TodoScheduleType.DailyServer,
+                Duration = TimeSpan.FromDays(1)
             };
         }
         
@@ -56,13 +57,15 @@ namespace Todos.Source.Models
                         return lastExecution.HasValue && lastExecution.Value > DateUtils.LastWeeklyReset;
                     case TodoScheduleType.LocalTime:
                         return lastExecution.HasValue && lastExecution.Value > DateUtils.LastLocalReset(Schedule.Value);
+                    case TodoScheduleType.Duration:
+                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDurationReset(Schedule.Value);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
             set
             {
-                if (value) Executions.Add(DateTime.Now);
+                if (value) Executions.Add(DateTime.Now.WithoutSeconds());
                 else
                 {
                     if (Executions.Count > 0)

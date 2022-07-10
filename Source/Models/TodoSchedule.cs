@@ -8,5 +8,6 @@ namespace Todos.Source.Models
     {
         [JsonProperty] public TodoScheduleType Type;
         [JsonProperty] public TimeSpan LocalTime;
+        [JsonProperty] public TimeSpan Duration;
     }
 }

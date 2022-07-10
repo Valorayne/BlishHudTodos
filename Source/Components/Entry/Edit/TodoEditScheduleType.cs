@@ -15,6 +15,7 @@ namespace Todos.Source.Components.Entry.Edit
             Items.Add(TodoScheduleTypeExtensions.DAILY_SERVER_RESET);
             Items.Add(TodoScheduleTypeExtensions.WEEKLY_SERVER_RESET);
             Items.Add(TodoScheduleTypeExtensions.LOCAL_TIME);
+            Items.Add(TodoScheduleTypeExtensions.DURATION);
 
             BasicTooltipText = SelectedItem.GetTooltip();
         }

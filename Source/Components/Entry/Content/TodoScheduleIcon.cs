@@ -46,7 +46,7 @@ namespace Todos.Source.Components.Entry.Content
             }
         }
 
-        private Texture2D IconTexture => _todo.Schedule.HasValue 
+        private Texture2D IconTexture => _todo.Schedule.HasValue
             ? Resources.GetTexture(Textures.ScheduleIcon) 
             : Resources.GetTexture(Textures.Empty);
 
@@ -63,6 +63,8 @@ namespace Todos.Source.Components.Entry.Content
                     return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
                 case TodoScheduleType.LocalTime:
                     return $"Local reset in {DateUtils.NextLocalReset(_todo.Schedule.Value).ToDurationString()}";
+                case TodoScheduleType.Duration:
+                    return $"Duration reset in {DateUtils.NextDurationReset(_todo).ToDurationString()}";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

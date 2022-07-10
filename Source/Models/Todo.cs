@@ -19,6 +19,7 @@ namespace Todos.Source.Models
         [JsonProperty] public string Description { get; set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
+        [JsonProperty] public string ClipboardContent { get; set; }
 
         public Todo() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>())
         {

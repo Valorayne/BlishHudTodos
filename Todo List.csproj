@@ -70,6 +70,7 @@
     <Compile Include="Source\Components\Entry\Content\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditPanel.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditSchedule.cs" />
+    <Compile Include="Source\Components\Entry\Edit\TodoEditClipboardContent.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoDeleteButton.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoEditButton.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoEntryHoverMenu.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Source\Components\Generic\CenteredMessage.cs" />
     <Compile Include="Source\Components\Generic\HoverButton.cs" />
     <Compile Include="Source\Components\Generic\TodoEditRow.cs" />
+    <Compile Include="Source\Components\Generic\TooltipNotification.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\CloseTodoWindowButton.cs" />
     <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />

@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
+using AsyncWindowsClipboard;
 using Blish_HUD.Controls;
+using Blish_HUD.Input;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Menu;
+using Todos.Source.Components.Generic;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Utility = Todos.Source.Utils.Utility;
 
 namespace Todos.Source.Components.Entry.Content
 {
@@ -14,6 +20,7 @@ namespace Todos.Source.Components.Entry.Content
         private readonly Todo _todo;
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly Label _label;
+        private readonly WindowsClipboardService _clipboardService;
         
         public TextBox EditField { get; }
 
@@ -21,7 +28,10 @@ namespace Todos.Source.Components.Entry.Content
         {
             _todo = todo;
             _hoverMenu = hoverMenu;
+            _clipboardService = new WindowsClipboardService();
+            
             Height = HEADER_HEIGHT;
+            
             _label = new Label
             {
                 Parent = this,
@@ -36,7 +46,8 @@ namespace Todos.Source.Components.Entry.Content
                 Text = todo.Description,
                 Visible = false,
                 Location = new Point(0, 5)
-            };
+            }; 
+            
             Data.TodoModified += OnTodoModified;
             EditField.TextChanged += OnChange;
         }
@@ -48,6 +59,16 @@ namespace Todos.Source.Components.Entry.Content
             if (_label != null)
                 _label.Width = Width - _hoverMenu.Width;
             base.OnResized(e);
+        }
+        
+        protected override void OnClick(MouseEventArgs e)
+        {
+            if (!_todo.ClipboardContent.IsNullOrEmpty())
+            {
+                _clipboardService.SetTextAsync(_todo.ClipboardContent)
+                    .ContinueWith(_ => TooltipNotification.Spawn("Content copied to clipboard!", e.MousePosition));
+            }
+            base.OnClick(e);
         }
 
         private void OnChange(object sender, EventArgs e)

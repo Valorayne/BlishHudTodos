@@ -5,30 +5,30 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoEditRow : Panel
     {
-        private readonly Label _label;
-        public readonly Control _input;
+        public Label Label { get; }
+        public Control Control { get; }
 
         public static T For<T>(Container parent, T input, string description, string tooltip = null) where T : Control
         {
-            return (T) new TodoEditRow(input, description, tooltip) { Parent = parent }._input;
+            return (T) new TodoEditRow(input, description, tooltip) { Parent = parent }.Control;
         }
         
-        public TodoEditRow(Control input, string description, string tooltip = null)
+        public TodoEditRow(Control control, string description, string tooltip = null)
         {
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.Fill;
 
-            _input = input;
-            _label = new Label { Parent = this, Text = description, BasicTooltipText = tooltip, StrokeText = true };
-            input.Parent = this;
+            Control = control;
+            Label = new Label { Parent = this, Text = description, BasicTooltipText = tooltip, StrokeText = true };
+            control.Parent = this;
         }
 
         protected override void OnResized(ResizedEventArgs e)
         {
-            _label.Location = new Point(0, 2);
-            _label.Width = Width / 2;
-            _input.Location = new Point(Width / 2, VerticalOffset);
-            _input.Width = Width / 2;
+            Label.Location = new Point(0, 2);
+            Label.Width = Width / 2;
+            Control.Location = new Point(Width / 2, VerticalOffset);
+            Control.Width = Width / 2;
             base.OnResized(e);
         }
 
@@ -36,7 +36,7 @@ namespace Todos.Source.Components.Entry.Edit
         {
             get
             {
-                if (_input is Checkbox)
+                if (Control is Checkbox)
                     return 3;
                 return -1;
             }

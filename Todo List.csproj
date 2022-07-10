@@ -68,7 +68,9 @@
     <Compile Include="Source\Components\Entry\Content\TodoDescription.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoEntryContent.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoScheduleIcon.cs" />
+    <Compile Include="Source\Components\Entry\Edit\TodoEditLocalTime.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditPanel.cs" />
+    <Compile Include="Source\Components\Entry\Edit\TodoEditSchedule.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditScheduleType.cs" />
     <Compile Include="Source\Components\Entry\Edit\TodoEditClipboardContent.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoDeleteButton.cs" />

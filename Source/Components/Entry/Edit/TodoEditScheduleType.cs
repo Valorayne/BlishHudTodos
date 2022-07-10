@@ -5,12 +5,8 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public class TodoEditScheduleType : Dropdown
     {
-        private readonly Todo _todo;
-
         public TodoEditScheduleType(Todo todo)
         {
-            _todo = todo;
-            
             SelectedItem = todo.Schedule.HasValue
                 ? todo.Schedule.Value.Type.ToDropdownEntry()
                 : TodoScheduleTypeExtensions.NO_RESET;
@@ -26,24 +22,9 @@ namespace Todos.Source.Components.Entry.Edit
         protected override void OnValueChanged(ValueChangedEventArgs e)
         {
             BasicTooltipText = SelectedItem.GetTooltip();
-            _todo.Schedule = Selected;
-            _todo.Save();
             base.OnValueChanged(e);
         }
 
-        public TodoSchedule? Selected
-        {
-            get
-            {
-                var type = SelectedItem.FromDropdownEntry();
-                if (!type.HasValue)
-                    return null;
-                
-                return new TodoSchedule
-                {
-                    Type = type.Value
-                };
-            }
-        }
+        public TodoScheduleType? Selected => SelectedItem?.FromDropdownEntry();
     }
 }

@@ -43,13 +43,13 @@ namespace Todos.Source.Utils
 
         public static DateTime NextLocalReset(TodoSchedule schedule)
         {
-            var resetToday = DateTime.Today + (schedule.LocalTime ?? TimeSpan.Zero);
+            var resetToday = DateTime.Today + schedule.LocalTime;
             return DateTime.Now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
         }
 
         public static DateTime LastLocalReset(TodoSchedule schedule)
         {
-            var resetToday = DateTime.Today + (schedule.LocalTime ?? TimeSpan.Zero);
+            var resetToday = DateTime.Today + schedule.LocalTime;
             return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
         }
     }

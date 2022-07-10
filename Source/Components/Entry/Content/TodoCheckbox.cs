@@ -25,13 +25,32 @@ namespace Todos.Source.Components.Entry.Content
             };
 
             _checkbox.CheckedChanged += OnClick;
+            Data.TodoModified += OnTodoModified;
+            TimeService.NewMinute += CheckForChange;
+        }
+
+        private void OnTodoModified(object sender, Todo todo)
+        {
+            if (todo == _todo)
+                UpdateState();
+        }
+
+        private void UpdateState()
+        {
+            _checkbox.Checked = _todo.Done;
+            _checkbox.BasicTooltipText = GetTooltipText(_todo);
+        }
+
+        private void CheckForChange(object sender, GameTime e)
+        {
+            UpdateState();
         }
 
         private void OnClick(object sender, CheckChangedEvent e)
         {
             _todo.Done = e.Checked;
             _todo.Save();
-            _checkbox.BasicTooltipText = GetTooltipText(_todo);
+            UpdateState();
         }
 
         private string GetTooltipText(Todo todo)
@@ -43,7 +62,9 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
+            Data.TodoModified -= OnTodoModified;
             _checkbox.CheckedChanged -= OnClick;
+            TimeService.NewMinute -= CheckForChange;
             base.DisposeControl();
         }
     }

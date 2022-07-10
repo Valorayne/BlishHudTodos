@@ -35,6 +35,8 @@ namespace Todos.Source.Components.Entry
                 Utility.Delay(OnEdit);
         }
 
+        public bool IsEditing => _row.IsEditing;
+
         private void OnEdit()
         {
             _saveScroll();

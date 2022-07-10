@@ -38,23 +38,24 @@ namespace Todos.Source.Models
             Executions = executions;
         }
 
-        public DateTime? LastExecution => Executions.Count > 0 ? Executions.Last() : (DateTime?)null;
+        public DateTime? LastExecution => Executions.Count > 0 ? Executions.Max().WithoutSeconds() : (DateTime?)null;
         
         public bool Done
         {
             get
             {
+                var lastExecution = LastExecution;
                 if (!Schedule.HasValue)
-                    return LastExecution.HasValue;
+                    return lastExecution.HasValue;
 
                 switch (Schedule.Value.Type)
                 {
                     case TodoScheduleType.DailyServer:
-                        return LastExecution.HasValue && LastExecution.Value > DateUtils.LastDailyReset;
+                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDailyReset;
                     case TodoScheduleType.WeeklyServer:
-                        return LastExecution.HasValue && LastExecution.Value > DateUtils.LastWeeklyReset;
+                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastWeeklyReset;
                     case TodoScheduleType.LocalTime:
-                        return LastExecution.HasValue && LastExecution.Value > DateUtils.LastLocalReset(Schedule.Value);
+                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastLocalReset(Schedule.Value);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -62,7 +63,11 @@ namespace Todos.Source.Models
             set
             {
                 if (value) Executions.Add(DateTime.Now);
-                else Executions.RemoveAt(Executions.Count - 1);
+                else
+                {
+                    if (Executions.Count > 0)
+                        Executions.RemoveAt(Executions.IndexOf(Executions.Max()));
+                }
             }
         }
         

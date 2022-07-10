@@ -37,12 +37,23 @@ namespace Todos.Source.Components
             Data.TodoAdded += SpawnEntry;
             Data.TodoDeleted += DeleteEntry;
             Settings.ShowAlreadyDoneTasks.SettingChanged += ShowOrHideAlreadyDoneTasks;
+            TimeService.NewMinute += OnNewMinute;
+        }
+
+        private void OnNewMinute(object sender, GameTime e)
+        {
+            UpdateVisibilityOfChildren();
         }
 
         private void ShowOrHideAlreadyDoneTasks(object sender, ValueChangedEventArgs<bool> change)
         {
-            foreach (var entry in _entries.Where(entry => entry.Key.Done))
-                entry.Value.Visible = change.NewValue;
+            UpdateVisibilityOfChildren();
+        }
+
+        private void UpdateVisibilityOfChildren()
+        {
+            foreach (var entry in _entries)
+                entry.Value.Visible = !entry.Key.Done || Settings.ShowAlreadyDoneTasks.Value || entry.Value.IsEditing;
             RecalculateLayout();
         }
 
@@ -63,6 +74,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
+            TimeService.NewMinute -= OnNewMinute;
             Settings.ShowAlreadyDoneTasks.SettingChanged -= ShowOrHideAlreadyDoneTasks;
             Data.TodoAdded -= SpawnEntry;
             Data.TodoDeleted -= DeleteEntry;

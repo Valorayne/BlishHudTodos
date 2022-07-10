@@ -5,6 +5,11 @@ namespace Todos.Source.Utils
 {
     public static class DateUtils
     {
+        public static DateTime WithoutSeconds(this DateTime time)
+        {
+            return new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, 0);
+        }
+        
         public static string ToDaysSinceString(this DateTime since)
         {
             var daysSince = (DateTime.Today - since.Date).Days;

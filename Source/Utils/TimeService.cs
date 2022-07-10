@@ -5,7 +5,7 @@ namespace Todos.Source.Utils
 {
     public static class TimeService
     {
-        private static TimeSpan? _lastMinuteTick;
+        private static DateTime? _lastMinute;
 
         public static event EventHandler<GameTime> NewMinute;
 
@@ -14,16 +14,16 @@ namespace Todos.Source.Utils
             if (time.IsRunningSlowly)
                 return;
 
-            if (!_lastMinuteTick.HasValue || (time.TotalGameTime - _lastMinuteTick.Value).TotalMinutes > 1)
+            if (!_lastMinute.HasValue || (DateTime.Now - _lastMinute.Value).TotalMinutes > 1)
             {
-                _lastMinuteTick = time.TotalGameTime;
+                _lastMinute = DateTime.Now.WithoutSeconds();
                 NewMinute?.Invoke(time, time);
             }
         }
 
         public static void Dispose()
         {
-            _lastMinuteTick = null;
+            _lastMinute = null;
         }
     }
 }

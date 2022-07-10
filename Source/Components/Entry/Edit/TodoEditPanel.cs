@@ -15,7 +15,7 @@ namespace Todos.Source.Components.Entry.Edit
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             OuterControlPadding = Vector2.One * PADDING;
             
-            TodoEditRow.For(this, new TodoEditSchedule(todo), "Reset Schedule",
+            TodoEditRow.For(this, new TodoEditScheduleType(todo), "Reset Schedule",
                 "Whether/when this task should automatically be reset");
             TodoEditRow.For(this, new TodoEditClipboardContent(todo), "Clipboard Content",
                 "Content (e.g. map waypoints) to copy to your clipboard when clicking on this task");

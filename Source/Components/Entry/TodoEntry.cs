@@ -2,8 +2,6 @@
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
-using Todos.Source.Components.Entry.Content;
-using Todos.Source.Components.Entry.Edit;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Messages;
 using Todos.Source.Models;
@@ -17,8 +15,7 @@ namespace Todos.Source.Components.Entry
         private readonly Todo _todo;
         private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
-        private readonly TodoEditPanel _editMenu;
-        private readonly TodoEntryContent _content;
+        private readonly TodoEntryRow _row;
 
         public TodoEntry(Todo todo, Action saveScroll)
         {
@@ -26,33 +23,23 @@ namespace Todos.Source.Components.Entry
             _saveScroll = saveScroll;
             
             WidthSizingMode = SizingMode.Fill;
-            Height = HEADER_HEIGHT;
+            HeightSizingMode = SizingMode.AutoSize;
 
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
-            _content = new TodoEntryContent(todo, _hoverMenu) { Parent = this, Location = Point.Zero };
-            _hoverMenu.ZIndex = _content.ZIndex + 1;
-            _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
+            _row = new TodoEntryRow(todo, _hoverMenu, OnEdit) { Parent = this };
+            _hoverMenu.ZIndex = _row.ZIndex + 1;
 
-            _content.Description.EditField.EnterPressed += OnEnterPressed;
             Data.TodoModified += OnTodoModified;
             
             if (todo.IsNew)
                 Utility.Delay(OnEdit);
         }
 
-        private void OnEnterPressed(object sender, EventArgs e)
-        {
-            OnEdit();
-        }
-
-        public bool IsEditing => Height != HEADER_HEIGHT;
-
         private void OnEdit()
         {
             _saveScroll();
-             Height = IsEditing ? HEADER_HEIGHT : HEADER_HEIGHT + _editMenu.Height;
-            _hoverMenu.EditButton.IsEditing = IsEditing;
-            _content.Description.IsEditing = IsEditing;
+            _row.IsEditing = !_row.IsEditing;
+            _hoverMenu.EditButton.IsEditing = _row.IsEditing;
         }
 
         private void OnDelete(Point location)
@@ -100,7 +87,6 @@ namespace Todos.Source.Components.Entry
         protected override void DisposeControl()
         {
             Data.TodoModified -= OnTodoModified;
-            _content.Description.EditField.EnterPressed -= OnEnterPressed;
             base.DisposeControl();
         }
     }

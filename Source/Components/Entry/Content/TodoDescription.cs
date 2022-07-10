@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AsyncWindowsClipboard;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
@@ -9,7 +8,6 @@ using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
 using Todos.Source.Utils;
-using Utility = Todos.Source.Utils.Utility;
 
 namespace Todos.Source.Components.Entry.Content
 {

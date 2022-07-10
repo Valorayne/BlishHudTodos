@@ -3,11 +3,11 @@ using Todos.Source.Models;
 
 namespace Todos.Source.Components.Entry.Edit
 {
-    public class TodoEditSchedule : Dropdown
+    public class TodoEditScheduleType : Dropdown
     {
         private readonly Todo _todo;
 
-        public TodoEditSchedule(Todo todo)
+        public TodoEditScheduleType(Todo todo)
         {
             _todo = todo;
             

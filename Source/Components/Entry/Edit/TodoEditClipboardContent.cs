@@ -11,6 +11,7 @@ namespace Todos.Source.Components.Entry.Edit
         public TodoEditClipboardContent(Todo todo)
         {
             _todo = todo;
+            Text = _todo.ClipboardContent;
             TextChanged += OnTextChanged;
         }
 

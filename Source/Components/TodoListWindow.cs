@@ -26,16 +26,23 @@ namespace Todos.Source.Components
         {
             Parent = GameService.Graphics.SpriteScreen;
             Title = "Todos";
-            SavesPosition = true;
-            Id = "96ee8ac0-2364-48df-b653-4af5b2fcbfd3";
             CanResize = true;
             CanClose = false;
             Opacity = Settings.WindowOpacityWhenNotFocussed.Value;
+            Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
+            Visible = true;
 
             new TodoListPanel { Parent = this };
 
             Click += OnClick;
             Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
+        }
+
+        protected override void OnMoved(MovedEventArgs e)
+        {
+            Settings.WindowLocationX.Value = e.CurrentLocation.X;
+            Settings.WindowLocationY.Value = e.CurrentLocation.Y;
+            base.OnMoved(e);
         }
 
         protected override void OnMouseEntered(MouseEventArgs e)
@@ -68,9 +75,9 @@ namespace Todos.Source.Components
             // hacky check to prevent infinite recursive call
             if (!Size.Equals(new Point(GetWindowRegion.Width, GetWindowRegion.Height + 40)))
                 ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
-
+            
             Settings.WindowWidth.Value = e.CurrentSize.X;
-            Settings.WindowHeight.Value = e.CurrentSize.Y; 
+            Settings.WindowHeight.Value = e.CurrentSize.Y - 40;
             
             base.OnResized(e);
         }

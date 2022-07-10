@@ -10,6 +10,8 @@ namespace Todos.Source.Utils
         
         public static SettingEntry<float> WindowOpacityWhenNotFocussed { get; private set; }
 
+        public static SettingEntry<int> WindowLocationX { get; private set; }
+        public static SettingEntry<int> WindowLocationY { get; private set; }
         public static SettingEntry<int> WindowWidth { get; private set; }
         public static SettingEntry<int> WindowHeight { get; private set; }
         
@@ -23,6 +25,8 @@ namespace Todos.Source.Utils
 
             WindowOpacityWhenNotFocussed = settings.DefineSetting("Window.Visibility.Opacity.WhenNotFocussed", 1f);
 
+            WindowLocationX = settings.DefineSetting("Window.Location.X", 200);
+            WindowLocationY = settings.DefineSetting("Window.Location.Y", 200);
             WindowWidth = settings.DefineSetting("Window.Dimensions.Width", 400);
             WindowHeight = settings.DefineSetting("Window.Dimensions.Height", 200);
 
@@ -36,7 +40,9 @@ namespace Todos.Source.Utils
             ShowWindowOnMap = null;
 
             WindowOpacityWhenNotFocussed = null;
-            
+
+            WindowLocationX = null;
+            WindowLocationY = null;
             WindowWidth = null;
             WindowHeight = null;
 

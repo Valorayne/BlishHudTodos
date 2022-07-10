@@ -77,7 +77,6 @@ namespace Todos.Source.Utils
             if (_window == null)
             {
                 _window = new TodoListWindow();
-                _window.Show();
             }
         }
 

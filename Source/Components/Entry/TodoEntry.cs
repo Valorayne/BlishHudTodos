@@ -40,6 +40,12 @@ namespace Todos.Source.Components.Entry
         private void OnEdit()
         {
             _saveScroll();
+            
+            if (!IsEditing)
+                _hoverMenu.Show();
+            else if (!MouseOver)
+                _hoverMenu.Hide();
+            
             _row.IsEditing = !_row.IsEditing;
             _hoverMenu.EditButton.IsEditing = _row.IsEditing;
 
@@ -88,7 +94,8 @@ namespace Todos.Source.Components.Entry
 
         protected override void OnMouseLeft(MouseEventArgs e)
         {
-            _hoverMenu.Hide();
+            if (!IsEditing)
+                _hoverMenu.Hide();
             base.OnMouseLeft(e);
         }
 

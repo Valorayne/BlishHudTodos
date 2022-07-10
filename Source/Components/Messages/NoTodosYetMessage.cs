@@ -8,7 +8,7 @@ namespace Todos.Source.Components.Messages
     public sealed class NoTodosYetMessage : CenteredMessage
     {
         private const string TEXT =
-            "Nothing to do yet!\r\nUse the button on the top right to\r\nstart working towards your goals!";
+            "Nothing to do yet!\r\nUse the plus button above to\r\nstart working towards your goals!";
 
         private static readonly Point LOCATION = new Point(0, 25);
 

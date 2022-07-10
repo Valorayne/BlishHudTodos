@@ -30,9 +30,12 @@ namespace Todos.Source.Components.Entry
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
             Data.TodoModified += OnTodoModified;
-            
+
             if (todo.IsNew)
+            {
                 Utility.Delay(OnEdit);
+                todo.IsNew = false;
+            }
         }
 
         public bool IsEditing => _row.IsEditing;

@@ -42,6 +42,12 @@ namespace Todos.Source.Components.Entry
             _saveScroll();
             _row.IsEditing = !_row.IsEditing;
             _hoverMenu.EditButton.IsEditing = _row.IsEditing;
+
+            if (_todo.Done && !IsEditing && !Settings.ShowAlreadyDoneTasks.Value)
+            {
+                Hide();
+                Parent.Invalidate();
+            }
         }
 
         private void OnDelete(Point location)
@@ -55,7 +61,7 @@ namespace Todos.Source.Components.Entry
 
         private void OnTodoModified(object sender, Todo todo)
         {
-            if (todo == _todo && todo.Done && !Settings.ShowAlreadyDoneTasks.Value)
+            if (todo == _todo && todo.Done && !Settings.ShowAlreadyDoneTasks.Value && !IsEditing)
             {
                 Hide();
                 Parent.Invalidate();

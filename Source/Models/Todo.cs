@@ -21,21 +21,22 @@ namespace Todos.Source.Models
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
         [JsonProperty] public string ClipboardContent { get; set; }
 
-        public Todo() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>())
+        public Todo() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>(), new TodoSchedule
+        {
+            Type = TodoScheduleType.DailyServer
+        })
         {
             IsNew = true;
+            Save();
         }
         
         [JsonConstructor]
-        private Todo(int version, DateTime createdAt, List<DateTime> executions)
+        private Todo(int version, DateTime createdAt, List<DateTime> executions, TodoSchedule? schedule)
         {
             Version = version;
             CreatedAt = createdAt;
             Executions = executions;
-            Schedule = new TodoSchedule
-            {
-                Type = TodoScheduleType.DailyServer
-            };
+            Schedule = schedule;
         }
 
         public DateTime? LastExecution => Executions.Count > 0 ? Executions.Last() : (DateTime?)null;
@@ -66,7 +67,6 @@ namespace Todos.Source.Models
         
         public void Save()
         {
-            IsNew = false;
             Data.Save(this);
         }
 

@@ -10,13 +10,14 @@ namespace Todos.Source.Components.Entry.Edit
         public TodoEditSchedule(Todo todo)
         {
             _todo = todo;
-            Items.Add(TodoScheduleTypeExtensions.NO_RESET);
-            Items.Add(TodoScheduleTypeExtensions.DAILY_SERVER_RESET);
-            Items.Add(TodoScheduleTypeExtensions.WEEKLY_SERVER_RESET);
-
+            
             SelectedItem = todo.Schedule.HasValue
                 ? todo.Schedule.Value.Type.ToDropdownEntry()
                 : TodoScheduleTypeExtensions.NO_RESET;
+            
+            Items.Add(TodoScheduleTypeExtensions.NO_RESET);
+            Items.Add(TodoScheduleTypeExtensions.DAILY_SERVER_RESET);
+            Items.Add(TodoScheduleTypeExtensions.WEEKLY_SERVER_RESET);
 
             BasicTooltipText = SelectedItem.GetTooltip();
         }

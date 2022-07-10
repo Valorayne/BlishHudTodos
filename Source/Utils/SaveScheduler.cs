@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework;
@@ -14,12 +14,12 @@ namespace Todos.Source.Utils
         
         private static Persistence _persistence;
         private static TimeSpan? _lastSaveProcess;
-        private static ConcurrentBag<Todo> _changedTodos; 
+        private static ConcurrentDictionary<long, Todo> _changedTodos; 
 
         public static void Initialize(DirectoriesManager manager)
         {
             _persistence = new Persistence(manager);
-            _changedTodos = new ConcurrentBag<Todo>();
+            _changedTodos = new ConcurrentDictionary<long, Todo>();
             
             Data.TodoAdded += OnTodoChanged;
             Data.TodoModified += OnTodoChanged;
@@ -28,7 +28,7 @@ namespace Todos.Source.Utils
 
         private static void OnTodoChanged(object sender, Todo todo)
         {
-            _changedTodos.Add(todo);
+            _changedTodos[todo.CreatedAt.Ticks] = todo;
         }
 
         public static void Progress(GameTime time)
@@ -45,16 +45,11 @@ namespace Todos.Source.Utils
 
         private static void PersistAll()
         {
-            var persistenceTasks = new List<Task>();
-            while (!_changedTodos.IsEmpty)
+            Task.WaitAll(_changedTodos.Select(entry => Task.Run(() => 
             {
-                persistenceTasks.Add(Task.Run(() =>
-                {
-                    if (_changedTodos.TryTake(out var todo))
-                        _persistence.Persist(todo);
-                }));
-            }
-            Task.WaitAll(persistenceTasks.ToArray());
+                if (_changedTodos.TryRemove(entry.Key, out var todo) )
+                    _persistence.Persist(todo);
+            })).ToArray());
         }
 
         public static void Dispose()
@@ -63,6 +58,7 @@ namespace Todos.Source.Utils
             Data.TodoModified -= OnTodoChanged;
             Data.TodoDeleted -= OnTodoChanged;
 
+            PersistAll();
             
             _changedTodos = null;
             _lastSaveProcess = null;

@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Forms;
+using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.IdentityModel.Tokens;
 using Todos.Source.Models;
+using HorizontalAlignment = Blish_HUD.Controls.HorizontalAlignment;
+using MouseEventArgs = Blish_HUD.Input.MouseEventArgs;
+using TextBox = Blish_HUD.Controls.TextBox;
 
 namespace Todos.Source.Components.Entry.Edit
 {
@@ -24,18 +29,29 @@ namespace Todos.Source.Components.Entry.Edit
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Text = (todo.Schedule?.LocalTime.Hours ?? 0).ToString(),
-                BasicTooltipText = "Hours"
+                BasicTooltipText = "Hours (scroll to change)",
+                
             };
             _minutes = new TextBox
             {
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Text = (todo.Schedule?.LocalTime.Minutes ?? 0).ToString(),
-                BasicTooltipText = "Minutes"
+                BasicTooltipText = "Minutes (scroll to change)"
             };
 
+            GameService.Input.Mouse.MouseWheelScrolled += OnScrolled;
             _hours.TextChanged += OnHourChanged;
             _minutes.TextChanged += OnMinutesChanged;
+        }
+
+        private void OnScrolled(object sender, MouseEventArgs e)
+        {
+            var scrollValue = GameService.Input.Mouse.State.ScrollWheelValue / SystemInformation.MouseWheelScrollDelta; 
+            if (_hours.MouseOver)
+                _hours.Text = (int.Parse(_hours.Text) + scrollValue).ToString();
+            if (_minutes.MouseOver)
+                _minutes.Text = (int.Parse(_minutes.Text) + scrollValue).ToString();
         }
 
         public TimeSpan Time =>
@@ -55,7 +71,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         private static void AssertValidity(TextInputBase textBox, int maxValue)
         {
-            var digits = string.Join("", textBox.Text.Where(c => c >= '0' && c <= '9'));
+            var digits = string.Join("", textBox.Text.Where(c => c >= '0' && c <= '9' || c == '-'));
             var number = int.Parse(digits.IsNullOrEmpty() ? "0" : digits);
             textBox.Text = Math.Max(Math.Min(number, maxValue), 0).ToString();
         }

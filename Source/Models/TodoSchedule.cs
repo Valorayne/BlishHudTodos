@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Todos.Source.Models
 {
@@ -6,5 +7,6 @@ namespace Todos.Source.Models
     public struct TodoSchedule
     {
         [JsonProperty] public TodoScheduleType Type;
+        [JsonProperty] public TimeSpan? LocalTime;
     }
 }

@@ -53,6 +53,8 @@ namespace Todos.Source.Models
                         return LastExecution.HasValue && LastExecution.Value > DateUtils.LastDailyReset;
                     case TodoScheduleType.WeeklyServer:
                         return LastExecution.HasValue && LastExecution.Value > DateUtils.LastWeeklyReset;
+                    case TodoScheduleType.LocalTime:
+                        return LastExecution.HasValue && LastExecution.Value > DateUtils.LastLocalReset(Schedule.Value);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

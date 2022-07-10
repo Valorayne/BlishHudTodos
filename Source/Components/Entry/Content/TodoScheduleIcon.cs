@@ -61,6 +61,8 @@ namespace Todos.Source.Components.Entry.Content
                     return $"Daily reset in {DateUtils.NextDailyReset.ToDurationString()}";
                 case TodoScheduleType.WeeklyServer:
                     return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
+                case TodoScheduleType.LocalTime:
+                    return $"Local reset in {DateUtils.NextLocalReset(_todo.Schedule.Value).ToDurationString()}";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

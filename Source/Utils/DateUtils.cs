@@ -1,4 +1,5 @@
 ﻿using System;
+using Todos.Source.Models;
 
 namespace Todos.Source.Utils
 {
@@ -38,6 +39,18 @@ namespace Todos.Source.Utils
                     date += TimeSpan.FromDays(1);
                 return date + TimeSpan.FromHours(7) + TimeSpan.FromMinutes(30);
             }
+        }
+
+        public static DateTime NextLocalReset(TodoSchedule schedule)
+        {
+            var resetToday = DateTime.Today + (schedule.LocalTime ?? TimeSpan.Zero);
+            return DateTime.Now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
+        }
+
+        public static DateTime LastLocalReset(TodoSchedule schedule)
+        {
+            var resetToday = DateTime.Today + (schedule.LocalTime ?? TimeSpan.Zero);
+            return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
         }
     }
 }

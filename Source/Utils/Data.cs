@@ -21,7 +21,7 @@ namespace Todos.Source.Utils
         public static async Task Initialize(DirectoriesManager manager)
         {
             _todos = new Dictionary<long, TodoModel>();
-            foreach (var todo in await new Persistence(manager).LoadAll())
+            foreach (var todo in await new Persistence.Persistence(manager).LoadAll())
                 AddToDictionary(todo);
         }
 

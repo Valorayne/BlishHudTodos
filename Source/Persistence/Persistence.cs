@@ -8,9 +8,8 @@ using Blish_HUD;
 using Blish_HUD.Modules.Managers;
 using Newtonsoft.Json;
 using Todos.Source.Models;
-using Todos.Source.Persistence;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Persistence
 {
     public class Persistence
     {

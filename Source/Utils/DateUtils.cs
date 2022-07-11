@@ -46,7 +46,8 @@ namespace Todos.Source.Utils
                 var date = DateTime.UtcNow.Date;
                 while (date.DayOfWeek != DayOfWeek.Monday)
                     date += TimeSpan.FromDays(1);
-                return date + TimeSpan.FromHours(7) + TimeSpan.FromMinutes(30);
+                var time = date + TimeSpan.FromHours(7) + TimeSpan.FromMinutes(30);
+                return DateTime.Now > time ? time + TimeSpan.FromDays(7) : time;
             }
         }
 

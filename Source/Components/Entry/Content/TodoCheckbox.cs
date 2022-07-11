@@ -13,6 +13,7 @@ namespace Todos.Source.Components.Entry.Content
         public TodoCheckbox(TodoModel todo)
         {
             _todo = todo;
+            
             Width = HEADER_HEIGHT;
             Height = HEADER_HEIGHT;
             

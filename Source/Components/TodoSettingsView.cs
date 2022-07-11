@@ -5,6 +5,7 @@ using Blish_HUD.Graphics.UI;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Edit;
+using Todos.Source.Components.Generic;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components

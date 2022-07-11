@@ -4,10 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework;
-using Todos.Source.Models;
-using Todos.Source.Persistence;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Persistence
 {
     public static class SaveScheduler
     {

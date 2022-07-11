@@ -16,7 +16,7 @@ namespace Todos.Source.Components.Entry.Content
         
         public TodoDescription Description { get; }
 
-        public TodoEntryContent(Todo todo, TodoEntryHoverMenu hoverMenu)
+        public TodoEntryContent(TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;

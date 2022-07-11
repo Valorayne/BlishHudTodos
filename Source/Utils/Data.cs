@@ -4,38 +4,47 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Todos.Source.Models;
+using Todos.Source.Persistence;
 
 namespace Todos.Source.Utils
 {
     public static class Data
     {
-        private static Dictionary<long, Todo> _todos;
+        private static Dictionary<long, TodoModel> _todos;
         
-        public static IReadOnlyList<Todo> Todos => _todos.Values.OrderBy(todo => todo.CreatedAt).ToList();
+        public static IReadOnlyList<TodoModel> Todos => _todos.Values.OrderBy(todo => todo.CreatedAt).ToList();
 
-        public static event EventHandler<Todo> TodoAdded;
-        public static event EventHandler<Todo> TodoModified;
-        public static event EventHandler<Todo> TodoDeleted;
+        public static event EventHandler<TodoModel> TodoAdded;
+        public static event EventHandler<bool> AnyDoneChanged; 
+        public static event EventHandler<TodoModel> TodoDeleted;
 
         public static async Task Initialize(DirectoriesManager manager)
         {
-            _todos = new Dictionary<long, Todo>();
+            _todos = new Dictionary<long, TodoModel>();
             foreach (var todo in await new Persistence(manager).LoadAll())
-                _todos.Add(todo.CreatedAt.Ticks, todo);
+                AddToDictionary(todo);
         }
 
-        public static void Save(Todo todo)
+        public static void AddNewTodo()
         {
-            TodoModified?.Invoke(todo, todo);
-        }
-
-        public static void Add(Todo todo)
-        {
-            _todos.Add(todo.CreatedAt.Ticks, todo);
+            var todo = new TodoModel(new TodoJson(), true);
+            AddToDictionary(todo);
             TodoAdded?.Invoke(todo, todo);
         }
-        
-        public static void Delete(Todo todo)
+
+        private static void AddToDictionary(TodoModel todo)
+        {
+            _todos.Add(todo.CreatedAt.Ticks, todo);
+            todo.Deleted += OnTodoDeleted;
+            todo.DoneChanged += OnDoneChanged;
+        }
+
+        private static void OnDoneChanged(bool newValue)
+        {
+            AnyDoneChanged?.Invoke(newValue, newValue);
+        }
+
+        private static void OnTodoDeleted(TodoModel todo)
         {
             _todos.Remove(todo.CreatedAt.Ticks);
             TodoDeleted?.Invoke(todo, todo);
@@ -43,6 +52,11 @@ namespace Todos.Source.Utils
 
         public static void Dispose()
         {
+            foreach (var todo in _todos.Values)
+            {
+                todo.Deleted -= OnTodoDeleted;
+                todo.DoneChanged -= OnDoneChanged;
+            }
             _todos?.Clear();
             _todos = null;
         }

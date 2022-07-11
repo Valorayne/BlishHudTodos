@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
@@ -18,7 +17,7 @@ namespace Todos.Source.Components
         private const int OUTER_PADDING = 5;
         private const int INNER_PADDING = 5;
         
-        private readonly Dictionary<Todo, TodoEntry> _entries = new Dictionary<Todo, TodoEntry>();
+        private readonly Dictionary<TodoModel, TodoEntry> _entries = new Dictionary<TodoModel, TodoEntry>();
         
         public TodoScrollView(Action saveScroll)
         {
@@ -57,13 +56,13 @@ namespace Todos.Source.Components
             RecalculateLayout();
         }
 
-        private void DeleteEntry(object sender, Todo todo)
+        private void DeleteEntry(object sender, TodoModel todo)
         {
             _entries[todo].Dispose();
             _entries.Remove(todo);
         }
 
-        private void SpawnEntry(object sender, Todo todo)
+        private void SpawnEntry(object sender, TodoModel todo)
         {
             _entries.Add(todo, new TodoEntry(todo, _saveScroll)
             {

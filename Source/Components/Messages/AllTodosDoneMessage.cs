@@ -19,9 +19,14 @@ namespace Todos.Source.Components.Messages
             UpdateVisibility(this);
 
             Data.TodoAdded += UpdateVisibility;
-            Data.TodoModified += UpdateVisibility;
+            Data.AnyDoneChanged += OnAnyDoneChanged;
             Data.TodoDeleted += UpdateVisibility;
             Settings.ShowAlreadyDoneTasks.SettingChanged += SettingChanged;
+        }
+
+        private void OnAnyDoneChanged(object sender, bool e)
+        {
+            UpdateVisibility(sender);
         }
 
         private void SettingChanged(object sender, ValueChangedEventArgs<bool> e)
@@ -32,14 +37,14 @@ namespace Todos.Source.Components.Messages
         protected override void DisposeControl()
         {
             Data.TodoAdded -= UpdateVisibility;
-            Data.TodoModified -= UpdateVisibility;
+            Data.AnyDoneChanged -= OnAnyDoneChanged;
             Data.TodoDeleted -= UpdateVisibility;
             Settings.ShowAlreadyDoneTasks.SettingChanged -= SettingChanged;
 
             base.DisposeControl();
         }
 
-        private void UpdateVisibility(object sender, Todo e = null)
+        private void UpdateVisibility(object sender, TodoModel e = null)
         {
             Visible = !Settings.ShowAlreadyDoneTasks.Value && Data.Todos.Count > 0 && Data.Todos.All(todo => todo.Done);
         }

@@ -16,7 +16,7 @@ namespace Todos.Source.Components.Menu
 
         protected override void OnClick(MouseEventArgs e)
         {
-            Data.Add(new Todo());
+            Data.AddNewTodo();
             base.OnClick(e);
         }
     }

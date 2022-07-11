@@ -8,7 +8,7 @@ namespace Todos.Source.Components.Entry.Edit
     {
         private const int PADDING = 10;
 
-        public TodoEditPanel(Todo todo)
+        public TodoEditPanel(TodoModel todo)
         {
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;

@@ -5,7 +5,7 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public class TodoEditScheduleType : Dropdown
     {
-        public TodoEditScheduleType(Todo todo)
+        public TodoEditScheduleType(TodoModel todo)
         {
             SelectedItem = todo.Schedule.HasValue
                 ? todo.Schedule.Value.Type.ToDropdownEntry()

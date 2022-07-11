@@ -14,7 +14,7 @@ namespace Todos.Source.Components.Entry
         private readonly TodoEntryContent _content;
         private readonly TodoEditPanel _editMenu;
 
-        public TodoEntryRow(Todo todo, TodoEntryHoverMenu hoverMenu, Action onEdit)
+        public TodoEntryRow(TodoModel todo, TodoEntryHoverMenu hoverMenu, Action onEdit)
         {
             _onEdit = onEdit;
             FlowDirection = ControlFlowDirection.SingleTopToBottom;

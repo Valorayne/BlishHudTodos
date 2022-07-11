@@ -8,6 +8,7 @@ using Blish_HUD;
 using Blish_HUD.Modules.Managers;
 using Newtonsoft.Json;
 using Todos.Source.Models;
+using Todos.Source.Persistence;
 
 namespace Todos.Source.Utils
 {
@@ -28,39 +29,39 @@ namespace Todos.Source.Utils
             _directoryPath = manager.GetFullDirectoryPath("todos");
         }
 
-        public Task<List<Todo>> LoadAll()
+        public Task<List<TodoModel>> LoadAll()
         {
             var files = Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}");
-            var todos = new ConcurrentBag<Todo>();
+            var todos = new ConcurrentBag<TodoModel>();
             var tasks = files.Select(filePath => Task.Run(() =>
             {
                 Try(filePath, "deserialize", file =>
                 {
                     var jsonString = File.ReadAllText(file);
-                    var todo = JsonConvert.DeserializeObject<Todo>(jsonString, SETTINGS);
+                    var todo = JsonConvert.DeserializeObject<TodoJson>(jsonString, SETTINGS);
                     if (todo != null)
-                        todos.Add(todo);
+                        todos.Add(new TodoModel(todo, false));
                 });
             }));
             Task.WaitAll(tasks.ToArray());
-            return Task.FromResult(new List<Todo>(todos.ToArray()));
+            return Task.FromResult(new List<TodoModel>(todos.ToArray()));
         }
 
-        public void Persist(Todo todo)
+        public void Persist(TodoJson todo)
         {
             if (todo.IsDeleted)
                 Delete(todo); 
             else Override(todo);
         }
         
-        private void Override(Todo todo)
+        private void Override(TodoJson todo)
         {
             var path = GetFilePath(todo);
             Try(path, File.Exists(path) ? "save" : "add", 
                 filePath => File.WriteAllText(filePath, JsonConvert.SerializeObject(todo, SETTINGS)));
         }
 
-        private void Delete(Todo todo)
+        private void Delete(TodoJson todo)
         {
             Try(GetFilePath(todo), "delete", filePath =>
             {
@@ -75,7 +76,7 @@ namespace Todos.Source.Utils
             catch (Exception e) { Logger.Error($"Could not {operation} file '{filePath}':\r\n{e.Message}"); }
         }
         
-        private string GetFilePath(Todo todo)
+        private string GetFilePath(TodoJson todo)
         {
             return Path.Combine(_directoryPath, $"{todo.CreatedAt.Ticks.ToString()}{FILE_ENDING}");
         }

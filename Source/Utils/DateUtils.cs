@@ -62,7 +62,7 @@ namespace Todos.Source.Utils
             return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
         }
         
-        public static DateTime NextDurationReset(Todo todo)
+        public static DateTime NextDurationReset(TodoModel todo)
         {
             return (todo.LastExecution ?? DateTime.Now) + todo.Schedule?.Duration ?? DateTime.Now;
         }

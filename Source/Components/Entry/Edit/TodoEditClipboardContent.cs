@@ -6,9 +6,9 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public class TodoEditClipboardContent : TextBox
     {
-        private readonly Todo _todo;
+        private readonly TodoModel _todo;
 
-        public TodoEditClipboardContent(Todo todo)
+        public TodoEditClipboardContent(TodoModel todo)
         {
             _todo = todo;
             Text = _todo.ClipboardContent;
@@ -18,7 +18,6 @@ namespace Todos.Source.Components.Entry.Edit
         private void OnTextChanged(object sender, EventArgs e)
         {
             _todo.ClipboardContent = Text;
-            _todo.Save();
         }
 
         protected override void DisposeControl()

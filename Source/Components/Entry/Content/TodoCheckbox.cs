@@ -7,10 +7,10 @@ namespace Todos.Source.Components.Entry.Content
 {
     public class TodoCheckbox : Panel
     {
-        private readonly Todo _todo;
+        private readonly TodoModel _todo;
         private readonly Checkbox _checkbox;
 
-        public TodoCheckbox(Todo todo)
+        public TodoCheckbox(TodoModel todo)
         {
             _todo = todo;
             Width = HEADER_HEIGHT;
@@ -25,14 +25,13 @@ namespace Todos.Source.Components.Entry.Content
             };
 
             _checkbox.CheckedChanged += OnClick;
-            Data.TodoModified += OnTodoModified;
+            todo.DoneChanged += OnDoneChanged;
             TimeService.NewMinute += CheckForChange;
         }
 
-        private void OnTodoModified(object sender, Todo todo)
+        private void OnDoneChanged(bool newDone)
         {
-            if (todo == _todo)
-                UpdateState();
+            UpdateState();
         }
 
         private void UpdateState()
@@ -49,11 +48,9 @@ namespace Todos.Source.Components.Entry.Content
         private void OnClick(object sender, CheckChangedEvent e)
         {
             _todo.Done = e.Checked;
-            _todo.Save();
-            UpdateState();
         }
 
-        private string GetTooltipText(Todo todo)
+        private string GetTooltipText(TodoModel todo)
         {
             return todo.Done
                 ? $"Done: {todo.LastExecution?.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
@@ -62,7 +59,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            Data.TodoModified -= OnTodoModified;
+            _todo.DoneChanged -= OnDoneChanged;
             _checkbox.CheckedChanged -= OnClick;
             TimeService.NewMinute -= CheckForChange;
             base.DisposeControl();

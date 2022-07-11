@@ -28,7 +28,7 @@ namespace Todos.Source.Components
             Data.TodoAdded += OnTodoAdded;
         }
 
-        private void OnTodoAdded(object sender, Todo todo)
+        private void OnTodoAdded(object sender, TodoModel todo)
         {
             Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
         }

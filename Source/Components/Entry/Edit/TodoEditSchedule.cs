@@ -6,14 +6,14 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoEditSchedule : FlowPanel
     {
-        private readonly Todo _todo;
+        private readonly TodoModel _todo;
         private readonly TodoEditRow _localTimeRow;
         private readonly TodoEditScheduleType _scheduleType;
         private readonly TodoEditLocalTime _localTimeInput;
         private readonly TodoEditDuration _durationInput;
         private readonly TodoEditRow _durationRow;
 
-        public TodoEditSchedule(Todo todo)
+        public TodoEditSchedule(TodoModel todo)
         {
             _todo = todo;
             
@@ -40,7 +40,6 @@ namespace Todos.Source.Components.Entry.Edit
         private void OnScheduleDetailsChanged(object sender, TimeSpan localTime)
         {
             _todo.Schedule = Selected;
-            _todo.Save();
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -53,7 +52,6 @@ namespace Todos.Source.Components.Entry.Edit
         {
             UpdateLocalTimeRowVisibility();
             _todo.Schedule = Selected;
-            _todo.Save();
         }
 
         private void UpdateHeight()

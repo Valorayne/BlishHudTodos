@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
-using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry.Content
 {
@@ -15,14 +14,14 @@ namespace Todos.Source.Components.Entry.Content
     {
         private const int PADDING_RIGHT = 5;
         
-        private readonly Todo _todo;
+        private readonly TodoModel _todo;
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly Label _label;
         private readonly WindowsClipboardService _clipboardService;
         
         public TextBox EditField { get; }
 
-        public TodoDescription(Todo todo, TodoEntryHoverMenu hoverMenu)
+        public TodoDescription(TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
             _todo = todo;
             _hoverMenu = hoverMenu;
@@ -46,7 +45,7 @@ namespace Todos.Source.Components.Entry.Content
                 Location = new Point(0, 5)
             }; 
             
-            Data.TodoModified += OnTodoModified;
+            todo.DescriptionChanged += OnDescriptionChanged;
             EditField.TextChanged += OnChange;
         }
 
@@ -72,7 +71,6 @@ namespace Todos.Source.Components.Entry.Content
         private void OnChange(object sender, EventArgs e)
         {
             _todo.Description = EditField.Text;
-            _todo.Save();
         }
 
         public bool IsEditing
@@ -91,16 +89,15 @@ namespace Todos.Source.Components.Entry.Content
             }
         }
 
-        private void OnTodoModified(object sender, Todo todo)
+        private void OnDescriptionChanged(string newDescription)
         {
-            if (todo == _todo)
-                _label.Text = todo.Description;
+            _label.Text = newDescription;
         }
 
         protected override void DisposeControl()
         {
             EditField.TextChanged -= OnChange;
-            Data.TodoModified -= OnTodoModified;
+            _todo.DescriptionChanged -= OnDescriptionChanged;
             base.DisposeControl();
         }
     }

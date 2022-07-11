@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Microsoft.Xna.Framework;
 using Todos.Source.Models;
+using Todos.Source.Persistence;
 
 namespace Todos.Source.Utils
 {
@@ -14,19 +15,15 @@ namespace Todos.Source.Utils
         
         private static Persistence _persistence;
         private static TimeSpan? _lastSaveProcess;
-        private static ConcurrentDictionary<long, Todo> _changedTodos; 
+        private static ConcurrentDictionary<long, TodoJson> _changedTodos; 
 
         public static void Initialize(DirectoriesManager manager)
         {
             _persistence = new Persistence(manager);
-            _changedTodos = new ConcurrentDictionary<long, Todo>();
-            
-            Data.TodoAdded += OnTodoChanged;
-            Data.TodoModified += OnTodoChanged;
-            Data.TodoDeleted += OnTodoChanged;
+            _changedTodos = new ConcurrentDictionary<long, TodoJson>();
         }
 
-        private static void OnTodoChanged(object sender, Todo todo)
+        public static void MarkAsChanged(TodoJson todo)
         {
             _changedTodos[todo.CreatedAt.Ticks] = todo;
         }
@@ -54,11 +51,8 @@ namespace Todos.Source.Utils
 
         public static void Dispose()
         {
-            Data.TodoAdded -= OnTodoChanged;
-            Data.TodoModified -= OnTodoChanged;
-            Data.TodoDeleted -= OnTodoChanged;
-
-            PersistAll();
+            if (_changedTodos.Count > 0)
+                PersistAll();
             
             _changedTodos = null;
             _lastSaveProcess = null;

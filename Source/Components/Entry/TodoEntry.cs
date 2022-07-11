@@ -12,12 +12,12 @@ namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntry : Panel
     {
-        private readonly Todo _todo;
+        private readonly TodoModel _todo;
         private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly TodoEntryRow _row;
 
-        public TodoEntry(Todo todo, Action saveScroll)
+        public TodoEntry(TodoModel todo, Action saveScroll)
         {
             _todo = todo;
             _saveScroll = saveScroll;
@@ -29,7 +29,7 @@ namespace Todos.Source.Components.Entry
             _row = new TodoEntryRow(todo, _hoverMenu, OnEdit) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
-            Data.TodoModified += OnTodoModified;
+            todo.DoneChanged += OnDoneChanged;
 
             if (todo.IsNew)
             {
@@ -68,9 +68,9 @@ namespace Todos.Source.Components.Entry
             });
         }
 
-        private void OnTodoModified(object sender, Todo todo)
+        private void OnDoneChanged(bool newDone)
         {
-            if (todo == _todo && todo.Done && !Settings.ShowAlreadyDoneTasks.Value && !IsEditing)
+            if (newDone && !Settings.ShowAlreadyDoneTasks.Value && !IsEditing)
             {
                 Hide();
                 Parent.Invalidate();
@@ -104,7 +104,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void DisposeControl()
         {
-            Data.TodoModified -= OnTodoModified;
+            _todo.DoneChanged -= OnDoneChanged;
             base.DisposeControl();
         }
     }

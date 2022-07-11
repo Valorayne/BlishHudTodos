@@ -27,7 +27,7 @@ namespace Todos.Source.Components.Messages
             base.DisposeControl();
         }
 
-        private void UpdateVisibility(object sender, Todo e = null)
+        private void UpdateVisibility(object sender, TodoModel e = null)
         {
             Visible = Data.Todos.Count == 0;
         }

@@ -19,7 +19,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         public event EventHandler<TimeSpan> ValueChanged;
 
-        public TodoEditDuration(Todo todo)
+        public TodoEditDuration(TodoModel todo)
         {
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
             HeightSizingMode = SizingMode.AutoSize;

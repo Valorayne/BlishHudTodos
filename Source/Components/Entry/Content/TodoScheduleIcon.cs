@@ -11,10 +11,10 @@ namespace Todos.Source.Components.Entry.Content
     {
         public const int WIDTH = HEADER_HEIGHT;
         
-        private readonly Todo _todo;
+        private readonly TodoModel _todo;
         private readonly Image _icon;
 
-        public TodoScheduleIcon(Todo todo)
+        public TodoScheduleIcon(TodoModel todo)
         {
             _todo = todo;
             Width = WIDTH;
@@ -28,7 +28,7 @@ namespace Todos.Source.Components.Entry.Content
                 BasicTooltipText = GetIconTooltip()
             };
 
-            Data.TodoModified += OnTodoModified;
+            todo.ScheduleChanged += OnScheduleChanged;
             TimeService.NewMinute += OnNewMinute;
         }
 
@@ -37,13 +37,10 @@ namespace Todos.Source.Components.Entry.Content
             _icon.BasicTooltipText = GetIconTooltip();
         }
 
-        private void OnTodoModified(object sender, Todo todo)
+        private void OnScheduleChanged(TodoSchedule? schedule)
         {
-            if (todo == _todo)
-            {
-                _icon.Texture = IconTexture;
-                _icon.BasicTooltipText = GetIconTooltip();
-            }
+            _icon.Texture = IconTexture;
+            _icon.BasicTooltipText = GetIconTooltip();
         }
 
         private Texture2D IconTexture => _todo.Schedule.HasValue
@@ -72,7 +69,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            Data.TodoModified -= OnTodoModified;
+            _todo.ScheduleChanged -= OnScheduleChanged;
             TimeService.NewMinute -= OnNewMinute;
             base.DisposeControl();
         }

@@ -40,7 +40,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         private void OnScheduleDetailsChanged(object sender, TimeSpan localTime)
         {
-            _todo.Schedule = Selected;
+            _todo.Schedule.Value = Selected;
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -52,7 +52,7 @@ namespace Todos.Source.Components.Entry.Edit
         private void OnScheduleTypeChanged(object sender, ValueChangedEventArgs e)
         {
             UpdateLocalTimeRowVisibility();
-            _todo.Schedule = Selected;
+            _todo.Schedule.Value = Selected;
         }
 
         private void UpdateHeight()

@@ -65,7 +65,7 @@ namespace Todos.Source.Utils
         
         public static DateTime NextDurationReset(TodoModel todo)
         {
-            return (todo.LastExecution ?? DateTime.Now) + todo.Schedule?.Duration ?? DateTime.Now;
+            return (todo.LastExecution ?? DateTime.Now) + todo.Schedule.Value?.Duration ?? DateTime.Now;
         }
 
         public static DateTime LastDurationReset(TodoSchedule schedule)

@@ -15,50 +15,9 @@ namespace Todos.Source.Models
         public int Version => _json.Version;
         public DateTime CreatedAt => _json.CreatedAt;
 
-        public event ValueChangedEvent<string> DescriptionChanged;
-        public string Description
-        {
-            get => _json.Description;
-            set
-            {
-                if (value == _json.Description)
-                    return;
- 
-                _json.Description = value;
-                _json.Persist();
-                DescriptionChanged?.Invoke(value);
-            }
-        }
-
-        public event ValueChangedEvent<TodoSchedule?> ScheduleChanged;
-        public TodoSchedule? Schedule
-        {
-            get => _json.Schedule;
-            set
-            {
-                if (Equals(value, _json.Schedule))
-                    return;
-
-                _json.Schedule = value;
-                _json.Persist();
-                ScheduleChanged?.Invoke(value);
-            }
-        }
-
-        public event ValueChangedEvent<string> ClipboardContentChanged;
-        public string ClipboardContent
-        {
-            get => _json.ClipboardContent;
-            set
-            {
-                if (ClipboardContent == _json.ClipboardContent)
-                    return;
-
-                _json.ClipboardContent = value;
-                _json.Persist();
-                ClipboardContentChanged?.Invoke(value);
-            }
-        }
+        public readonly Variable<string> Description;
+        public readonly Variable<TodoSchedule?> Schedule;
+        public readonly Variable<string> ClipboardContent;
         
         public bool IsNew { get; set; }
 
@@ -68,6 +27,10 @@ namespace Todos.Source.Models
             IsNew = isNew;
             if (isNew)
                 _json.Persist();
+
+            Description = new Variable<string>(_json.Description, v => _json.Description = v, _json.Persist);
+            Schedule = new Variable<TodoSchedule?>(_json.Schedule, v => _json.Schedule = v, _json.Persist);
+            ClipboardContent = new Variable<string>(_json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);
         }
 
         public event ValueChangedEvent<DateTime?> LastExecutionChanged;
@@ -81,19 +44,19 @@ namespace Todos.Source.Models
             get
             {
                 var lastExecution = LastExecution;
-                if (!Schedule.HasValue)
+                if (!Schedule.Value.HasValue)
                     return lastExecution.HasValue;
 
-                switch (Schedule.Value.Type)
+                switch (Schedule.Value.Value.Type)
                 {
                     case TodoScheduleType.DailyServer:
                         return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDailyReset;
                     case TodoScheduleType.WeeklyServer:
                         return lastExecution.HasValue && lastExecution.Value > DateUtils.LastWeeklyReset;
                     case TodoScheduleType.LocalTime:
-                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastLocalReset(Schedule.Value);
+                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastLocalReset(Schedule.Value.Value);
                     case TodoScheduleType.Duration:
-                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDurationReset(Schedule.Value);
+                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDurationReset(Schedule.Value.Value);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

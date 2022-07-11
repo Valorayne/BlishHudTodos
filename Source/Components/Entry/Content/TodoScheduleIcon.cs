@@ -28,7 +28,7 @@ namespace Todos.Source.Components.Entry.Content
                 BasicTooltipText = GetIconTooltip()
             };
 
-            todo.ScheduleChanged += OnScheduleChanged;
+            todo.Schedule.Changed += OnScheduleChanged;
             TimeService.NewMinute += OnNewMinute;
         }
 
@@ -43,23 +43,23 @@ namespace Todos.Source.Components.Entry.Content
             _icon.BasicTooltipText = GetIconTooltip();
         }
 
-        private Texture2D IconTexture => _todo.Schedule.HasValue
+        private Texture2D IconTexture => _todo.Schedule.Value.HasValue
             ? Resources.GetTexture(Textures.ScheduleIcon) 
             : Resources.GetTexture(Textures.Empty);
 
         private string GetIconTooltip()
         {
-            if (!_todo.Schedule.HasValue)
+            if (!_todo.Schedule.Value.HasValue)
                 return null;
 
-            switch (_todo.Schedule.Value.Type)
+            switch (_todo.Schedule.Value.Value.Type)
             {
                 case TodoScheduleType.DailyServer:
                     return $"Daily reset in {DateUtils.NextDailyReset.ToDurationString()}";
                 case TodoScheduleType.WeeklyServer:
                     return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
                 case TodoScheduleType.LocalTime:
-                    return $"Local reset in {DateUtils.NextLocalReset(_todo.Schedule.Value).ToDurationString()}";
+                    return $"Local reset in {DateUtils.NextLocalReset(_todo.Schedule.Value.Value).ToDurationString()}";
                 case TodoScheduleType.Duration:
                     return $"Duration reset in {DateUtils.NextDurationReset(_todo).ToDurationString()}";
                 default:
@@ -69,7 +69,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _todo.ScheduleChanged -= OnScheduleChanged;
+            _todo.Schedule.Changed -= OnScheduleChanged;
             TimeService.NewMinute -= OnNewMinute;
             base.DisposeControl();
         }

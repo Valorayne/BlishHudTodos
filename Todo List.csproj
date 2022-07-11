@@ -111,6 +111,7 @@
     <Compile Include="Source\Utils\Subscriptions\BackgroundTextureSubscription.cs" />
     <Compile Include="Source\Utils\TimeService.cs" />
     <Compile Include="Source\Utils\Utility.cs" />
+    <Compile Include="Source\Utils\Variable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AsyncClipboardService, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">

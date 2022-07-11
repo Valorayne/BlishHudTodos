@@ -33,19 +33,19 @@ namespace Todos.Source.Components.Entry.Content
             {
                 Parent = this,
                 StrokeText = true,
-                Text = todo.Description,
+                Text = todo.Description.Value,
                 AutoSizeWidth = true,
                 Location = new Point(0, 8)
             };
             EditField = new TextBox
             {
                 Parent = this,
-                Text = todo.Description,
+                Text = todo.Description.Value,
                 Visible = false,
                 Location = new Point(0, 5)
             }; 
             
-            todo.DescriptionChanged += OnDescriptionChanged;
+            todo.Description.Changed += OnDescriptionChanged;
             EditField.TextChanged += OnChange;
         }
 
@@ -60,9 +60,9 @@ namespace Todos.Source.Components.Entry.Content
         
         protected override void OnClick(MouseEventArgs e)
         {
-            if (!_todo.ClipboardContent.IsNullOrEmpty())
+            if (!_todo.ClipboardContent.Value.IsNullOrEmpty())
             {
-                _clipboardService.SetTextAsync(_todo.ClipboardContent)
+                _clipboardService.SetTextAsync(_todo.ClipboardContent.Value)
                     .ContinueWith(_ => TooltipNotification.Spawn("Content copied to clipboard!", e.MousePosition));
             }
             base.OnClick(e);
@@ -70,7 +70,7 @@ namespace Todos.Source.Components.Entry.Content
 
         private void OnChange(object sender, EventArgs e)
         {
-            _todo.Description = EditField.Text;
+            _todo.Description.Value = EditField.Text;
         }
 
         public bool IsEditing
@@ -97,7 +97,7 @@ namespace Todos.Source.Components.Entry.Content
         protected override void DisposeControl()
         {
             EditField.TextChanged -= OnChange;
-            _todo.DescriptionChanged -= OnDescriptionChanged;
+            _todo.Description.Changed -= OnDescriptionChanged;
             base.DisposeControl();
         }
     }

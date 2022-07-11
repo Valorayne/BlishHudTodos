@@ -11,13 +11,13 @@ namespace Todos.Source.Components.Entry.Edit
         public TodoEditClipboardContent(TodoModel todo)
         {
             _todo = todo;
-            Text = _todo.ClipboardContent;
+            Text = _todo.ClipboardContent.Value;
             TextChanged += OnTextChanged;
         }
 
         private void OnTextChanged(object sender, EventArgs e)
         {
-            _todo.ClipboardContent = Text;
+            _todo.ClipboardContent.Value = Text;
         }
 
         protected override void DisposeControl()

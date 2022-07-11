@@ -29,21 +29,21 @@ namespace Todos.Source.Components.Entry.Edit
             {
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = ((int) Math.Floor(todo.Schedule?.Duration.TotalDays ?? 0)).ToString(),
+                Text = ((int) Math.Floor(todo.Schedule.Value?.Duration.TotalDays ?? 0)).ToString(),
                 BasicTooltipText = "Days (scroll to change)"
             };
             _hours = new TextBox
             {
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = (todo.Schedule?.Duration.Hours ?? 0).ToString(),
+                Text = (todo.Schedule.Value?.Duration.Hours ?? 0).ToString(),
                 BasicTooltipText = "Hours (scroll to change)",
             };
             _minutes = new TextBox
             {
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = (todo.Schedule?.Duration.Minutes ?? 0).ToString(),
+                Text = (todo.Schedule.Value?.Duration.Minutes ?? 0).ToString(),
                 BasicTooltipText = "Minutes (scroll to change)"
             };
 

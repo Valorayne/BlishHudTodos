@@ -28,14 +28,14 @@ namespace Todos.Source.Components.Entry.Edit
             {
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = (todo.Schedule?.LocalTime.Hours ?? 0).ToString(),
+                Text = (todo.Schedule.Value?.LocalTime.Hours ?? 0).ToString(),
                 BasicTooltipText = "Hours (scroll to change)",
             };
             _minutes = new TextBox
             {
                 Parent = this,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = (todo.Schedule?.LocalTime.Minutes ?? 0).ToString(),
+                Text = (todo.Schedule.Value?.LocalTime.Minutes ?? 0).ToString(),
                 BasicTooltipText = "Minutes (scroll to change)"
             };
 

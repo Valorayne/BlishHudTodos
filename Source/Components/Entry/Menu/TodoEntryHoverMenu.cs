@@ -12,7 +12,7 @@ namespace Todos.Source.Components.Entry.Menu
 
         public TodoEntryHoverMenu(Action onEdit, Action<Point> onDelete)
         {
-            HeightSizingMode = SizingMode.AutoSize;
+            Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
             OuterControlPadding = new Vector2(PADDING_RIGHT, 0);
 

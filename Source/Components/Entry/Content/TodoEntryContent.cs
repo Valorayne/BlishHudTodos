@@ -19,7 +19,7 @@ namespace Todos.Source.Components.Entry.Content
         public TodoEntryContent(TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
             WidthSizingMode = SizingMode.Fill;
-            HeightSizingMode = SizingMode.AutoSize;
+            Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
             _checkbox = new TodoCheckbox(todo) { Parent = this };

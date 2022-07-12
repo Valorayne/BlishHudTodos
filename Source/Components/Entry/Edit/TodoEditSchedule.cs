@@ -31,7 +31,7 @@ namespace Todos.Source.Components.Entry.Edit
             _durationRow = new TodoEditRow(_durationInput, "Duration",
                 "The duration after which this task should reset automatically") { Parent = this };
 
-            UpdateLocalTimeRowVisibility();
+            UpdateAdditionalRowsVisibility();
             
             _scheduleType.ValueChanged += OnScheduleTypeChanged;
             _localTimeInput.ValueChanged += OnScheduleDetailsChanged;
@@ -51,16 +51,16 @@ namespace Todos.Source.Components.Entry.Edit
 
         private void OnScheduleTypeChanged(object sender, ValueChangedEventArgs e)
         {
-            UpdateLocalTimeRowVisibility();
+            UpdateAdditionalRowsVisibility();
             _todo.Schedule.Value = Selected;
         }
 
         private void UpdateHeight()
         {
             if (_scheduleType != null)
-                Height = _scheduleType.Height 
-                         + (_localTimeRow.Visible ? _localTimeRow.Height : 0) 
-                         + (_durationRow.Visible ? _durationRow.Height : 0); 
+                Height = _scheduleType.Height
+                         + (_localTimeRow.Visible ? _localTimeRow.Height : 0)
+                         + (_durationRow.Visible ? _durationRow.Height : 0);
         }
         
         public TodoSchedule? Selected
@@ -80,7 +80,7 @@ namespace Todos.Source.Components.Entry.Edit
             }
         }
 
-        private void UpdateLocalTimeRowVisibility()
+        private void UpdateAdditionalRowsVisibility()
         {
             _localTimeRow.Visible = _scheduleType.Selected == TodoScheduleType.LocalTime;
             _durationRow.Visible = _scheduleType.Selected == TodoScheduleType.Duration;

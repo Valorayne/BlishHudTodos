@@ -17,14 +17,21 @@ namespace Todos.Source.Components.Entry
         public TodoEntryRow(TodoModel todo, TodoEntryHoverMenu hoverMenu, Action onEdit)
         {
             _onEdit = onEdit;
-            FlowDirection = ControlFlowDirection.SingleTopToBottom;
-            WidthSizingMode = SizingMode.Fill;
-            HeightSizingMode = SizingMode.AutoSize;
             
             _content = new TodoEntryContent(todo, hoverMenu) { Parent = this, Location = Point.Zero };
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT), Visible = false };
+            
+            FlowDirection = ControlFlowDirection.SingleTopToBottom;
+            WidthSizingMode = SizingMode.Fill;
+            UpdateHeight();
 
             _content.Description.EditField.EnterPressed += OnEnterPressed;
+            _editMenu.Resized += OnEditMenuResized;
+        }
+
+        private void OnEditMenuResized(object sender, EventArgs eventArgs)
+        {
+            UpdateHeight();
         }
 
         private void OnEnterPressed(object sender, EventArgs e)
@@ -34,7 +41,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void OnResized(ResizedEventArgs e)
         {
-            Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
+            UpdateHeight();
             base.OnResized(e);
         }
 
@@ -45,12 +52,18 @@ namespace Todos.Source.Components.Entry
             {
                 _editMenu.Visible = value;
                 _content.Description.IsEditing = value;
-                Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
+                UpdateHeight();
             }
+        }
+
+        private void UpdateHeight()
+        {
+            Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
         }
 
         protected override void DisposeControl()
         {
+            _editMenu.Resized -= OnEditMenuResized;
             _content.Description.EditField.EnterPressed += OnEnterPressed;
             base.DisposeControl();
         }

@@ -21,9 +21,6 @@ namespace Todos.Source.Components.Entry
         {
             _todo = todo;
             _saveScroll = saveScroll;
-            
-            WidthSizingMode = SizingMode.Fill;
-            HeightSizingMode = SizingMode.AutoSize;
 
             _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
             _row = new TodoEntryRow(todo, _hoverMenu, OnEdit) { Parent = this };
@@ -36,14 +33,23 @@ namespace Todos.Source.Components.Entry
                 Utility.Delay(OnEdit);
                 todo.IsNew = false;
             }
+            
+            WidthSizingMode = SizingMode.Fill;
+            Height = _row.Height;
+
+            _row.Resized += OnRowResized;
+        }
+
+        private void OnRowResized(object sender, ResizedEventArgs e)
+        {
+            _saveScroll();
+            Height = _row.Height;
         }
 
         public bool IsEditing => _row.IsEditing;
 
         private void OnEdit()
         {
-            _saveScroll();
-            
             if (!IsEditing)
                 _hoverMenu.Show();
             else if (!MouseOver)
@@ -51,6 +57,7 @@ namespace Todos.Source.Components.Entry
             
             _row.IsEditing = !_row.IsEditing;
             _hoverMenu.EditButton.IsEditing = _row.IsEditing;
+            Height = _row.Height;
 
             if (_todo.Done && !IsEditing && !Settings.ShowAlreadyDoneTasks.Value)
             {
@@ -104,6 +111,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void DisposeControl()
         {
+            _row.Resized -= OnRowResized;
             _todo.DoneChanged -= OnDoneChanged;
             base.DisposeControl();
         }

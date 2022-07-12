@@ -97,6 +97,7 @@
     <Compile Include="Source\Components\TodoListWindow.cs" />
     <Compile Include="Source\Components\TodoSettingsView.cs" />
     <Compile Include="Source\Components\TodoVisualsManager.cs" />
+    <Compile Include="Source\Components\TodoWindowToggleHotkey.cs" />
     <Compile Include="Source\Models\TodoModel.cs" />
     <Compile Include="Source\Models\TodoSchedule.cs" />
     <Compile Include="Source\Models\TodoScheduleType.cs" />

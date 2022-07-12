@@ -2,7 +2,9 @@
 using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Graphics.UI;
+using Blish_HUD.Input;
 using Blish_HUD.Settings;
+using Blish_HUD.Settings.UI.Views;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Edit;
 using Todos.Source.Components.Generic;
@@ -12,15 +14,18 @@ namespace Todos.Source.Components
 {
     public class TodoSettingsView : View
     {
-        private FlowPanel _panel;
+        private FlowPanel _leftPanel;
         private IDisposable _showWindowOnMap;
         private IDisposable _opacityWhenNotFocussed;
         private IDisposable _alwaysShowWindow;
         private IDisposable _fixatedWindow;
+        
+        private FlowPanel _rightPanel;
+        private IDisposable _toggleWindowHotkey;
 
         protected override void Build(Container buildPanel)
         {
-            _panel = new FlowPanel
+            _leftPanel = new FlowPanel
             {
                 Parent = buildPanel,
                 FlowDirection = ControlFlowDirection.SingleTopToBottom,
@@ -29,18 +34,48 @@ namespace Todos.Source.Components
                 OuterControlPadding = new Vector2(10, 10)
             };
 
-            _alwaysShowWindow = AddBooleanSetting(_panel, Settings.AlwaysShowWindow, "Always visible",
+            _alwaysShowWindow = AddBooleanSetting(_leftPanel, Settings.AlwaysShowWindow, "Always visible",
                 "Whether or not the Todos window should also be shown during\r\ncutscenes, the character selection screen and loading screens");
-            _showWindowOnMap = AddBooleanSetting(_panel, Settings.ShowWindowOnMap, "Show on map", 
+            _showWindowOnMap = AddBooleanSetting(_leftPanel, Settings.ShowWindowOnMap, "Show on map", 
                 "Whether or not the Todos window should\r\nalso be shown while the map is opened");
-            _opacityWhenNotFocussed = AddSliderSetting(_panel, Settings.WindowOpacityWhenNotFocussed,
-                "Unfocused opacity", "The opacity of the window when you're not currently using it");
-            _fixatedWindow = AddBooleanSetting(_panel, Settings.FixatedWindow, "Fixated Window",
+            _fixatedWindow = AddBooleanSetting(_leftPanel, Settings.FixatedWindow, "Fixated Window",
                 "When fixated, the Todos window can neither be moved nor resized");
+            _opacityWhenNotFocussed = AddSliderSetting(_leftPanel, Settings.WindowOpacityWhenNotFocussed,
+                "Unfocused opacity", "The opacity of the window when you're not currently using it");
+
+            _rightPanel = new FlowPanel
+            {
+                Parent = buildPanel,
+                FlowDirection = ControlFlowDirection.SingleTopToBottom,
+                Width = buildPanel.Width / 2,
+                Height = buildPanel.Height,
+                OuterControlPadding = new Vector2(10, 10),
+                Location = new Point(buildPanel.Width / 2, 0)
+            };
+
+            _toggleWindowHotkey = AddKeybindingSetting(_rightPanel, Settings.ToggleWindowHotkey, "Show/Hide Window",
+                "Maximizes or minimizes the Todos window");
             
             base.Build(buildPanel);
         }
 
+        private static IDisposable AddKeybindingSetting(Container parent, SettingEntry<KeyBinding> setting, string label, string tooltip = null)
+        {
+            var row = new KeybindingAssigner(setting.Value) { Parent = parent, KeyBindingName = label, BasicTooltipText = tooltip };
+            
+            var interactionHandler = new EventHandler<EventArgs>((sender, e) => setting.Value = row.KeyBinding);
+            row.BindingChanged += interactionHandler;
+            
+            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<KeyBinding>>((sender, e) => row.KeyBinding = e.NewValue);
+            setting.SettingChanged += settingChangedHandler;
+            
+            return new SimpleDisposable(() =>
+            {
+                row.BindingChanged -= interactionHandler;
+                setting.SettingChanged -= settingChangedHandler;
+            });
+        }
+        
         private static IDisposable AddBooleanSetting(Container parent, SettingEntry<bool> setting, string label, string tooltip = null)
         {
             var row = TodoEditRow.For(parent, new Checkbox { Checked = setting.Value }, label, tooltip);
@@ -81,7 +116,10 @@ namespace Todos.Source.Components
             _showWindowOnMap.Dispose();
             _opacityWhenNotFocussed.Dispose();
             _fixatedWindow.Dispose();
-            _panel.Dispose();
+            _leftPanel.Dispose();
+            
+            _rightPanel.Dispose();
+            _toggleWindowHotkey.Dispose();
             base.Unload();
         }
     }

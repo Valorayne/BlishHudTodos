@@ -6,11 +6,15 @@ namespace Todos.Source.Components
 {
     public class TodoVisualsManager : IDisposable
     {
+        private readonly TodoWindowToggleHotkey _hotkeyManager; 
+        
         private TodoListWindow _window;
         private TodoCornerIcon _cornerIcon;
 
         public TodoVisualsManager()
         {
+            _hotkeyManager = new TodoWindowToggleHotkey();
+            
             Settings.WindowMinimized.SettingChanged += OnSettingChanged;
             GameService.Gw2Mumble.UI.IsMapOpenChanged += OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged += OnInGameChanged;
@@ -100,6 +104,7 @@ namespace Todos.Source.Components
             GameService.GameIntegration.Gw2Instance.IsInGameChanged -= OnInGameChanged;
             _window?.Dispose();
             _cornerIcon?.Dispose();
+            _hotkeyManager.Dispose();
         }
     }
 }

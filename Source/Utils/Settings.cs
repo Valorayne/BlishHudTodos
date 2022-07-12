@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Settings;
+﻿using Blish_HUD.Input;
+using Blish_HUD.Settings;
 
 namespace Todos.Source.Utils
 {
@@ -17,6 +18,8 @@ namespace Todos.Source.Utils
         public static SettingEntry<int> WindowHeight { get; private set; }
         
         public static SettingEntry<bool> ShowAlreadyDoneTasks { get; private set; }
+        
+        public static SettingEntry<KeyBinding> ToggleWindowHotkey { get; private set; }
 
         public static void Initialize(SettingCollection settings)
         {
@@ -33,6 +36,8 @@ namespace Todos.Source.Utils
             WindowHeight = settings.DefineSetting("Window.Dimensions.Height", 200);
 
             ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true);
+
+            ToggleWindowHotkey = settings.DefineSetting("Hotkeys.Window.Toggle", new KeyBinding());
         }
 
         public static void Dispose()
@@ -50,6 +55,8 @@ namespace Todos.Source.Utils
             WindowHeight = null;
 
             ShowAlreadyDoneTasks = null;
+
+            ToggleWindowHotkey = null;
         }
     }
 }

@@ -6,7 +6,6 @@ using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Messages;
 using Todos.Source.Models;
 using Todos.Source.Utils;
-using Utility = Todos.Source.Utils.Utility;
 
 namespace Todos.Source.Components.Entry
 {
@@ -22,17 +21,12 @@ namespace Todos.Source.Components.Entry
             _todo = todo;
             _saveScroll = saveScroll;
 
-            _hoverMenu = new TodoEntryHoverMenu(OnEdit, OnDelete) { Parent = this, Visible = false };
-            _row = new TodoEntryRow(todo, _hoverMenu, OnEdit) { Parent = this };
+            _hoverMenu = new TodoEntryHoverMenu(todo, OnDelete) { Parent = this, Visible = todo.IsEditing.Value };
+            _row = new TodoEntryRow(todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
             todo.DoneChanged += OnDoneChanged;
-
-            if (todo.IsNew)
-            {
-                Utility.Delay(OnEdit);
-                todo.IsNew = false;
-            }
+            todo.IsEditing.Changed += OnEditModeChanged;
             
             WidthSizingMode = SizingMode.Fill;
             Height = _row.Height;
@@ -40,30 +34,26 @@ namespace Todos.Source.Components.Entry
             _row.Resized += OnRowResized;
         }
 
-        private void OnRowResized(object sender, ResizedEventArgs e)
+        private void OnEditModeChanged(bool isInEditMode)
         {
-            _saveScroll();
-            Height = _row.Height;
-        }
-
-        public bool IsEditing => _row.IsEditing;
-
-        private void OnEdit()
-        {
-            if (!IsEditing)
+            if (isInEditMode)
                 _hoverMenu.Show();
             else if (!MouseOver)
                 _hoverMenu.Hide();
             
-            _row.IsEditing = !_row.IsEditing;
-            _hoverMenu.EditButton.IsEditing = _row.IsEditing;
             Height = _row.Height;
 
-            if (_todo.Done && !IsEditing && !Settings.ShowAlreadyDoneTasks.Value)
+            if (_todo.Done && !isInEditMode && !Settings.ShowAlreadyDoneTasks.Value)
             {
                 Hide();
                 Parent.Invalidate();
             }
+        }
+
+        private void OnRowResized(object sender, ResizedEventArgs e)
+        {
+            _saveScroll();
+            Height = _row.Height;
         }
 
         private void OnDelete(Point location)
@@ -77,7 +67,7 @@ namespace Todos.Source.Components.Entry
 
         private void OnDoneChanged(bool newDone)
         {
-            if (newDone && !Settings.ShowAlreadyDoneTasks.Value && !IsEditing)
+            if (newDone && !Settings.ShowAlreadyDoneTasks.Value && !_todo.IsEditing.Value)
             {
                 Hide();
                 Parent.Invalidate();
@@ -104,7 +94,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void OnMouseLeft(MouseEventArgs e)
         {
-            if (!IsEditing)
+            if (!_todo.IsEditing.Value)
                 _hoverMenu.Hide();
             base.OnMouseLeft(e);
         }

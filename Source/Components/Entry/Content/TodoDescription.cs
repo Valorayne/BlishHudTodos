@@ -41,12 +41,27 @@ namespace Todos.Source.Components.Entry.Content
             {
                 Parent = this,
                 Text = todo.Description.Value,
-                Visible = false,
                 Location = new Point(0, 5)
             }; 
             
             todo.Description.Changed += OnDescriptionChanged;
             EditField.TextChanged += OnChange;
+
+            todo.IsEditing.Changed += OnEditModeChanged;
+            OnEditModeChanged(todo.IsEditing.Value);
+        }
+
+        private void OnEditModeChanged(bool isInEditMode)
+        {
+            _label.Visible = !isInEditMode;
+            EditField.Visible = isInEditMode;
+                
+            if (EditField.Visible)
+            {
+                EditField.Focused = true;
+                EditField.SelectionStart = 0;
+                EditField.SelectionEnd = EditField.Text.Length;
+            }
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -71,22 +86,6 @@ namespace Todos.Source.Components.Entry.Content
         private void OnChange(object sender, EventArgs e)
         {
             _todo.Description.Value = EditField.Text;
-        }
-
-        public bool IsEditing
-        {
-            set
-            {
-                _label.Visible = !value;
-                EditField.Visible = value;
-                
-                if (EditField.Visible)
-                {
-                    EditField.Focused = true;
-                    EditField.SelectionStart = 0;
-                    EditField.SelectionEnd = EditField.Text.Length;
-                }
-            }
         }
 
         private void OnDescriptionChanged(string newDescription)

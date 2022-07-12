@@ -52,7 +52,7 @@ namespace Todos.Source.Components
         private void UpdateVisibilityOfChildren()
         {
             foreach (var entry in _entries)
-                entry.Value.Visible = !entry.Key.Done || Settings.ShowAlreadyDoneTasks.Value || entry.Value.IsEditing;
+                entry.Value.Visible = !entry.Key.Done || Settings.ShowAlreadyDoneTasks.Value || entry.Key.IsEditing.Value;
             RecalculateLayout();
         }
 

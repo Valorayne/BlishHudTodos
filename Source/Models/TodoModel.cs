@@ -15,19 +15,18 @@ namespace Todos.Source.Models
         public int Version => _json.Version;
         public DateTime CreatedAt => _json.CreatedAt;
 
+        public readonly Variable<bool> IsEditing;
         public readonly Variable<string> Description;
         public readonly Variable<TodoSchedule?> Schedule;
         public readonly Variable<string> ClipboardContent;
-        
-        public bool IsNew { get; set; }
 
         public TodoModel(TodoJson json, bool isNew)
         {
             _json = json;
-            IsNew = isNew;
             if (isNew)
                 _json.Persist();
 
+            IsEditing = new Variable<bool>(isNew);
             Description = new Variable<string>(_json.Description, v => _json.Description = v, _json.Persist);
             Schedule = new Variable<TodoSchedule?>(_json.Schedule, v => _json.Schedule = v, _json.Persist);
             ClipboardContent = new Variable<string>(_json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);

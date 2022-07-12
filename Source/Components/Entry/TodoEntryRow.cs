@@ -10,16 +10,15 @@ namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntryRow : FlowPanel
     {
-        private readonly Action _onEdit;
+        private readonly TodoModel _todo;
         private readonly TodoEntryContent _content;
         private readonly TodoEditPanel _editMenu;
 
-        public TodoEntryRow(TodoModel todo, TodoEntryHoverMenu hoverMenu, Action onEdit)
+        public TodoEntryRow(TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
-            _onEdit = onEdit;
-            
+            _todo = todo;
             _content = new TodoEntryContent(todo, hoverMenu) { Parent = this, Location = Point.Zero };
-            _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT), Visible = false };
+            _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
             
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
@@ -27,6 +26,15 @@ namespace Todos.Source.Components.Entry
 
             _content.Description.EditField.EnterPressed += OnEnterPressed;
             _editMenu.Resized += OnEditMenuResized;
+
+            todo.IsEditing.Changed += OnEditMenuChanged;
+            OnEditMenuChanged(todo.IsEditing.Value);
+        }
+
+        private void OnEditMenuChanged(bool isInEditMode)
+        {
+            _editMenu.Visible = isInEditMode;
+            UpdateHeight();
         }
 
         private void OnEditMenuResized(object sender, EventArgs eventArgs)
@@ -36,24 +44,13 @@ namespace Todos.Source.Components.Entry
 
         private void OnEnterPressed(object sender, EventArgs e)
         {
-            _onEdit();
+            _todo.IsEditing.Value = false;
         }
 
         protected override void OnResized(ResizedEventArgs e)
         {
             UpdateHeight();
             base.OnResized(e);
-        }
-
-        public bool IsEditing
-        {
-            get => _editMenu.Visible;
-            set
-            {
-                _editMenu.Visible = value;
-                _content.Description.IsEditing = value;
-                UpdateHeight();
-            }
         }
 
         private void UpdateHeight()
@@ -63,6 +60,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void DisposeControl()
         {
+            _todo.IsEditing.Changed -= OnEditMenuChanged;
             _editMenu.Resized -= OnEditMenuResized;
             _content.Description.EditField.EnterPressed += OnEnterPressed;
             base.DisposeControl();

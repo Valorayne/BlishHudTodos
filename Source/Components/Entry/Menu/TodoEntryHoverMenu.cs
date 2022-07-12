@@ -1,6 +1,7 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using Todos.Source.Models;
 
 namespace Todos.Source.Components.Entry.Menu
 {
@@ -10,14 +11,14 @@ namespace Todos.Source.Components.Entry.Menu
         
         public TodoEditButton EditButton { get; }
 
-        public TodoEntryHoverMenu(Action onEdit, Action<Point> onDelete)
+        public TodoEntryHoverMenu(TodoModel todo, Action<Point> onDelete)
         {
             Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
             OuterControlPadding = new Vector2(PADDING_RIGHT, 0);
 
             var deleteButton = new TodoDeleteButton(onDelete) { Parent = this };
-            EditButton = new TodoEditButton(onEdit) { Parent = this };
+            EditButton = new TodoEditButton(todo) { Parent = this };
 
             Width = deleteButton.Width + EditButton.Width + PADDING_RIGHT;
         }

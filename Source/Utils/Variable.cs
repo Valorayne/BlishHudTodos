@@ -24,13 +24,13 @@ namespace Todos.Source.Utils
             }
         }
 
-        public Variable(T defaultValue, Action<T> propagateChange, Action persist)
+        public Variable(T defaultValue, Action<T> propagateChange = null, Action persist = null)
         {
             _value = defaultValue;
             _onChange = newValue =>
             {
-                propagateChange(newValue);
-                persist();
+                propagateChange?.Invoke(newValue);
+                persist?.Invoke();
             };
         }
 

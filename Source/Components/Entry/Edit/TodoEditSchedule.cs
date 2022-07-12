@@ -34,11 +34,11 @@ namespace Todos.Source.Components.Entry.Edit
             UpdateAdditionalRowsVisibility();
             
             _scheduleType.ValueChanged += OnScheduleTypeChanged;
-            _localTimeInput.ValueChanged += OnScheduleDetailsChanged;
-            _durationInput.ValueChanged += OnScheduleDetailsChanged;
+            _localTimeInput.Time.Changed += OnTimeChanged;
+            _durationInput.Time.Changed += OnTimeChanged;
         }
 
-        private void OnScheduleDetailsChanged(object sender, TimeSpan localTime)
+        private void OnTimeChanged(TimeSpan _)
         {
             _todo.Schedule.Value = Selected;
         }
@@ -74,8 +74,8 @@ namespace Todos.Source.Components.Entry.Edit
                 return new TodoSchedule
                 {
                     Type = type.Value,
-                    LocalTime = _localTimeInput.Time,
-                    Duration = _durationInput.Time
+                    LocalTime = _localTimeInput.Time.Value,
+                    Duration = _durationInput.Time.Value
                 };
             }
         }
@@ -90,8 +90,8 @@ namespace Todos.Source.Components.Entry.Edit
         protected override void DisposeControl()
         {
             _scheduleType.ValueChanged -= OnScheduleTypeChanged;
-            _localTimeInput.ValueChanged -= OnScheduleDetailsChanged;
-            _durationInput.ValueChanged -= OnScheduleDetailsChanged;
+            _localTimeInput.Time.Changed -= OnTimeChanged;
+            _durationInput.Time.Changed -= OnTimeChanged;
             base.DisposeControl();
         }
     }

@@ -16,6 +16,7 @@ namespace Todos.Source.Components
         private IDisposable _showWindowOnMap;
         private IDisposable _opacityWhenNotFocussed;
         private IDisposable _alwaysShowWindow;
+        private IDisposable _fixatedWindow;
 
         protected override void Build(Container buildPanel)
         {
@@ -34,6 +35,8 @@ namespace Todos.Source.Components
                 "Whether or not the Todos window should\r\nalso be shown while the map is opened");
             _opacityWhenNotFocussed = AddSliderSetting(_panel, Settings.WindowOpacityWhenNotFocussed,
                 "Unfocused opacity", "The opacity of the window when you're not currently using it");
+            _fixatedWindow = AddBooleanSetting(_panel, Settings.FixatedWindow, "Fixated Window",
+                "When fixated, the Todos window can neither be moved nor resized");
             
             base.Build(buildPanel);
         }
@@ -77,6 +80,7 @@ namespace Todos.Source.Components
             _alwaysShowWindow.Dispose();
             _showWindowOnMap.Dispose();
             _opacityWhenNotFocussed.Dispose();
+            _fixatedWindow.Dispose();
             _panel.Dispose();
             base.Unload();
         }

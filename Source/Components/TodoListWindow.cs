@@ -26,7 +26,7 @@ namespace Todos.Source.Components
         {
             Parent = GameService.Graphics.SpriteScreen;
             Title = "Todos";
-            CanResize = true;
+            CanResize = !Settings.FixatedWindow.Value;
             CanClose = false;
             Opacity = Settings.WindowOpacityWhenNotFocussed.Value;
             Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
@@ -36,10 +36,22 @@ namespace Todos.Source.Components
 
             Click += OnClick;
             Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
+            Settings.FixatedWindow.SettingChanged += OnFixatedWindowChanged;
+        }
+
+        private void OnFixatedWindowChanged(object sender, ValueChangedEventArgs<bool> fixated)
+        {
+            CanResize = !fixated.NewValue;
         }
 
         protected override void OnMoved(MovedEventArgs e)
         {
+            if (Settings.FixatedWindow.Value)
+            {
+                Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
+                return;
+            }
+
             Settings.WindowLocationX.Value = e.CurrentLocation.X;
             Settings.WindowLocationY.Value = e.CurrentLocation.Y;
             base.OnMoved(e);
@@ -85,6 +97,7 @@ namespace Todos.Source.Components
         protected override void DisposeControl()
         {
             Settings.WindowOpacityWhenNotFocussed.SettingChanged -= OnOpacityChanged;
+            Settings.FixatedWindow.SettingChanged -= OnFixatedWindowChanged;
             Click -= OnClick;
             base.DisposeControl();
         }

@@ -78,6 +78,7 @@
     <Compile Include="Source\Components\Entry\Menu\TodoDeleteButton.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoEditButton.cs" />
     <Compile Include="Source\Components\Entry\Menu\TodoEntryHoverMenu.cs" />
+    <Compile Include="Source\Components\Entry\Menu\TodoReorderButton.cs" />
     <Compile Include="Source\Components\Entry\TodoEntry.cs" />
     <Compile Include="Source\Components\Entry\TodoEntryRow.cs" />
     <Compile Include="Source\Components\Generic\CenteredMessage.cs" />

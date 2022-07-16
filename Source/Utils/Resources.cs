@@ -20,6 +20,9 @@ namespace Todos.Source.Utils
         CloseIcon,
         CloseIconHovered,
         ScheduleIcon,
+        ReorderIcon,
+        ReorderIconUp,
+        ReorderIconDown
     }
     
     public static class Resources
@@ -42,7 +45,10 @@ namespace Todos.Source.Utils
             { Textures.DeleteIconHovered, @"textures\156675.png" },
             { Textures.CloseIcon, @"textures\2338895.png" },
             { Textures.CloseIconHovered, @"textures\2338896.png" },
-            { Textures.ScheduleIcon, @"textures\784265.png" }
+            { Textures.ScheduleIcon, @"textures\784265.png" },
+            { Textures.ReorderIcon, @"textures\154963.png" },
+            { Textures.ReorderIconUp, @"textures\154962_inverted.png" },
+            { Textures.ReorderIconDown, @"textures\154962.png" },
         };
         
         public static Texture2D GetTexture(Textures texture)

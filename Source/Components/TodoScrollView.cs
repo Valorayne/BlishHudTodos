@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
@@ -37,6 +38,22 @@ namespace Todos.Source.Components
             Data.TodoDeleted += DeleteEntry;
             Settings.ShowAlreadyDoneTasks.SettingChanged += ShowOrHideAlreadyDoneTasks;
             TimeService.NewMinute += OnNewMinute;
+            
+            UpdateReorderOptions();
+        }
+
+        private void UpdateReorderOptions()
+        {
+            var visibleEntries = _entries
+                .Where(entry => entry.Value.Visible)
+                .Select(entry => entry.Key)
+                .ToList();
+            
+            for (var i = 0; i < visibleEntries.Count; i++)
+            {
+                visibleEntries[i].CanBeMovedUp.Value = i-1 >= 0;
+                visibleEntries[i].CanBeMovedDown.Value = i+1 < visibleEntries.Count;
+            }
         }
 
         private void OnNewMinute(object sender, GameTime e)
@@ -53,6 +70,7 @@ namespace Todos.Source.Components
         {
             foreach (var entry in _entries)
                 entry.Value.Visible = !entry.Key.Done || Settings.ShowAlreadyDoneTasks.Value || entry.Key.IsEditing.Value;
+            UpdateReorderOptions();
             RecalculateLayout();
         }
 
@@ -60,6 +78,7 @@ namespace Todos.Source.Components
         {
             _entries[todo].Dispose();
             _entries.Remove(todo);
+            UpdateReorderOptions();
         }
 
         private void SpawnEntry(object sender, TodoModel todo)
@@ -69,6 +88,8 @@ namespace Todos.Source.Components
                 Parent = this,
                 Visible = Settings.ShowAlreadyDoneTasks.Value || !todo.Done,
             });
+            if (sender != this)
+                UpdateReorderOptions();
         }
 
         protected override void DisposeControl()

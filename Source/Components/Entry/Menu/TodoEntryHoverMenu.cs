@@ -8,8 +8,6 @@ namespace Todos.Source.Components.Entry.Menu
     public sealed class TodoEntryHoverMenu : FlowPanel
     {
         private const int PADDING_RIGHT = 8;
-        
-        public TodoEditButton EditButton { get; }
 
         public TodoEntryHoverMenu(TodoModel todo, Action<Point> onDelete)
         {
@@ -18,9 +16,10 @@ namespace Todos.Source.Components.Entry.Menu
             OuterControlPadding = new Vector2(PADDING_RIGHT, 0);
 
             var deleteButton = new TodoDeleteButton(onDelete) { Parent = this };
-            EditButton = new TodoEditButton(todo) { Parent = this };
+            var editButton = new TodoEditButton(todo) { Parent = this };
+            var reorderButton = new TodoReorderButton(todo) { Parent = this };
 
-            Width = deleteButton.Width + EditButton.Width + PADDING_RIGHT;
+            Width = deleteButton.Width + editButton.Width + reorderButton.Width + PADDING_RIGHT;
         }
     }
 }

@@ -16,6 +16,9 @@ namespace Todos.Source.Models
         public DateTime CreatedAt => _json.CreatedAt;
 
         public readonly Variable<bool> IsEditing;
+        public readonly Variable<bool> CanBeMovedUp;
+        public readonly Variable<bool> CanBeMovedDown;
+
         public readonly Variable<string> Description;
         public readonly Variable<TodoSchedule?> Schedule;
         public readonly Variable<string> ClipboardContent;
@@ -27,6 +30,9 @@ namespace Todos.Source.Models
                 _json.Persist();
 
             IsEditing = new Variable<bool>(isNew);
+            CanBeMovedUp = new Variable<bool>(false);
+            CanBeMovedDown = new Variable<bool>(false);
+            
             Description = new Variable<string>(_json.Description, v => _json.Description = v, _json.Persist);
             Schedule = new Variable<TodoSchedule?>(_json.Schedule, v => _json.Schedule = v, _json.Persist);
             ClipboardContent = new Variable<string>(_json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);

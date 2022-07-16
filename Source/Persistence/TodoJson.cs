@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Newtonsoft.Json;
 using Todos.Source.Models;
 using Todos.Source.Utils;
@@ -17,6 +18,7 @@ namespace Todos.Source.Persistence
         
         public bool IsDeleted { get; set; }
         
+        [JsonProperty] public long OrderIndex { get; set; }
         [JsonProperty] public string Description { get; set; }
         [JsonProperty] public TodoSchedule? Schedule { get; set; }
         [JsonProperty] public string ClipboardContent { get; set; }
@@ -27,6 +29,9 @@ namespace Todos.Source.Persistence
             Version = version;
             CreatedAt = createdAt;
             Executions = executions;
+
+            if (OrderIndex == default)
+                OrderIndex = CreatedAt.Ticks;
         }
 
         public TodoJson() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>())

@@ -40,7 +40,7 @@ namespace Todos.Source.Models
             IsVisible = new Variable<bool>(ShouldBeVisible);
             CanBeMovedUp = new Variable<bool>(false);
             CanBeMovedDown = new Variable<bool>(false);
-            OrderIndex = new Variable<long>(_json.CreatedAt.Ticks);
+            OrderIndex = new Variable<long>(_json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
 
             Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
         }

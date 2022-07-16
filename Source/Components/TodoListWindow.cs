@@ -37,6 +37,14 @@ namespace Todos.Source.Components
             Click += OnClick;
             Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
             Settings.FixatedWindow.SettingChanged += OnFixatedWindowChanged;
+
+            BackgroundColor = new Color(0, 0, 0, Settings.BackgroundOpacity.Value);
+            Settings.BackgroundOpacity.SettingChanged += OnBackgroundOpacityChanged;
+        }
+
+        private void OnBackgroundOpacityChanged(object sender, ValueChangedEventArgs<float> e)
+        {
+            BackgroundColor = new Color(0, 0, 0, e.NewValue);
         }
 
         private void OnFixatedWindowChanged(object sender, ValueChangedEventArgs<bool> fixated)
@@ -98,6 +106,7 @@ namespace Todos.Source.Components
         {
             Settings.WindowOpacityWhenNotFocussed.SettingChanged -= OnOpacityChanged;
             Settings.FixatedWindow.SettingChanged -= OnFixatedWindowChanged;
+            Settings.BackgroundOpacity.SettingChanged -= OnBackgroundOpacityChanged;
             Click -= OnClick;
             base.DisposeControl();
         }

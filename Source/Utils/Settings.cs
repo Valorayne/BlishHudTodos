@@ -10,6 +10,7 @@ namespace Todos.Source.Utils
         public static SettingEntry<bool> ShowWindowOnMap { get; private set; }
         public static SettingEntry<bool> FixatedWindow { get; private set; }
         
+        public static SettingEntry<float> BackgroundOpacity { get; private set; }
         public static SettingEntry<float> WindowOpacityWhenNotFocussed { get; private set; }
 
         public static SettingEntry<int> WindowLocationX { get; private set; }
@@ -26,8 +27,9 @@ namespace Todos.Source.Utils
             WindowMinimized = settings.DefineSetting("Window.Visibility.Minimized", false);
             AlwaysShowWindow = settings.DefineSetting("Window.Visibility.Always", false);
             ShowWindowOnMap = settings.DefineSetting("Window.Visibility.OnMap", false);
-            FixatedWindow = settings.DefineSetting("Window.Location.Fixed", false); 
+            FixatedWindow = settings.DefineSetting("Window.Location.Fixed", false);
 
+            BackgroundOpacity = settings.DefineSetting("Window.Background.Opacity", 0.2f);
             WindowOpacityWhenNotFocussed = settings.DefineSetting("Window.Visibility.Opacity.WhenNotFocussed", 1f);
 
             WindowLocationX = settings.DefineSetting("Window.Location.X", 200);
@@ -47,6 +49,7 @@ namespace Todos.Source.Utils
             ShowWindowOnMap = null;
             FixatedWindow = null;
 
+            BackgroundOpacity = null;
             WindowOpacityWhenNotFocussed = null;
 
             WindowLocationX = null;

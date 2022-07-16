@@ -4,9 +4,7 @@ using Blish_HUD.Controls;
 using Blish_HUD.Graphics.UI;
 using Blish_HUD.Input;
 using Blish_HUD.Settings;
-using Blish_HUD.Settings.UI.Views;
 using Microsoft.Xna.Framework;
-using Todos.Source.Components.Entry.Edit;
 using Todos.Source.Components.Generic;
 using Todos.Source.Utils;
 
@@ -16,6 +14,7 @@ namespace Todos.Source.Components
     {
         private FlowPanel _leftPanel;
         private IDisposable _showWindowOnMap;
+        private IDisposable _backgroundOpacity;
         private IDisposable _opacityWhenNotFocussed;
         private IDisposable _alwaysShowWindow;
         private IDisposable _fixatedWindow;
@@ -40,6 +39,8 @@ namespace Todos.Source.Components
                 "Whether or not the Todos window should\r\nalso be shown while the map is opened");
             _fixatedWindow = AddBooleanSetting(_leftPanel, Settings.FixatedWindow, "Fixated Window",
                 "When fixated, the Todos window can neither be moved nor resized");
+            _backgroundOpacity = AddSliderSetting(_leftPanel, Settings.BackgroundOpacity,
+                "Background opacity", "The opacity of the window background");
             _opacityWhenNotFocussed = AddSliderSetting(_leftPanel, Settings.WindowOpacityWhenNotFocussed,
                 "Unfocused opacity", "The opacity of the window when you're not currently using it");
 
@@ -114,6 +115,7 @@ namespace Todos.Source.Components
         {
             _alwaysShowWindow.Dispose();
             _showWindowOnMap.Dispose();
+            _backgroundOpacity.Dispose();
             _opacityWhenNotFocussed.Dispose();
             _fixatedWindow.Dispose();
             _leftPanel.Dispose();

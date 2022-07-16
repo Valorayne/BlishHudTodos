@@ -47,8 +47,9 @@ namespace Todos.Source.Components.Entry.Content
         }
 
         private void OnClick(object sender, CheckChangedEvent e)
-        {
-            _todo.Done = e.Checked;
+        { 
+            if (_todo.Done != e.Checked)
+                _todo.Done = e.Checked;
         }
 
         private string GetTooltipText(TodoModel todo)

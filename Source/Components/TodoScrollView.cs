@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry;
@@ -36,7 +35,6 @@ namespace Todos.Source.Components
 
             Data.TodoAdded += SpawnEntry;
             Data.TodoDeleted += DeleteEntry;
-            Settings.ShowAlreadyDoneTasks.SettingChanged += ShowOrHideAlreadyDoneTasks;
             TimeService.NewMinute += OnNewMinute;
             
             UpdateReorderOptions();
@@ -61,15 +59,8 @@ namespace Todos.Source.Components
             UpdateVisibilityOfChildren();
         }
 
-        private void ShowOrHideAlreadyDoneTasks(object sender, ValueChangedEventArgs<bool> change)
-        {
-            UpdateVisibilityOfChildren();
-        }
-
         private void UpdateVisibilityOfChildren()
         {
-            foreach (var entry in _entries)
-                entry.Value.Visible = !entry.Key.Done || Settings.ShowAlreadyDoneTasks.Value || entry.Key.IsEditing.Value;
             UpdateReorderOptions();
             RecalculateLayout();
         }
@@ -83,11 +74,7 @@ namespace Todos.Source.Components
 
         private void SpawnEntry(object sender, TodoModel todo)
         {
-            _entries.Add(todo, new TodoEntry(todo, _saveScroll)
-            {
-                Parent = this,
-                Visible = Settings.ShowAlreadyDoneTasks.Value || !todo.Done,
-            });
+            _entries.Add(todo, new TodoEntry(todo, _saveScroll) { Parent = this });
             if (sender != this)
                 UpdateReorderOptions();
         }
@@ -95,7 +82,6 @@ namespace Todos.Source.Components
         protected override void DisposeControl()
         {
             TimeService.NewMinute -= OnNewMinute;
-            Settings.ShowAlreadyDoneTasks.SettingChanged -= ShowOrHideAlreadyDoneTasks;
             Data.TodoAdded -= SpawnEntry;
             Data.TodoDeleted -= DeleteEntry;
 

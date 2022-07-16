@@ -27,11 +27,20 @@ namespace Todos.Source.Components.Entry
 
             todo.DoneChanged += OnDoneChanged;
             todo.IsEditing.Changed += OnEditModeChanged;
+            todo.IsVisible.Changed += OnVisibilityChanged;
+            Visible = todo.IsVisible.Value;
             
             WidthSizingMode = SizingMode.Fill;
             Height = _row.Height;
 
             _row.Resized += OnRowResized;
+        }
+
+        private void OnVisibilityChanged(bool newVisibility)
+        {
+            _saveScroll();
+            Visible = newVisibility;
+            Parent.Invalidate();
         }
 
         private void OnEditModeChanged(bool isInEditMode)
@@ -42,12 +51,6 @@ namespace Todos.Source.Components.Entry
                 _hoverMenu.Hide();
             
             Height = _row.Height;
-
-            if (_todo.Done && !isInEditMode && !Settings.ShowAlreadyDoneTasks.Value)
-            {
-                Hide();
-                Parent.Invalidate();
-            }
         }
 
         private void OnRowResized(object sender, ResizedEventArgs e)
@@ -103,6 +106,7 @@ namespace Todos.Source.Components.Entry
         {
             _row.Resized -= OnRowResized;
             _todo.DoneChanged -= OnDoneChanged;
+            _todo.IsVisible.Changed -= OnVisibilityChanged;
             base.DisposeControl();
         }
     }

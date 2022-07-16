@@ -56,6 +56,7 @@ namespace Todos.Source.Utils
             {
                 todo.Deleted -= OnTodoDeleted;
                 todo.DoneChanged -= OnDoneChanged;
+                todo.Dispose();
             }
             _todos?.Clear();
             _todos = null;

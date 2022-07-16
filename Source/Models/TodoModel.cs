@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Blish_HUD;
 using Todos.Source.Persistence;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Models
 {
-    public class TodoModel
+    public class TodoModel : IDisposable
     {
         public delegate void DeletionEvent(TodoModel todo);
         public delegate void ValueChangedEvent<in T>(T newValue);
@@ -15,6 +16,7 @@ namespace Todos.Source.Models
         public int Version => _json.Version;
         public DateTime CreatedAt => _json.CreatedAt;
 
+        public readonly Variable<bool> IsVisible;
         public readonly Variable<bool> IsEditing;
         public readonly Variable<bool> CanBeMovedUp;
         public readonly Variable<bool> CanBeMovedDown;
@@ -28,15 +30,25 @@ namespace Todos.Source.Models
             _json = json;
             if (isNew)
                 _json.Persist();
-
-            IsEditing = new Variable<bool>(isNew);
-            CanBeMovedUp = new Variable<bool>(false);
-            CanBeMovedDown = new Variable<bool>(false);
             
             Description = new Variable<string>(_json.Description, v => _json.Description = v, _json.Persist);
             Schedule = new Variable<TodoSchedule?>(_json.Schedule, v => _json.Schedule = v, _json.Persist);
             ClipboardContent = new Variable<string>(_json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);
+
+            IsEditing = new Variable<bool>(isNew, _ => IsVisible.Value = ShouldBeVisible);
+            IsVisible = new Variable<bool>(ShouldBeVisible);
+            CanBeMovedUp = new Variable<bool>(false);
+            CanBeMovedDown = new Variable<bool>(false);
+
+            Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
         }
+
+        private void OnShowTasksSettingChanged(object sender, ValueChangedEventArgs<bool> e)
+        {
+            IsVisible.Value = ShouldBeVisible;
+        }
+
+        private bool ShouldBeVisible => !Done || IsEditing.Value || Settings.ShowAlreadyDoneTasks.Value;
 
         public event ValueChangedEvent<DateTime?> LastExecutionChanged;
         public DateTime? LastExecution => _json.Executions.Count > 0 
@@ -78,6 +90,7 @@ namespace Todos.Source.Models
                 _json.Persist();
                 DoneChanged?.Invoke(value);
                 LastExecutionChanged?.Invoke(LastExecution);
+                IsVisible.Value = ShouldBeVisible;
             }
         }
 
@@ -87,6 +100,11 @@ namespace Todos.Source.Models
             _json.IsDeleted = true;
             _json.Persist();
             Deleted?.Invoke(this);
+        }
+
+        public void Dispose()
+        {
+            Settings.ShowAlreadyDoneTasks.SettingChanged -= OnShowTasksSettingChanged;
         }
     }
 }

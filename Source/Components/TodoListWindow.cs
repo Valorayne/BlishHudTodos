@@ -25,7 +25,7 @@ namespace Todos.Source.Components
         public TodoListWindow() : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
-            Title = "Todos";
+            Title = "To-Dos";
             CanResize = !Settings.FixatedWindow.Value;
             CanClose = false;
             Opacity = Settings.WindowOpacityWhenNotFocussed.Value;

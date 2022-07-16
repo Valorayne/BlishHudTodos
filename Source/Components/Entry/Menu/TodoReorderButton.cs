@@ -36,17 +36,13 @@ namespace Todos.Source.Components.Entry.Menu
         private void OnUpClicked(object sender, MouseEventArgs e)
         {
             if (_todo.CanBeMovedUp.Value)
-            {
-                // maybe change bool CanBeMovedUp to "EntryAbove" and just swap their order values?
-            }
+                Data.MoveUp(_todo);
         }
 
         private void OnDownClicked(object sender, MouseEventArgs e)
         {
             if (_todo.CanBeMovedDown.Value)
-            {
-                // maybe change bool CanBeMovedDown to "EntryBelow" and just swap their order values?
-            }
+                Data.MoveDown(_todo);
         }
 
         private void OnMouseEnteredDown(object sender, MouseEventArgs e)

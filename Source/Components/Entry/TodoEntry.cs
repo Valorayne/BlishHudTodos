@@ -11,14 +11,15 @@ namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntry : Panel
     {
-        private readonly TodoModel _todo;
+        public readonly TodoModel Todo;
+        
         private readonly Action _saveScroll;
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly TodoEntryRow _row;
 
         public TodoEntry(TodoModel todo, Action saveScroll)
         {
-            _todo = todo;
+            Todo = todo;
             _saveScroll = saveScroll;
 
             _hoverMenu = new TodoEntryHoverMenu(todo, OnDelete) { Parent = this, Visible = todo.IsEditing.Value };
@@ -64,13 +65,13 @@ namespace Todos.Source.Components.Entry
             ConfirmDeletionWindow.Spawn(location, () =>
             {
                 _saveScroll();
-                _todo.Delete();
+                Todo.Delete();
             });
         }
 
         private void OnDoneChanged(bool newDone)
         {
-            if (newDone && !Settings.ShowAlreadyDoneTasks.Value && !_todo.IsEditing.Value)
+            if (newDone && !Settings.ShowAlreadyDoneTasks.Value && !Todo.IsEditing.Value)
             {
                 Hide();
                 Parent.Invalidate();
@@ -97,7 +98,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void OnMouseLeft(MouseEventArgs e)
         {
-            if (!_todo.IsEditing.Value)
+            if (!Todo.IsEditing.Value)
                 _hoverMenu.Hide();
             base.OnMouseLeft(e);
         }
@@ -105,8 +106,8 @@ namespace Todos.Source.Components.Entry
         protected override void DisposeControl()
         {
             _row.Resized -= OnRowResized;
-            _todo.DoneChanged -= OnDoneChanged;
-            _todo.IsVisible.Changed -= OnVisibilityChanged;
+            Todo.DoneChanged -= OnDoneChanged;
+            Todo.IsVisible.Changed -= OnVisibilityChanged;
             base.DisposeControl();
         }
     }

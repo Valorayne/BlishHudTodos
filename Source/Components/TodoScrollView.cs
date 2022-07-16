@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Blish_HUD;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry;
@@ -35,13 +36,32 @@ namespace Todos.Source.Components
 
             Data.TodoAdded += SpawnEntry;
             Data.TodoDeleted += DeleteEntry;
+            Data.TodoOrderChanged += OnTodoOrderChanged;
             TimeService.NewMinute += OnNewMinute;
+            Settings.ShowAlreadyDoneTasks.SettingChanged += OnSettingChanged;
             
+            UpdateReorderOptions();
+        }
+
+        private void OnSettingChanged(object sender, ValueChangedEventArgs<bool> e)
+        {
+            UpdateReorderOptions();
+        }
+
+        private void OnTodoOrderChanged(object sender, EventArgs e)
+        {
+            RecalculateLayout();
             UpdateReorderOptions();
         }
 
         private void UpdateReorderOptions()
         {
+            foreach (var entry in _entries.Values)
+                entry.Dispose();
+            _entries.Clear();
+            foreach (var todo in Data.Todos)
+                SpawnEntry(this, todo);
+            
             var visibleEntries = _entries
                 .Where(entry => entry.Value.Visible)
                 .Select(entry => entry.Key)
@@ -84,6 +104,8 @@ namespace Todos.Source.Components
             TimeService.NewMinute -= OnNewMinute;
             Data.TodoAdded -= SpawnEntry;
             Data.TodoDeleted -= DeleteEntry;
+            Data.TodoOrderChanged -= OnTodoOrderChanged;
+            Settings.ShowAlreadyDoneTasks.SettingChanged -= OnSettingChanged;
 
             foreach (var entry in _entries.Values)
                 entry.Dispose();

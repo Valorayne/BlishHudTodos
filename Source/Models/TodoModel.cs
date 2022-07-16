@@ -20,6 +20,7 @@ namespace Todos.Source.Models
         public readonly Variable<bool> IsEditing;
         public readonly Variable<bool> CanBeMovedUp;
         public readonly Variable<bool> CanBeMovedDown;
+        public readonly Variable<long> OrderIndex;
 
         public readonly Variable<string> Description;
         public readonly Variable<TodoSchedule?> Schedule;
@@ -39,6 +40,7 @@ namespace Todos.Source.Models
             IsVisible = new Variable<bool>(ShouldBeVisible);
             CanBeMovedUp = new Variable<bool>(false);
             CanBeMovedDown = new Variable<bool>(false);
+            OrderIndex = new Variable<long>(_json.CreatedAt.Ticks);
 
             Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
         }

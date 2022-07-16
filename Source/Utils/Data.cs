@@ -12,11 +12,12 @@ namespace Todos.Source.Utils
     {
         private static Dictionary<long, TodoModel> _todos;
         
-        public static IReadOnlyList<TodoModel> Todos => _todos.Values.OrderBy(todo => todo.CreatedAt).ToList();
+        public static IReadOnlyList<TodoModel> Todos => _todos.Values.OrderBy(todo => todo.OrderIndex.Value).ToList();
 
         public static event EventHandler<TodoModel> TodoAdded;
         public static event EventHandler<bool> AnyDoneChanged; 
         public static event EventHandler<TodoModel> TodoDeleted;
+        public static event EventHandler TodoOrderChanged;
 
         public static async Task Initialize(DirectoriesManager manager)
         {
@@ -30,6 +31,40 @@ namespace Todos.Source.Utils
             var todo = new TodoModel(new TodoJson(), true);
             AddToDictionary(todo);
             TodoAdded?.Invoke(todo, todo);
+        }
+        
+        public static void MoveUp(TodoModel todo)
+        {
+            var todos = new List<TodoModel>(Todos);
+            var topIndex = todos.FindLastIndex(t => t.IsVisible.Value && t.OrderIndex.Value < todo.OrderIndex.Value);
+            var bottomIndex = todos.IndexOf(todo);
+            var newOrderIndexes = new Dictionary<TodoModel, long>();
+
+            for (var i = topIndex; i < bottomIndex; i++)
+                newOrderIndexes[todos[i]] = todos[i + 1].OrderIndex.Value;
+            newOrderIndexes[todo] = todos[topIndex].OrderIndex.Value;
+
+            foreach (var update in newOrderIndexes)
+                update.Key.OrderIndex.Value = update.Value;
+
+            TodoOrderChanged?.Invoke(todo, EventArgs.Empty);
+        }
+        
+        public static void MoveDown(TodoModel todo)
+        {
+            var todos = new List<TodoModel>(Todos);
+            var topIndex = todos.IndexOf(todo);
+            var bottomIndex = todos.FindIndex(t => t.IsVisible.Value && t.OrderIndex.Value > todo.OrderIndex.Value);
+            var newOrderIndexes = new Dictionary<TodoModel, long>();
+
+            for (var i = topIndex + 1; i <= bottomIndex; i++)
+                newOrderIndexes[todos[i]] = todos[i - 1].OrderIndex.Value;
+            newOrderIndexes[todo] = todos[bottomIndex].OrderIndex.Value;
+
+            foreach (var update in newOrderIndexes)
+                update.Key.OrderIndex.Value = update.Value;
+
+            TodoOrderChanged?.Invoke(todo, EventArgs.Empty);
         }
 
         private static void AddToDictionary(TodoModel todo)

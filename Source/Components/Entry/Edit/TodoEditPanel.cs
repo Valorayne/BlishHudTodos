@@ -9,14 +9,14 @@ namespace Todos.Source.Components.Entry.Edit
     public sealed class TodoEditPanel : FlowPanel
     {
         private readonly TodoEditSchedule _schedule;
-        private readonly TodoEditClipboardContent _clipboard;
+        public readonly TodoEditClipboardContent Clipboard;
         
         private const int PADDING = 10;
 
         public TodoEditPanel(TodoModel todo)
         {
             _schedule = new TodoEditSchedule(todo) { Parent = this };
-            _clipboard = TodoEditRow.For(this, new TodoEditClipboardContent(todo), "Clipboard Content",
+            Clipboard = TodoEditRow.For(this, new TodoEditClipboardContent(todo), "Clipboard Content",
                 "Content (e.g. map waypoints) to copy to your clipboard when clicking on this task");
             
             WidthSizingMode = SizingMode.Fill;
@@ -40,7 +40,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         private void UpdateHeight()
         {
-            Height = _schedule.Height + PADDING + _clipboard.Height;
+            Height = _schedule.Height + PADDING + Clipboard.Height;
         }
 
         protected override void DisposeControl()

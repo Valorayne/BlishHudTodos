@@ -25,6 +25,7 @@ namespace Todos.Source.Components.Entry
             UpdateHeight();
 
             _content.Description.EditField.EnterPressed += OnEnterPressed;
+            _editMenu.Clipboard.EnterPressed += OnEnterPressed;
             _editMenu.Resized += OnEditMenuResized;
 
             todo.IsEditing.Changed += OnEditMenuChanged;
@@ -62,7 +63,8 @@ namespace Todos.Source.Components.Entry
         {
             _todo.IsEditing.Changed -= OnEditMenuChanged;
             _editMenu.Resized -= OnEditMenuResized;
-            _content.Description.EditField.EnterPressed += OnEnterPressed;
+            _content.Description.EditField.EnterPressed -= OnEnterPressed;
+            _editMenu.Clipboard.EnterPressed -= OnEnterPressed;
             base.DisposeControl();
         }
     }

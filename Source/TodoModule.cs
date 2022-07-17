@@ -54,10 +54,10 @@ namespace Todos.Source
 		protected override void Unload()
 		{
 			_visuals.Dispose();
+			Data.Dispose();
 			Settings.Dispose();
 
 			TimeService.Dispose();
-			Data.Dispose();
 			SaveScheduler.Dispose();
 			Resources.Dispose();
 			ConfirmDeletionWindow.Dispose();

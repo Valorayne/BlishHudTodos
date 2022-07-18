@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.IdentityModel.Tokens;
-using Todos.Source.Models;
 
 namespace Todos.Source.Utils
 {
@@ -33,46 +32,6 @@ namespace Todos.Source.Utils
                 ? ", "
                 : "";
             return $"{dayString}{separator}{hourString}{minuteString}";
-        }
-
-        public static DateTime LastDailyReset => DateTime.UtcNow.Date;
-        public static DateTime NextDailyReset => DateTime.UtcNow.Date + TimeSpan.FromDays(1);
-
-        public static DateTime LastWeeklyReset => NextWeeklyReset - TimeSpan.FromDays(7);
-        public static DateTime NextWeeklyReset
-        {
-            get
-            {
-                var date = DateTime.UtcNow.Date;
-                while (date.DayOfWeek != DayOfWeek.Monday)
-                    date += TimeSpan.FromDays(1);
-                var time = date + TimeSpan.FromHours(7) + TimeSpan.FromMinutes(30);
-                return DateTime.Now > time ? time + TimeSpan.FromDays(7) : time;
-            }
-        }
-
-        public static DateTime NextLocalReset(TimeSpan localTime)
-        {
-            var resetToday = DateTime.Today + localTime;
-            return DateTime.Now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
-        }
-
-        public static DateTime LastLocalReset(TimeSpan localTime)
-        {
-            var resetToday = DateTime.Today + localTime;
-            return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
-        }
-        
-        public static DateTime NextDurationReset(DateTime? lastExecution, TimeSpan duration)
-        {
-            var previousDurationReset = lastExecution ?? DateTime.Now;
-            var nextDurationReset = previousDurationReset + duration;
-            return nextDurationReset > DateTime.Now ? nextDurationReset : DateTime.Now + duration;
-        }
-
-        public static DateTime LastDurationReset(TimeSpan duration)
-        {
-            return DateTime.Now - duration; 
         }
     }
 }

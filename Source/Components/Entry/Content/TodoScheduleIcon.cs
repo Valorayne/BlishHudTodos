@@ -1,8 +1,10 @@
 ﻿using System;
 using Blish_HUD.Controls;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Models;
+using Todos.Source.Models.Resets;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry.Content
@@ -25,12 +27,12 @@ namespace Todos.Source.Components.Entry.Content
                 Location = new Point(0, 2),
                 Width = 32,
                 Height = 32,
-                BasicTooltipText = GetIconTooltip()
+                BasicTooltipText = _todo.IconTooltip
             };
 
-            todo.ScheduleType.Changed += OnScheduleTypeChanged;
-            todo.ScheduleDuration.Changed += OnScheduleDetailsChanged;
-            todo.ScheduleLocalTime.Changed += OnScheduleDetailsChanged;
+            todo.Schedule.Reset.Changed += OnScheduleTypeChanged;
+            todo.Schedule.Duration.Changed += OnScheduleDetailsChanged;
+            todo.Schedule.LocalTime.Changed += OnScheduleDetailsChanged;
             
             TimeService.NewMinute += OnNewMinute;
         }
@@ -38,7 +40,7 @@ namespace Todos.Source.Components.Entry.Content
         private void UpdateVisuals()
         {
             _icon.Texture = IconTexture;
-            _icon.BasicTooltipText = GetIconTooltip();
+            _icon.BasicTooltipText = _todo.IconTooltip;
         }
 
         private void OnScheduleDetailsChanged(TimeSpan newValue)
@@ -51,39 +53,20 @@ namespace Todos.Source.Components.Entry.Content
             UpdateVisuals();
         }
 
-        private void OnScheduleTypeChanged(TodoScheduleType newValue)
+        private void OnScheduleTypeChanged(IReset newValue)
         {
             UpdateVisuals();
         }
 
-        private Texture2D IconTexture => _todo.ScheduleType.Value != TodoScheduleType.NoReset
-            ? Resources.GetTexture(Textures.ScheduleIcon) 
-            : Resources.GetTexture(Textures.Empty);
-
-        private string GetIconTooltip()
-        {
-            switch (_todo.ScheduleType.Value)
-            {
-                case TodoScheduleType.NoReset: 
-                    return null;
-                case TodoScheduleType.DailyServer:
-                    return $"Daily reset in {DateUtils.NextDailyReset.ToDurationString()}";
-                case TodoScheduleType.WeeklyServer:
-                    return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
-                case TodoScheduleType.LocalTime:
-                    return $"Local reset in {DateUtils.NextLocalReset(_todo.ScheduleLocalTime.Value).ToDurationString()}";
-                case TodoScheduleType.Duration:
-                    return $"Duration reset in {DateUtils.NextDurationReset(_todo.LastExecution, _todo.ScheduleDuration.Value).ToDurationString()}";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        private Texture2D IconTexture => _todo.IconTooltip.IsNullOrEmpty()
+            ? Resources.GetTexture(Textures.Empty) 
+            : Resources.GetTexture(Textures.ScheduleIcon);
 
         protected override void DisposeControl()
         {
-            _todo.ScheduleType.Changed -= OnScheduleTypeChanged;
-            _todo.ScheduleDuration.Changed -= OnScheduleDetailsChanged;
-            _todo.ScheduleLocalTime.Changed -= OnScheduleDetailsChanged;
+            _todo.Schedule.Reset.Changed -= OnScheduleTypeChanged;
+            _todo.Schedule.Duration.Changed -= OnScheduleDetailsChanged;
+            _todo.Schedule.LocalTime.Changed -= OnScheduleDetailsChanged;
             TimeService.NewMinute -= OnNewMinute;
             base.DisposeControl();
         }

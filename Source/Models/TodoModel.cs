@@ -13,7 +13,6 @@ namespace Todos.Source.Models
         
         private readonly TodoJson _json;
         
-        public int Version => _json.Version;
         public DateTime CreatedAt => _json.CreatedAt;
 
         public readonly Variable<bool> IsVisible;
@@ -24,10 +23,8 @@ namespace Todos.Source.Models
 
         public readonly Variable<string> Description;
         public readonly Variable<string> ClipboardContent;
-        
-        public readonly Variable<TodoScheduleType> ScheduleType;
-        public readonly Variable<TimeSpan> ScheduleLocalTime;
-        public readonly Variable<TimeSpan> ScheduleDuration;
+
+        public readonly TodoScheduleModel Schedule;
 
         public TodoModel(TodoJson json, bool isNew)
         {
@@ -37,10 +34,8 @@ namespace Todos.Source.Models
             
             Description = new Variable<string>(_json.Description, v => _json.Description = v, _json.Persist);
             ClipboardContent = new Variable<string>(_json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);
-            
-            ScheduleType = new Variable<TodoScheduleType>(_json.Schedule.Type, v => _json.Schedule.Type = v, _json.Persist);
-            ScheduleLocalTime = new Variable<TimeSpan>(_json.Schedule.LocalTime, v => _json.Schedule.LocalTime = v, _json.Persist);
-            ScheduleDuration = new Variable<TimeSpan>(_json.Schedule.Duration, v => _json.Schedule.Duration = v, _json.Persist);
+
+            Schedule = new TodoScheduleModel(_json.Schedule, _json.Persist);
 
             IsEditing = new Variable<bool>(isNew, _ => IsVisible.Value = ShouldBeVisible);
             IsVisible = new Variable<bool>(ShouldBeVisible);
@@ -66,25 +61,7 @@ namespace Todos.Source.Models
         public event ValueChangedEvent<bool> DoneChanged; 
         public bool Done
         {
-            get
-            {
-                var lastExecution = LastExecution;
-                switch (ScheduleType.Value)
-                {
-                    case TodoScheduleType.NoReset:
-                        return lastExecution.HasValue;
-                    case TodoScheduleType.DailyServer:
-                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDailyReset;
-                    case TodoScheduleType.WeeklyServer:
-                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastWeeklyReset;
-                    case TodoScheduleType.LocalTime:
-                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastLocalReset(ScheduleLocalTime.Value);
-                    case TodoScheduleType.Duration:
-                        return lastExecution.HasValue && lastExecution.Value > DateUtils.LastDurationReset(ScheduleDuration.Value);
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
+            get => LastExecution.HasValue && Schedule.Reset.Value.IsDone(LastExecution.Value);
             set
             {
                 if (value == Done)
@@ -103,6 +80,8 @@ namespace Todos.Source.Models
                 IsVisible.Value = ShouldBeVisible;
             }
         }
+
+        public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
 
         public event DeletionEvent Deleted;
         public void Delete()

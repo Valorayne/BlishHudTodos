@@ -13,7 +13,7 @@ namespace Todos.Source.Persistence
         [JsonProperty] public int Version { get; private set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
         [JsonProperty] public List<DateTime> Executions { get; private set; }
-        [JsonProperty] public TodoSchedule Schedule { get; private set; }
+        [JsonProperty] public TodoScheduleJson Schedule { get; private set; }
         
         public bool IsDeleted { get; set; }
         
@@ -22,7 +22,7 @@ namespace Todos.Source.Persistence
         [JsonProperty] public string ClipboardContent { get; set; }
 
         [JsonConstructor]
-        private TodoJson(int version, DateTime createdAt, List<DateTime> executions, TodoSchedule schedule)
+        private TodoJson(int version, DateTime createdAt, List<DateTime> executions, TodoScheduleJson schedule)
         {
             Version = version;
             CreatedAt = createdAt;
@@ -34,7 +34,7 @@ namespace Todos.Source.Persistence
         }
 
         public TodoJson() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>(), 
-            new TodoSchedule { Duration = TimeSpan.FromDays(1) }) { }
+            new TodoScheduleJson { Duration = TimeSpan.FromDays(1) }) { }
 
         public void Persist()
         {

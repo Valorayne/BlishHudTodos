@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Todos.Source.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class TodoSchedule
+    public class TodoScheduleJson
     {
         [DefaultValue(TodoScheduleType.DailyServer)] 
         [JsonProperty] public TodoScheduleType Type;

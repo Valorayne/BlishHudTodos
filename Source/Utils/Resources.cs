@@ -22,7 +22,10 @@ namespace Todos.Source.Utils
         ScheduleIcon,
         ReorderIcon,
         ReorderIconUp,
-        ReorderIconDown
+        ReorderIconDown,
+        CheckboxUnchecked,
+        CheckboxChecked,
+        CheckboxHovered
     }
     
     public static class Resources
@@ -49,6 +52,9 @@ namespace Todos.Source.Utils
             { Textures.ReorderIcon, @"textures\154963.png" },
             { Textures.ReorderIconUp, @"textures\154962_inverted.png" },
             { Textures.ReorderIconDown, @"textures\154962.png" },
+            { Textures.CheckboxUnchecked, @"textures\155921.png" },
+            { Textures.CheckboxChecked, @"textures\155919.png" },
+            { Textures.CheckboxHovered, @"textures\155923.png" },
         };
         
         public static Texture2D GetTexture(Textures texture)

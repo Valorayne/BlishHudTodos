@@ -1,4 +1,5 @@
 ﻿using Blish_HUD.Controls;
+using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Todos.Source.Models;
 using Todos.Source.Utils;
@@ -7,8 +8,12 @@ namespace Todos.Source.Components.Entry.Content
 {
     public class TodoCheckbox : Panel
     {
+        private readonly Point SIZE = new Point(32, 32);
+        private readonly Point OFFSET = new Point(2, 2);
+        
         private readonly TodoModel _todo;
-        private readonly Checkbox _checkbox;
+        private readonly Image _hovered;
+        private readonly Image _checked;
 
         public TodoCheckbox(TodoModel todo)
         {
@@ -16,18 +21,32 @@ namespace Todos.Source.Components.Entry.Content
             
             Width = HEADER_HEIGHT;
             Height = HEADER_HEIGHT;
-            
-            _checkbox = new Checkbox
+
+            new Image(Resources.GetTexture(Textures.CheckboxUnchecked)) { Parent = this, Location = OFFSET, Size = SIZE };
+            _hovered = new Image(Resources.GetTexture(Textures.CheckboxHovered)) { Parent = this, Location = OFFSET, Size = SIZE, Visible = false };
+            _checked = new Image(Resources.GetTexture(Textures.CheckboxChecked))
             {
                 Parent = this, 
-                Location = new Point(10, 10),
-                Checked = todo.Done,
+                Location = OFFSET, 
+                Size = SIZE, 
+                Visible = todo.Done, 
                 BasicTooltipText = GetTooltipText(todo)
             };
-
-            _checkbox.CheckedChanged += OnClick;
+            
             todo.DoneChanged += OnDoneChanged;
             TimeService.NewMinute += CheckForChange;
+        }
+
+        protected override void OnMouseEntered(MouseEventArgs e)
+        {
+            _hovered.Visible = true;
+            base.OnMouseEntered(e);
+        }
+
+        protected override void OnMouseLeft(MouseEventArgs e)
+        {
+            _hovered.Visible = false;
+            base.OnMouseLeft(e);
         }
 
         private void OnDoneChanged(bool newDone)
@@ -35,21 +54,21 @@ namespace Todos.Source.Components.Entry.Content
             UpdateState();
         }
 
-        private void UpdateState()
-        {
-            _checkbox.Checked = _todo.Done;
-            _checkbox.BasicTooltipText = GetTooltipText(_todo);
-        }
-
         private void CheckForChange(object sender, GameTime e)
         {
             UpdateState();
         }
 
-        private void OnClick(object sender, CheckChangedEvent e)
-        { 
-            if (_todo.Done != e.Checked)
-                _todo.Done = e.Checked;
+        private void UpdateState()
+        {
+            _checked.Visible = _todo.Done;
+            _checked.BasicTooltipText = GetTooltipText(_todo);
+        }
+
+        protected override void OnClick(MouseEventArgs e)
+        {
+            _todo.Done = !_todo.Done;
+            base.OnClick(e);
         }
 
         private string GetTooltipText(TodoModel todo)
@@ -62,7 +81,6 @@ namespace Todos.Source.Components.Entry.Content
         protected override void DisposeControl()
         {
             _todo.DoneChanged -= OnDoneChanged;
-            _checkbox.CheckedChanged -= OnClick;
             TimeService.NewMinute -= CheckForChange;
             base.DisposeControl();
         }

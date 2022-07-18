@@ -82,6 +82,9 @@ namespace Todos.Source.Models
             }
             set
             {
+                if (value == Done)
+                    return;
+                
                 if (value) 
                     _json.Executions.Add(DateTime.Now.WithoutSeconds());
                 else

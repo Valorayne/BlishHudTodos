@@ -43,10 +43,9 @@ namespace Todos.Source.Models
 
         private void OnNewMinute(object sender, GameTime e)
         {
-            IsVisible.Value = ShouldBeVisible;
+            IsDone.Value = Done;
         }
-
-        private bool ShouldBeVisible => !Done || IsEditing.Value || Settings.ShowAlreadyDoneTasks.Value;
+        
         public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
 
         public DateTime? LastExecution => _json.Executions.Count > 0 

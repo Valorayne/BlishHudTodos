@@ -26,6 +26,7 @@ namespace Todos.Source.Components.Entry
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
             todo.IsEditing.Changed += OnEditModeChanged;
+            OnEditModeChanged(todo.IsEditing.Value);
             
             WidthSizingMode = SizingMode.Fill;
             Height = _row.Height;

@@ -18,7 +18,7 @@ namespace Todos.Source.Utils
         public static SettingEntry<int> WindowWidth { get; private set; }
         public static SettingEntry<int> WindowHeight { get; private set; }
         
-        public static SettingEntry<bool> ShowAlreadyDoneTasks { get; private set; }
+        public static Variable<bool> ShowAlreadyDoneTasks { get; private set; }
         
         public static SettingEntry<KeyBinding> ToggleWindowHotkey { get; private set; }
         public static SettingEntry<CheckboxType> CheckboxType { get; private set; }
@@ -38,7 +38,7 @@ namespace Todos.Source.Utils
             WindowWidth = settings.DefineSetting("Window.Dimensions.Width", 400);
             WindowHeight = settings.DefineSetting("Window.Dimensions.Height", 200);
 
-            ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true);
+            ShowAlreadyDoneTasks = new Variable<bool>(null, settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true));
 
             ToggleWindowHotkey = settings.DefineSetting("Hotkeys.Window.Toggle", new KeyBinding());
             CheckboxType = settings.DefineSetting("Checkbox.Type", Utils.CheckboxType.Standard);
@@ -59,6 +59,7 @@ namespace Todos.Source.Utils
             WindowWidth = null;
             WindowHeight = null;
 
+            ShowAlreadyDoneTasks?.Dispose();
             ShowAlreadyDoneTasks = null;
 
             ToggleWindowHotkey = null;

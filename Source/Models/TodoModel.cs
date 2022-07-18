@@ -28,27 +28,20 @@ namespace Todos.Source.Models
             
             Schedule = new TodoScheduleModel(_json.Schedule, _json.Persist);
             
-            IsDeleted = new Variable<bool>(this, false, v => _json.IsDeleted = v, _json.Persist);
-            // ReSharper disable once PossibleNullReferenceException
-            IsEditing = new Variable<bool>(this, isNew, _ => IsVisible.Value = ShouldBeVisible);
-            IsVisible = new Variable<bool>(this, ShouldBeVisible);
-            
             OrderIndex = new Variable<long>(this, _json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
             Description = new Variable<string>(this, _json.Description, v => _json.Description = v, _json.Persist);
             ClipboardContent = new Variable<string>(this, _json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);
-
+            
+            IsDeleted = new Variable<bool>(this, false, v => _json.IsDeleted = v, _json.Persist);
+            IsEditing = new Variable<bool>(this, isNew);
             IsDone = new Variable<bool>(this, Done, v => Done = v, _json.Persist);
 
-            Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
+            IsVisible = Variable<bool>.Combine(IsDone, IsEditing, Settings.ShowAlreadyDoneTasks,
+                (done, editing, show) => !done || editing || show);
             TimeService.NewMinute += OnNewMinute;
         }
 
         private void OnNewMinute(object sender, GameTime e)
-        {
-            IsVisible.Value = ShouldBeVisible;
-        }
-
-        private void OnShowTasksSettingChanged(object sender, ValueChangedEventArgs<bool> e)
         {
             IsVisible.Value = ShouldBeVisible;
         }
@@ -72,13 +65,12 @@ namespace Todos.Source.Models
                     if (_json.Executions.Count > 0)
                         _json.Executions.RemoveAt(_json.Executions.IndexOf(_json.Executions.Max()));
                 }
-                IsVisible.Value = ShouldBeVisible;
             }
         }
 
         public void Dispose()
         {
-            Settings.ShowAlreadyDoneTasks.SettingChanged -= OnShowTasksSettingChanged;
+            IsVisible.Dispose();
             TimeService.NewMinute -= OnNewMinute;
         }
     }

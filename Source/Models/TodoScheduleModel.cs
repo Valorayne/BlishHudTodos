@@ -18,9 +18,9 @@ namespace Todos.Source.Models
 
         public TodoScheduleModel(TodoScheduleJson json, Action persist)
         {
-            LocalTime = new Variable<TimeSpan>(json.LocalTime, v => json.LocalTime = v, persist);
-            Duration = new Variable<TimeSpan>(json.Duration, v => json.Duration = v, persist);
-            Reset = new Variable<IReset>(FromType(json.Type), v => json.Type = v.Type, persist);
+            LocalTime = new Variable<TimeSpan>(this, json.LocalTime, v => json.LocalTime = v, persist);
+            Duration = new Variable<TimeSpan>(this, json.Duration, v => json.Duration = v, persist);
+            Reset = new Variable<IReset>(this, FromType(json.Type), v => json.Type = v.Type, persist);
         }
 
         public void UpdateSchedule(string dropdownEntry)

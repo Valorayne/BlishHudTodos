@@ -26,7 +26,7 @@ namespace Todos.Source.Components.Entry.Edit
             _maxValue = maxValue;
             _minValue = minValue;
 
-            Time = new Variable<int>(startValue);
+            Time = new Variable<int>(this, startValue);
             HorizontalAlignment = HorizontalAlignment.Center;
             Text = startValue.ToString();
             BasicTooltipText = $"{name} (drag to change)";

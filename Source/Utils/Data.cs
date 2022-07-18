@@ -70,7 +70,7 @@ namespace Todos.Source.Utils
         private static void AddToDictionary(TodoModel todo)
         {
             _todos.Add(todo.CreatedAt.Ticks, todo);
-            todo.Deleted += OnTodoDeleted;
+            todo.IsDeleted.PropertyChanged += OnTodoDeleted;
             todo.DoneChanged += OnDoneChanged;
         }
 
@@ -79,17 +79,17 @@ namespace Todos.Source.Utils
             AnyDoneChanged?.Invoke(newValue, newValue);
         }
 
-        private static void OnTodoDeleted(TodoModel todo)
+        private static void OnTodoDeleted(object owner, bool newValue)
         {
-            _todos.Remove(todo.CreatedAt.Ticks);
-            TodoDeleted?.Invoke(todo, todo);
+            _todos.Remove(((TodoModel) owner).CreatedAt.Ticks);
+            TodoDeleted?.Invoke(owner, (TodoModel) owner);
         }
 
         public static void Dispose()
         {
             foreach (var todo in _todos.Values)
             {
-                todo.Deleted -= OnTodoDeleted;
+                todo.IsDeleted.PropertyChanged -= OnTodoDeleted;
                 todo.DoneChanged -= OnDoneChanged;
                 todo.Dispose();
             }

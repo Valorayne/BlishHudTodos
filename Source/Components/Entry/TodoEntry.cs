@@ -65,7 +65,7 @@ namespace Todos.Source.Components.Entry
             ConfirmDeletionWindow.Spawn(location, () =>
             {
                 _saveScroll();
-                Todo.Delete();
+                Todo.IsDeleted.Value = true;
             });
         }
 

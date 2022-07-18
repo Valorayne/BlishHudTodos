@@ -8,13 +8,13 @@ namespace Todos.Source.Models
 {
     public class TodoModel : IDisposable
     {
-        public delegate void DeletionEvent(TodoModel todo);
         public delegate void ValueChangedEvent<in T>(T newValue);
         
         private readonly TodoJson _json;
         
         public DateTime CreatedAt => _json.CreatedAt;
 
+        public readonly Variable<bool> IsDeleted;
         public readonly Variable<bool> IsVisible;
         public readonly Variable<bool> IsEditing;
         public readonly Variable<bool> CanBeMovedUp;
@@ -31,17 +31,19 @@ namespace Todos.Source.Models
             _json = json;
             if (isNew)
                 _json.Persist();
+
+            IsDeleted = new Variable<bool>(this, false, v => _json.IsDeleted = v, _json.Persist);
             
-            Description = new Variable<string>(_json.Description, v => _json.Description = v, _json.Persist);
-            ClipboardContent = new Variable<string>(_json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);
+            Description = new Variable<string>(this, _json.Description, v => _json.Description = v, _json.Persist);
+            ClipboardContent = new Variable<string>(this, _json.ClipboardContent, v => _json.ClipboardContent = v, _json.Persist);
 
             Schedule = new TodoScheduleModel(_json.Schedule, _json.Persist);
 
-            IsEditing = new Variable<bool>(isNew, _ => IsVisible.Value = ShouldBeVisible);
-            IsVisible = new Variable<bool>(ShouldBeVisible);
-            CanBeMovedUp = new Variable<bool>(false);
-            CanBeMovedDown = new Variable<bool>(false);
-            OrderIndex = new Variable<long>(_json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
+            IsEditing = new Variable<bool>(this, isNew, _ => IsVisible.Value = ShouldBeVisible);
+            IsVisible = new Variable<bool>(this, ShouldBeVisible);
+            OrderIndex = new Variable<long>(this, _json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
+            CanBeMovedUp = new Variable<bool>(this, false);
+            CanBeMovedDown = new Variable<bool>(this, false);
 
             Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
         }
@@ -52,8 +54,8 @@ namespace Todos.Source.Models
         }
 
         private bool ShouldBeVisible => !Done || IsEditing.Value || Settings.ShowAlreadyDoneTasks.Value;
+        public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
 
-        public event ValueChangedEvent<DateTime?> LastExecutionChanged;
         public DateTime? LastExecution => _json.Executions.Count > 0 
             ? _json.Executions.Max().WithoutSeconds() 
             : (DateTime?)null;
@@ -76,19 +78,8 @@ namespace Todos.Source.Models
                 }
                 _json.Persist();
                 DoneChanged?.Invoke(value);
-                LastExecutionChanged?.Invoke(LastExecution);
                 IsVisible.Value = ShouldBeVisible;
             }
-        }
-
-        public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
-
-        public event DeletionEvent Deleted;
-        public void Delete()
-        {
-            _json.IsDeleted = true;
-            _json.Persist();
-            Deleted?.Invoke(this);
         }
 
         public void Dispose()

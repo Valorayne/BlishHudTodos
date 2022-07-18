@@ -20,7 +20,7 @@ namespace Todos.Source.Models
         {
             LocalTime = new Variable<TimeSpan>(json.LocalTime, v => json.LocalTime = v, persist);
             Duration = new Variable<TimeSpan>(json.Duration, v => json.Duration = v, persist);
-            Reset = new Variable<IReset>(FromType(json.Type), null, persist);
+            Reset = new Variable<IReset>(FromType(json.Type), v => json.Type = v.Type, persist);
         }
 
         public void UpdateSchedule(string dropdownEntry)

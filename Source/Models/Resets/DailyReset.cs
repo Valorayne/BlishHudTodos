@@ -5,6 +5,8 @@ namespace Todos.Source.Models.Resets
 {
     public class DailyReset : IReset
     {
+        public TodoScheduleType Type => TodoScheduleType.DailyServer;
+        
         public string DropdownEntry => TodoScheduleModel.DAILY_SERVER;
         public string DropdownEntryTooltip => "This task will reset every day at 0:00 UTC";
         

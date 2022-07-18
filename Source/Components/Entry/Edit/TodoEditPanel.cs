@@ -8,15 +8,15 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoEditPanel : FlowPanel
     {
-        private readonly TodoEditSchedule _schedule;
-        public readonly TodoEditClipboardContent Clipboard;
+        private readonly TodoScheduleInput _schedule;
+        public readonly TodoClipboardContentInput Clipboard;
         
         private const int PADDING = 10;
 
         public TodoEditPanel(TodoModel todo)
         {
-            _schedule = new TodoEditSchedule(todo) { Parent = this };
-            Clipboard = TodoEditRow.For(this, new TodoEditClipboardContent(todo), "Clipboard Content",
+            _schedule = new TodoScheduleInput(todo.Schedule) { Parent = this };
+            Clipboard = TodoEditRow.For(this, new TodoClipboardContentInput(todo), "Clipboard Content",
                 "Content (e.g. map waypoints) to copy to your clipboard when clicking on this task");
             
             WidthSizingMode = SizingMode.Fill;

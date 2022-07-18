@@ -9,7 +9,7 @@ using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry.Edit
 {
-    public class TimeInputBox : TextBox
+    public class TimeInput : TextBox
     {
         private const int Y_DISTANCE_FOR_CHANGE = 10;
 
@@ -21,7 +21,7 @@ namespace Todos.Source.Components.Entry.Edit
         private Point? _dragStartPoint;
         private int? _dragStartValue;
         
-        public TimeInputBox(int startValue, string name, int maxValue, int minValue = 0)
+        public TimeInput(int startValue, string name, int maxValue, int minValue = 0)
         {
             _maxValue = maxValue;
             _minValue = minValue;

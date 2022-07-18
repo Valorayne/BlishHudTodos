@@ -1,26 +1,26 @@
 ﻿using System;
 using Blish_HUD.Controls;
-using Todos.Source.Models;
+using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry.Edit
 {
-    public sealed class TodoEditLocalTime : FlowPanel
+    public sealed class TodoLocalTimeInput : FlowPanel
     {
-        private readonly TodoModel _todo;
+        private readonly Variable<TimeSpan> _localTime;
         
-        private readonly TimeInputBox _hours;
-        private readonly TimeInputBox _minutes;
+        private readonly TimeInput _hours;
+        private readonly TimeInput _minutes;
 
-        public TodoEditLocalTime(TodoModel todo)
+        public TodoLocalTimeInput(Variable<TimeSpan> localTime)
         {
-            _todo = todo;
+            _localTime = localTime;
             
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.AutoSize;
 
-            _hours = new TimeInputBox(todo.Schedule.LocalTime.Value.Hours, "Hours", 23) { Parent = this };
-            _minutes = new TimeInputBox(todo.Schedule.LocalTime.Value.Minutes, "Minutes", 59) { Parent = this };
+            _hours = new TimeInput(localTime.Value.Hours, "Hours", 23) { Parent = this };
+            _minutes = new TimeInput(localTime.Value.Minutes, "Minutes", 59) { Parent = this };
 
             _hours.Time.Changed += OnTimeChanged;
             _minutes.Time.Changed += OnTimeChanged;
@@ -28,7 +28,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         private void OnTimeChanged(int _)
         {
-            _todo.Schedule.LocalTime.Value = TimeSpan.FromHours(_hours.Time.Value) + TimeSpan.FromMinutes(_minutes.Time.Value);
+            _localTime.Value = TimeSpan.FromHours(_hours.Time.Value) + TimeSpan.FromMinutes(_minutes.Time.Value);
         }
 
         protected override void OnResized(ResizedEventArgs e)

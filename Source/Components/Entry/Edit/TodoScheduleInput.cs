@@ -5,33 +5,33 @@ using Todos.Source.Models.Resets;
 
 namespace Todos.Source.Components.Entry.Edit
 {
-    public sealed class TodoEditSchedule : FlowPanel
+    public sealed class TodoScheduleInput : FlowPanel
     {
-        private readonly TodoModel _todo;
+        private readonly TodoScheduleModel _schedule;
+        
         private readonly TodoEditRow _localTimeRow;
-        private readonly TodoEditScheduleType _scheduleType;
+        private readonly TodoScheduleTypeInput _scheduleType;
         private readonly TodoEditRow _durationRow;
 
-        public TodoEditSchedule(TodoModel todo)
+        public TodoScheduleInput(TodoScheduleModel schedule)
         {
-            _todo = todo;
+            _schedule = schedule;
             
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             
-            _scheduleType = TodoEditRow.For(this, new TodoEditScheduleType(todo.Schedule), "Reset Schedule",
+            _scheduleType = TodoEditRow.For(this, new TodoScheduleTypeInput(schedule), "Reset Schedule",
                 "Whether/when this task should automatically be reset");
-            var localTimeInput = new TodoEditLocalTime(todo);
+            var localTimeInput = new TodoLocalTimeInput(schedule.LocalTime);
             _localTimeRow = new TodoEditRow(localTimeInput, "Local Time", 
                 "The local time at which this task should reset automatically") { Parent = this };
-            var durationInput = new TodoEditDuration(todo);
+            var durationInput = new TodoDurationInput(schedule.Duration);
             _durationRow = new TodoEditRow(durationInput, "Duration",
                 "The duration after which this task should reset automatically") { Parent = this };
             
-            _todo.Schedule.Reset.Changed += OnScheduleTypeChanged;
-            
-            OnScheduleTypeChanged(todo.Schedule.Reset.Value);
+            _schedule.Reset.Changed += OnScheduleTypeChanged;
+            OnScheduleTypeChanged(schedule.Reset.Value);
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -57,7 +57,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         protected override void DisposeControl()
         {
-            _todo.Schedule.Reset.Changed -= OnScheduleTypeChanged;
+            _schedule.Reset.Changed -= OnScheduleTypeChanged;
             base.DisposeControl();
         }
     }

@@ -5,6 +5,8 @@ namespace Todos.Source.Models.Resets
 {
     public class WeeklyReset : IReset
     {
+        public TodoScheduleType Type => TodoScheduleType.WeeklyServer;
+        
         public string DropdownEntry => TodoScheduleModel.WEEKLY_SERVER;
         public string DropdownEntryTooltip => "This task will reset every Monday, 7:30 UTC";
         

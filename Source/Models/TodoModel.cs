@@ -17,8 +17,6 @@ namespace Todos.Source.Models
         public readonly Variable<bool> IsDeleted;
         public readonly Variable<bool> IsVisible;
         public readonly Variable<bool> IsEditing;
-        public readonly Variable<bool> CanBeMovedUp;
-        public readonly Variable<bool> CanBeMovedDown;
         public readonly Variable<long> OrderIndex;
 
         public readonly Variable<string> Description;
@@ -42,8 +40,6 @@ namespace Todos.Source.Models
             IsEditing = new Variable<bool>(this, isNew, _ => IsVisible.Value = ShouldBeVisible);
             IsVisible = new Variable<bool>(this, ShouldBeVisible);
             OrderIndex = new Variable<long>(this, _json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
-            CanBeMovedUp = new Variable<bool>(this, false);
-            CanBeMovedDown = new Variable<bool>(this, false);
 
             Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
         }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Blish_HUD;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
@@ -16,37 +15,21 @@ namespace Todos.Source.Components.Messages
 
         public AllTodosDoneMessage() : base(TEXT, LOCATION)
         {
-            UpdateVisibility(this);
-
-            Data.TodoAdded += UpdateVisibility;
-            Data.AnyDoneChanged += OnAnyDoneChanged;
-            Data.TodoDeleted += UpdateVisibility;
-            Settings.ShowAlreadyDoneTasks.SettingChanged += SettingChanged;
+            Data.AllTodos.Changed += UpdateVisibility;
+            Data.VisibleTodos.Changed += UpdateVisibility;
+            UpdateVisibility(Data.AllTodos.Value);
         }
 
-        private void OnAnyDoneChanged(object sender, bool e)
+        private void UpdateVisibility(IReadOnlyList<TodoModel> newValue)
         {
-            UpdateVisibility(sender);
-        }
-
-        private void SettingChanged(object sender, ValueChangedEventArgs<bool> e)
-        {
-            UpdateVisibility(sender);
+            Visible = Data.AllTodos.Value.Count > 0 && Data.VisibleTodos.Value.Count == 0;
         }
 
         protected override void DisposeControl()
         {
-            Data.TodoAdded -= UpdateVisibility;
-            Data.AnyDoneChanged -= OnAnyDoneChanged;
-            Data.TodoDeleted -= UpdateVisibility;
-            Settings.ShowAlreadyDoneTasks.SettingChanged -= SettingChanged;
-
+            Data.AllTodos.Changed -= UpdateVisibility;
+            Data.VisibleTodos.Changed -= UpdateVisibility;
             base.DisposeControl();
-        }
-
-        private void UpdateVisibility(object sender, TodoModel e = null)
-        {
-            Visible = !Settings.ShowAlreadyDoneTasks.Value && Data.Todos.Count > 0 && Data.Todos.All(todo => todo.Done);
         }
     }
 }

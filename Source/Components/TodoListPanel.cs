@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System.Collections.Generic;
+using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Components.Menu;
@@ -25,10 +26,10 @@ namespace Todos.Source.Components
             _scrollView = new TodoScrollView(SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
 
-            Data.TodoAdded += OnTodoAdded;
+            Data.VisibleTodos.Changed += OnTodoAdded;
         }
 
-        private void OnTodoAdded(object sender, TodoModel todo)
+        private void OnTodoAdded(IReadOnlyList<TodoModel> newValue)
         {
             Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
         }
@@ -37,7 +38,8 @@ namespace Todos.Source.Components
 
         private void SaveScroll()
         {
-            _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Height - _scrollView.ContentBounds.Y);
+            if (_scrollBar != null)
+                _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Height - _scrollView.ContentBounds.Y);
         }
         
         public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
@@ -75,7 +77,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            Data.TodoAdded -= OnTodoAdded;
+            Data.VisibleTodos.Changed -= OnTodoAdded;
             base.DisposeControl();
         }
     }

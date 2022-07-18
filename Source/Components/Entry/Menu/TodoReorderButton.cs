@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System.Linq;
+using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Todos.Source.Models;
 using Todos.Source.Utils;
@@ -33,21 +34,24 @@ namespace Todos.Source.Components.Entry.Menu
             BackgroundTexture = Resources.GetTexture(Textures.ReorderIcon);
         }
 
+        private bool CanBeMovedUp => Data.VisibleTodos.Value.FirstOrDefault() != _todo;
+        private bool CanBeMovedDown => Data.VisibleTodos.Value.LastOrDefault() != _todo;
+
         private void OnUpClicked(object sender, MouseEventArgs e)
         {
-            if (_todo.CanBeMovedUp.Value)
+            if (CanBeMovedUp)
                 Data.MoveUp(_todo);
         }
 
         private void OnDownClicked(object sender, MouseEventArgs e)
         {
-            if (_todo.CanBeMovedDown.Value)
+            if (CanBeMovedDown)
                 Data.MoveDown(_todo);
         }
 
         private void OnMouseEnteredDown(object sender, MouseEventArgs e)
         {
-            if (_todo.CanBeMovedDown.Value)
+            if (CanBeMovedDown)
             {
                 BackgroundTexture = Resources.GetTexture(Textures.ReorderIconDown);
                 _downButton.BasicTooltipText = "Move Down";
@@ -66,7 +70,7 @@ namespace Todos.Source.Components.Entry.Menu
 
         private void OnMouseEnteredUp(object sender, MouseEventArgs e)
         {
-            if (_todo.CanBeMovedUp.Value)
+            if (CanBeMovedUp)
             {
                 BackgroundTexture = Resources.GetTexture(Textures.ReorderIconUp);
                 _upButton.BasicTooltipText = "Move Up";

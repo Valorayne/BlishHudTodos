@@ -34,7 +34,6 @@ namespace Todos.Source.Components
 
             new TodoListPanel { Parent = this };
 
-            Click += OnClick;
             Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
             Settings.FixatedWindow.SettingChanged += OnFixatedWindowChanged;
 
@@ -85,9 +84,10 @@ namespace Todos.Source.Components
                 Opacity = e.NewValue;
         }
 
-        private void OnClick(object sender, MouseEventArgs e)
+        protected override void OnClick(MouseEventArgs e)
         {
             ConfirmDeletionWindow.Hide();
+            base.OnClick(e);
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -107,7 +107,6 @@ namespace Todos.Source.Components
             Settings.WindowOpacityWhenNotFocussed.SettingChanged -= OnOpacityChanged;
             Settings.FixatedWindow.SettingChanged -= OnFixatedWindowChanged;
             Settings.BackgroundOpacity.SettingChanged -= OnBackgroundOpacityChanged;
-            Click -= OnClick;
             base.DisposeControl();
         }
     }

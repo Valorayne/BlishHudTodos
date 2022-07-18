@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
@@ -10,32 +9,57 @@ namespace Todos.Source.Utils
 {
     public static class Data
     {
-        private static Dictionary<long, TodoModel> _todos;
-        
-        public static IReadOnlyList<TodoModel> Todos => _todos.Values.OrderBy(todo => todo.OrderIndex.Value).ToList();
-
-        public static event EventHandler<TodoModel> TodoAdded;
-        public static event EventHandler<bool> AnyDoneChanged; 
-        public static event EventHandler<TodoModel> TodoDeleted;
-        public static event EventHandler TodoOrderChanged;
+        public static Variable<IReadOnlyList<TodoModel>> AllTodos;
+        public static Variable<IReadOnlyList<TodoModel>> VisibleTodos;
 
         public static async Task Initialize(DirectoriesManager manager)
         {
-            _todos = new Dictionary<long, TodoModel>();
-            foreach (var todo in await new Persistence.Persistence(manager).LoadAll())
-                AddToDictionary(todo);
+            var storedTodos = await new Persistence.Persistence(manager).LoadAll();
+            var sortedTodos = storedTodos.OrderBy(t => t.OrderIndex.Value).ToList();
+            
+            VisibleTodos = new Variable<IReadOnlyList<TodoModel>>(null, sortedTodos.Where(t => t.IsVisible.Value).ToList());
+            AllTodos = new Variable<IReadOnlyList<TodoModel>>(null, sortedTodos, 
+                v => VisibleTodos.Value = v.Where(t => t.IsVisible.Value).ToList());
+
+            foreach (var todo in sortedTodos)
+                SetupTodo(todo);
+        }
+
+        private static void SetupTodo(TodoModel todo)
+        {
+            todo.IsDeleted.PropertyChanged += OnTodoDeleted;
+            todo.OrderIndex.Changed += OnOrderChanged;
+            todo.IsVisible.Changed += OnVisibilityChanged;
+        }
+
+        private static void TearDownTodo(TodoModel todo)
+        {
+            todo.IsDeleted.PropertyChanged -= OnTodoDeleted;
+            todo.OrderIndex.Changed -= OnOrderChanged;
+            todo.IsVisible.Changed -= OnVisibilityChanged;
+            todo.Dispose();
+        }
+
+        private static void OnVisibilityChanged(bool isVisible)
+        {
+            VisibleTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).Where(t => t.IsVisible.Value).ToList();
+        }
+
+        private static void OnOrderChanged(long newValue)
+        {
+            AllTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).ToList();
         }
 
         public static void AddNewTodo()
         {
             var todo = new TodoModel(new TodoJson(), true);
-            AddToDictionary(todo);
-            TodoAdded?.Invoke(todo, todo);
+            SetupTodo(todo);
+            AllTodos.Value = AllTodos.Value.Append(todo).ToList();
         }
         
         public static void MoveUp(TodoModel todo)
         {
-            var todos = new List<TodoModel>(Todos);
+            var todos = new List<TodoModel>(AllTodos.Value);
             var topIndex = todos.FindLastIndex(t => t.IsVisible.Value && t.OrderIndex.Value < todo.OrderIndex.Value);
             var bottomIndex = todos.IndexOf(todo);
             var newOrderIndexes = new Dictionary<TodoModel, long>();
@@ -46,13 +70,11 @@ namespace Todos.Source.Utils
 
             foreach (var update in newOrderIndexes)
                 update.Key.OrderIndex.Value = update.Value;
-
-            TodoOrderChanged?.Invoke(todo, EventArgs.Empty);
         }
         
         public static void MoveDown(TodoModel todo)
         {
-            var todos = new List<TodoModel>(Todos);
+            var todos = new List<TodoModel>(AllTodos.Value);
             var topIndex = todos.IndexOf(todo);
             var bottomIndex = todos.FindIndex(t => t.IsVisible.Value && t.OrderIndex.Value > todo.OrderIndex.Value);
             var newOrderIndexes = new Dictionary<TodoModel, long>();
@@ -63,38 +85,21 @@ namespace Todos.Source.Utils
 
             foreach (var update in newOrderIndexes)
                 update.Key.OrderIndex.Value = update.Value;
-
-            TodoOrderChanged?.Invoke(todo, EventArgs.Empty);
-        }
-
-        private static void AddToDictionary(TodoModel todo)
-        {
-            _todos.Add(todo.CreatedAt.Ticks, todo);
-            todo.IsDeleted.PropertyChanged += OnTodoDeleted;
-            todo.DoneChanged += OnDoneChanged;
-        }
-
-        private static void OnDoneChanged(bool newValue)
-        {
-            AnyDoneChanged?.Invoke(newValue, newValue);
         }
 
         private static void OnTodoDeleted(object owner, bool newValue)
         {
-            _todos.Remove(((TodoModel) owner).CreatedAt.Ticks);
-            TodoDeleted?.Invoke(owner, (TodoModel) owner);
+            var todo = (TodoModel)owner;
+            TearDownTodo(todo);
+            AllTodos.Value = AllTodos.Value.Where(t => t != todo).ToList();
         }
 
         public static void Dispose()
         {
-            foreach (var todo in _todos.Values)
-            {
-                todo.IsDeleted.PropertyChanged -= OnTodoDeleted;
-                todo.DoneChanged -= OnDoneChanged;
-                todo.Dispose();
-            }
-            _todos?.Clear();
-            _todos = null;
+            foreach (var todo in AllTodos.Value)
+                TearDownTodo(todo);
+            AllTodos.Dispose();
+            VisibleTodos.Dispose();
         }
     }
 }

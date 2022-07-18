@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
 using Todos.Source.Utils;
@@ -14,22 +15,19 @@ namespace Todos.Source.Components.Messages
 
         public NoTodosYetMessage() : base(TEXT, LOCATION)
         {
-            UpdateVisibility(this);
-
-            Data.TodoAdded += UpdateVisibility;
-            Data.TodoDeleted += UpdateVisibility;
+            Data.AllTodos.Changed += UpdateVisibility;
+            UpdateVisibility(Data.AllTodos.Value);
         }
 
         protected override void DisposeControl()
         {
-            Data.TodoAdded -= UpdateVisibility;
-            Data.TodoDeleted -= UpdateVisibility;
+            Data.AllTodos.Changed -= UpdateVisibility;
             base.DisposeControl();
         }
 
-        private void UpdateVisibility(object sender, TodoModel e = null)
+        private void UpdateVisibility(IReadOnlyList<TodoModel> newValue)
         {
-            Visible = Data.Todos.Count == 0;
+            Visible = newValue.Count == 0;
         }
     }
 }

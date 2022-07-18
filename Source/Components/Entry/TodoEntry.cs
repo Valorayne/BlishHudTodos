@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Messages;
 using Todos.Source.Models;
-using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry
 {
@@ -22,26 +21,16 @@ namespace Todos.Source.Components.Entry
             Todo = todo;
             _saveScroll = saveScroll;
 
-            _hoverMenu = new TodoEntryHoverMenu(todo, OnDelete) { Parent = this, Visible = todo.IsEditing.Value };
+            _hoverMenu = new TodoEntryHoverMenu(todo, OnDelete) { Parent = this };
             _row = new TodoEntryRow(todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
-            todo.DoneChanged += OnDoneChanged;
             todo.IsEditing.Changed += OnEditModeChanged;
-            todo.IsVisible.Changed += OnVisibilityChanged;
-            Visible = todo.IsVisible.Value;
             
             WidthSizingMode = SizingMode.Fill;
             Height = _row.Height;
 
             _row.Resized += OnRowResized;
-        }
-
-        private void OnVisibilityChanged(bool newVisibility)
-        {
-            _saveScroll();
-            Visible = newVisibility;
-            Parent.Invalidate();
         }
 
         private void OnEditModeChanged(bool isInEditMode)
@@ -67,15 +56,6 @@ namespace Todos.Source.Components.Entry
                 _saveScroll();
                 Todo.IsDeleted.Value = true;
             });
-        }
-
-        private void OnDoneChanged(bool newDone)
-        {
-            if (newDone && !Settings.ShowAlreadyDoneTasks.Value && !Todo.IsEditing.Value)
-            {
-                Hide();
-                Parent.Invalidate();
-            }
         }
 
         private void RepositionHoverMenu()
@@ -106,8 +86,7 @@ namespace Todos.Source.Components.Entry
         protected override void DisposeControl()
         {
             _row.Resized -= OnRowResized;
-            Todo.DoneChanged -= OnDoneChanged;
-            Todo.IsVisible.Changed -= OnVisibilityChanged;
+            Todo.IsEditing.Changed -= OnEditModeChanged;
             base.DisposeControl();
         }
     }

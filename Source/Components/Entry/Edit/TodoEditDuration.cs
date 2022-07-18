@@ -26,9 +26,9 @@ namespace Todos.Source.Components.Entry.Edit
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.AutoSize;
 
-            _days = new TimeInputBox((int)Math.Floor(todo.Schedule.Value?.Duration.TotalDays ?? 0), "Days", 364) { Parent = this };
-            _hours = new TimeInputBox(todo.Schedule.Value?.Duration.Hours ?? 0, "Hours", 23) { Parent = this };
-            _minutes = new TimeInputBox(todo.Schedule.Value?.Duration.Minutes ?? 0, "Minutes", 59) { Parent = this };
+            _days = new TimeInputBox((int)Math.Floor(todo.ScheduleDuration.Value.TotalDays), "Days", 364) { Parent = this };
+            _hours = new TimeInputBox(todo.ScheduleDuration.Value.Hours, "Hours", 23) { Parent = this };
+            _minutes = new TimeInputBox(todo.ScheduleDuration.Value.Minutes, "Minutes", 59) { Parent = this };
             Time = new Variable<TimeSpan>(new TimeSpan(_days.Time.Value, _hours.Time.Value, _minutes.Time.Value, 0));
 
             _days.Time.Changed += OnTimeChanged;

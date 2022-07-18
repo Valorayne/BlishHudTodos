@@ -8,6 +8,7 @@ using Blish_HUD;
 using Blish_HUD.Modules.Managers;
 using Newtonsoft.Json;
 using Todos.Source.Models;
+using Todos.Source.Persistence.Migrations;
 
 namespace Todos.Source.Persistence
 {
@@ -37,7 +38,8 @@ namespace Todos.Source.Persistence
                 Try(filePath, "deserialize", file =>
                 {
                     var jsonString = File.ReadAllText(file);
-                    var todo = JsonConvert.DeserializeObject<TodoJson>(jsonString, SETTINGS);
+                    var migrated = Migrator.Migrate(jsonString);
+                    var todo = JsonConvert.DeserializeObject<TodoJson>(migrated, SETTINGS);
                     if (todo != null)
                         todos.Add(new TodoModel(todo, false));
                 });

@@ -7,9 +7,7 @@ namespace Todos.Source.Components.Entry.Edit
     {
         public TodoEditScheduleType(TodoModel todo)
         {
-            SelectedItem = todo.Schedule.Value.HasValue
-                ? todo.Schedule.Value.Value.Type.ToDropdownEntry()
-                : TodoScheduleTypeExtensions.NO_RESET;
+            SelectedItem = todo.ScheduleType.Value.ToDropdownEntry();
             
             Items.Add(TodoScheduleTypeExtensions.NO_RESET);
             Items.Add(TodoScheduleTypeExtensions.DAILY_SERVER_RESET);

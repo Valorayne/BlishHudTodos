@@ -102,6 +102,9 @@
     <Compile Include="Source\Models\TodoModel.cs" />
     <Compile Include="Source\Models\TodoSchedule.cs" />
     <Compile Include="Source\Models\TodoScheduleType.cs" />
+    <Compile Include="Source\Persistence\Migrations\MigrationBase.cs" />
+    <Compile Include="Source\Persistence\Migrations\MakeScheduleMandatory.cs" />
+    <Compile Include="Source\Persistence\Migrations\Migrator.cs" />
     <Compile Include="Source\Persistence\Persistence.cs" />
     <Compile Include="Source\Persistence\SaveScheduler.cs" />
     <Compile Include="Source\Persistence\TodoJson.cs" />

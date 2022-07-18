@@ -34,13 +34,18 @@ namespace Todos.Source.Components.Entry.Edit
             UpdateAdditionalRowsVisibility();
             
             _scheduleType.ValueChanged += OnScheduleTypeChanged;
-            _localTimeInput.Time.Changed += OnTimeChanged;
-            _durationInput.Time.Changed += OnTimeChanged;
+            _localTimeInput.Time.Changed += OnLocalTimeChanged;
+            _durationInput.Time.Changed += OnDurationChanged;
         }
 
-        private void OnTimeChanged(TimeSpan _)
+        private void OnLocalTimeChanged(TimeSpan newTime)
         {
-            _todo.Schedule.Value = Selected;
+            _todo.ScheduleLocalTime.Value = newTime;
+        }
+        
+        private void OnDurationChanged(TimeSpan newTime)
+        {
+            _todo.ScheduleDuration.Value = newTime;
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -52,7 +57,7 @@ namespace Todos.Source.Components.Entry.Edit
         private void OnScheduleTypeChanged(object sender, ValueChangedEventArgs e)
         {
             UpdateAdditionalRowsVisibility();
-            _todo.Schedule.Value = Selected;
+            _todo.ScheduleType.Value = e.CurrentValue.FromDropdownEntry();
         }
 
         private void UpdateHeight()
@@ -61,23 +66,6 @@ namespace Todos.Source.Components.Entry.Edit
                 Height = _scheduleType.Height
                          + (_localTimeRow.Visible ? _localTimeRow.Height : 0)
                          + (_durationRow.Visible ? _durationRow.Height : 0);
-        }
-        
-        public TodoSchedule? Selected
-        {
-            get
-            {
-                var type = _scheduleType.Selected;
-                if (!type.HasValue)
-                    return null;
-                
-                return new TodoSchedule
-                {
-                    Type = type.Value,
-                    LocalTime = _localTimeInput.Time.Value,
-                    Duration = _durationInput.Time.Value
-                };
-            }
         }
 
         private void UpdateAdditionalRowsVisibility()
@@ -90,8 +78,8 @@ namespace Todos.Source.Components.Entry.Edit
         protected override void DisposeControl()
         {
             _scheduleType.ValueChanged -= OnScheduleTypeChanged;
-            _localTimeInput.Time.Changed -= OnTimeChanged;
-            _durationInput.Time.Changed -= OnTimeChanged;
+            _localTimeInput.Time.Changed -= OnLocalTimeChanged;
+            _durationInput.Time.Changed -= OnDurationChanged;
             base.DisposeControl();
         }
     }

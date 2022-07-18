@@ -18,8 +18,8 @@ namespace Todos.Source.Components.Entry.Edit
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.AutoSize;
 
-            _hours = new TimeInputBox(todo.Schedule.Value?.LocalTime.Hours ?? 0, "Hours", 23) { Parent = this };
-            _minutes = new TimeInputBox(todo.Schedule.Value?.LocalTime.Minutes ?? 0, "Minutes", 59) { Parent = this };
+            _hours = new TimeInputBox(todo.ScheduleLocalTime.Value.Hours, "Hours", 23) { Parent = this };
+            _minutes = new TimeInputBox(todo.ScheduleLocalTime.Value.Minutes, "Minutes", 59) { Parent = this };
             Time = new Variable<TimeSpan>(TimeSpan.FromHours(_hours.Time.Value) + TimeSpan.FromMinutes(_minutes.Time.Value));
 
             _hours.Time.Changed += OnTimeChanged;

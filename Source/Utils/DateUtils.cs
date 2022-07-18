@@ -51,28 +51,28 @@ namespace Todos.Source.Utils
             }
         }
 
-        public static DateTime NextLocalReset(TodoSchedule schedule)
+        public static DateTime NextLocalReset(TimeSpan localTime)
         {
-            var resetToday = DateTime.Today + schedule.LocalTime;
+            var resetToday = DateTime.Today + localTime;
             return DateTime.Now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
         }
 
-        public static DateTime LastLocalReset(TodoSchedule schedule)
+        public static DateTime LastLocalReset(TimeSpan localTime)
         {
-            var resetToday = DateTime.Today + schedule.LocalTime;
+            var resetToday = DateTime.Today + localTime;
             return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
         }
         
-        public static DateTime NextDurationReset(TodoModel todo)
+        public static DateTime NextDurationReset(DateTime? lastExecution, TimeSpan duration)
         {
-            var previousDurationReset = todo.LastExecution ?? DateTime.Now;
-            var nextDurationReset = previousDurationReset + (todo.Schedule.Value?.Duration ?? TimeSpan.Zero);
-            return nextDurationReset > DateTime.Now ? nextDurationReset : DateTime.Now + (todo.Schedule.Value?.Duration ?? TimeSpan.Zero);
+            var previousDurationReset = lastExecution ?? DateTime.Now;
+            var nextDurationReset = previousDurationReset + duration;
+            return nextDurationReset > DateTime.Now ? nextDurationReset : DateTime.Now + duration;
         }
 
-        public static DateTime LastDurationReset(TodoSchedule schedule)
+        public static DateTime LastDurationReset(TimeSpan duration)
         {
-            return DateTime.Now - schedule.Duration; 
+            return DateTime.Now - duration; 
         }
     }
 }

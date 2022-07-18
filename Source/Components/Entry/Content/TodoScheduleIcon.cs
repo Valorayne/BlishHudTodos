@@ -28,40 +28,52 @@ namespace Todos.Source.Components.Entry.Content
                 BasicTooltipText = GetIconTooltip()
             };
 
-            todo.Schedule.Changed += OnScheduleChanged;
+            todo.ScheduleType.Changed += OnScheduleTypeChanged;
+            todo.ScheduleDuration.Changed += OnScheduleDetailsChanged;
+            todo.ScheduleLocalTime.Changed += OnScheduleDetailsChanged;
+            
             TimeService.NewMinute += OnNewMinute;
         }
 
-        private void OnNewMinute(object sender, GameTime e)
-        {
-            _icon.BasicTooltipText = GetIconTooltip();
-        }
-
-        private void OnScheduleChanged(TodoSchedule? schedule)
+        private void UpdateVisuals()
         {
             _icon.Texture = IconTexture;
             _icon.BasicTooltipText = GetIconTooltip();
         }
 
-        private Texture2D IconTexture => _todo.Schedule.Value.HasValue
+        private void OnScheduleDetailsChanged(TimeSpan newValue)
+        {
+            UpdateVisuals();
+        }
+
+        private void OnNewMinute(object sender, GameTime e)
+        {
+            UpdateVisuals();
+        }
+
+        private void OnScheduleTypeChanged(TodoScheduleType newValue)
+        {
+            UpdateVisuals();
+        }
+
+        private Texture2D IconTexture => _todo.ScheduleType.Value != TodoScheduleType.NoReset
             ? Resources.GetTexture(Textures.ScheduleIcon) 
             : Resources.GetTexture(Textures.Empty);
 
         private string GetIconTooltip()
         {
-            if (!_todo.Schedule.Value.HasValue)
-                return null;
-
-            switch (_todo.Schedule.Value.Value.Type)
+            switch (_todo.ScheduleType.Value)
             {
+                case TodoScheduleType.NoReset: 
+                    return null;
                 case TodoScheduleType.DailyServer:
                     return $"Daily reset in {DateUtils.NextDailyReset.ToDurationString()}";
                 case TodoScheduleType.WeeklyServer:
                     return $"Weekly reset in {DateUtils.NextWeeklyReset.ToDurationString()}";
                 case TodoScheduleType.LocalTime:
-                    return $"Local reset in {DateUtils.NextLocalReset(_todo.Schedule.Value.Value).ToDurationString()}";
+                    return $"Local reset in {DateUtils.NextLocalReset(_todo.ScheduleLocalTime.Value).ToDurationString()}";
                 case TodoScheduleType.Duration:
-                    return $"Duration reset in {DateUtils.NextDurationReset(_todo).ToDurationString()}";
+                    return $"Duration reset in {DateUtils.NextDurationReset(_todo.LastExecution, _todo.ScheduleDuration.Value).ToDurationString()}";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -69,7 +81,9 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _todo.Schedule.Changed -= OnScheduleChanged;
+            _todo.ScheduleType.Changed -= OnScheduleTypeChanged;
+            _todo.ScheduleDuration.Changed -= OnScheduleDetailsChanged;
+            _todo.ScheduleLocalTime.Changed -= OnScheduleDetailsChanged;
             TimeService.NewMinute -= OnNewMinute;
             base.DisposeControl();
         }

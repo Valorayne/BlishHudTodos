@@ -1,7 +1,10 @@
-﻿namespace Todos.Source.Models
+﻿using System;
+
+namespace Todos.Source.Models
 {
     public enum TodoScheduleType
     {
+        NoReset = -1,
         DailyServer = 0,
         WeeklyServer = 1,
         LocalTime = 2,
@@ -16,15 +19,16 @@
         public const string LOCAL_TIME = "Local Time";
         public const string DURATION = "Duration";
 
-        public static TodoScheduleType? FromDropdownEntry(this string entry)
+        public static TodoScheduleType FromDropdownEntry(this string entry)
         {
             switch (entry)
             {
+                case NO_RESET: return TodoScheduleType.NoReset;
                 case DAILY_SERVER_RESET: return TodoScheduleType.DailyServer;
                 case WEEKLY_SERVER_RESET: return TodoScheduleType.WeeklyServer;
                 case LOCAL_TIME: return TodoScheduleType.LocalTime;
                 case DURATION: return TodoScheduleType.Duration;
-                default: return null;
+                default: throw new ArgumentOutOfRangeException();
             }
         }
         

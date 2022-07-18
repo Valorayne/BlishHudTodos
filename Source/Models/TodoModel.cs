@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Blish_HUD;
+using Microsoft.Xna.Framework;
 using Todos.Source.Persistence;
 using Todos.Source.Utils;
 
@@ -11,8 +12,6 @@ namespace Todos.Source.Models
         public delegate void ValueChangedEvent<in T>(T newValue);
         
         private readonly TodoJson _json;
-        
-        public DateTime CreatedAt => _json.CreatedAt;
 
         public readonly Variable<bool> IsDeleted;
         public readonly Variable<bool> IsVisible;
@@ -37,11 +36,18 @@ namespace Todos.Source.Models
 
             Schedule = new TodoScheduleModel(_json.Schedule, _json.Persist);
 
+            // ReSharper disable once PossibleNullReferenceException
             IsEditing = new Variable<bool>(this, isNew, _ => IsVisible.Value = ShouldBeVisible);
             IsVisible = new Variable<bool>(this, ShouldBeVisible);
             OrderIndex = new Variable<long>(this, _json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
 
             Settings.ShowAlreadyDoneTasks.SettingChanged += OnShowTasksSettingChanged;
+            TimeService.NewMinute += OnNewMinute;
+        }
+
+        private void OnNewMinute(object sender, GameTime e)
+        {
+            IsVisible.Value = ShouldBeVisible;
         }
 
         private void OnShowTasksSettingChanged(object sender, ValueChangedEventArgs<bool> e)
@@ -81,6 +87,7 @@ namespace Todos.Source.Models
         public void Dispose()
         {
             Settings.ShowAlreadyDoneTasks.SettingChanged -= OnShowTasksSettingChanged;
+            TimeService.NewMinute -= OnNewMinute;
         }
     }
 }

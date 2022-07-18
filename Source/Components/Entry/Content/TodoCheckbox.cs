@@ -36,7 +36,6 @@ namespace Todos.Source.Components.Entry.Content
             };
             
             todo.DoneChanged += OnDoneChanged;
-            TimeService.NewMinute += CheckForChange;
             
             Settings.CheckboxType.SettingChanged += OnCheckboxTypeChanged;
         }
@@ -67,11 +66,6 @@ namespace Todos.Source.Components.Entry.Content
             UpdateState();
         }
 
-        private void CheckForChange(object sender, GameTime e)
-        {
-            UpdateState();
-        }
-
         private void UpdateState()
         {
             _checked.Visible = _todo.Done;
@@ -94,7 +88,6 @@ namespace Todos.Source.Components.Entry.Content
         protected override void DisposeControl()
         {
             _todo.DoneChanged -= OnDoneChanged;
-            TimeService.NewMinute -= CheckForChange;
             Settings.CheckboxType.SettingChanged -= OnCheckboxTypeChanged;
             base.DisposeControl();
         }

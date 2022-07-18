@@ -30,8 +30,6 @@ namespace Todos.Source.Components
             new NoTodosYetMessage { Parent = this };
 
             Data.VisibleTodos.Changed += OnVisibleTodosChanged;
-            TimeService.NewMinute += OnNewMinute;
-            
             OnVisibleTodosChanged(Data.VisibleTodos.Value);
         }
 
@@ -45,14 +43,8 @@ namespace Todos.Source.Components
                 _entries.Add(todo, new TodoEntry(todo, _saveScroll) { Parent = this });            
         }
 
-        private void OnNewMinute(object sender, GameTime e)
-        {
-            OnVisibleTodosChanged(Data.VisibleTodos.Value);
-        }
-
         protected override void DisposeControl()
         {
-            TimeService.NewMinute -= OnNewMinute;
             Data.VisibleTodos.Changed -= OnVisibleTodosChanged;
 
             foreach (var entry in _entries.Values)

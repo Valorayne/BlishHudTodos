@@ -106,6 +106,7 @@
     <Compile Include="Source\Persistence\SaveScheduler.cs" />
     <Compile Include="Source\Persistence\TodoJson.cs" />
     <Compile Include="Source\TodoModule.cs" />
+    <Compile Include="Source\Utils\CheckboxType.cs" />
     <Compile Include="Source\Utils\Data.cs" />
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\Resources.cs" />

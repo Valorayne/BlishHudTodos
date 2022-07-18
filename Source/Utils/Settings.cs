@@ -21,6 +21,7 @@ namespace Todos.Source.Utils
         public static SettingEntry<bool> ShowAlreadyDoneTasks { get; private set; }
         
         public static SettingEntry<KeyBinding> ToggleWindowHotkey { get; private set; }
+        public static SettingEntry<CheckboxType> CheckboxType { get; private set; }
 
         public static void Initialize(SettingCollection settings)
         {
@@ -40,6 +41,7 @@ namespace Todos.Source.Utils
             ShowAlreadyDoneTasks = settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true);
 
             ToggleWindowHotkey = settings.DefineSetting("Hotkeys.Window.Toggle", new KeyBinding());
+            CheckboxType = settings.DefineSetting("Checkbox.Type", Utils.CheckboxType.Standard);
         }
 
         public static void Dispose()
@@ -60,6 +62,7 @@ namespace Todos.Source.Utils
             ShowAlreadyDoneTasks = null;
 
             ToggleWindowHotkey = null;
+            CheckboxType = null;
         }
     }
 }

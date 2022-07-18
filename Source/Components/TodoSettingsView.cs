@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Graphics.UI;
@@ -21,6 +22,7 @@ namespace Todos.Source.Components
         
         private FlowPanel _rightPanel;
         private IDisposable _toggleWindowHotkey;
+        private IDisposable _checkboxType;
 
         protected override void Build(Container buildPanel)
         {
@@ -43,6 +45,8 @@ namespace Todos.Source.Components
                 "Background opacity", "The opacity of the window background");
             _opacityWhenNotFocussed = AddSliderSetting(_leftPanel, Settings.WindowOpacityWhenNotFocussed,
                 "Unfocused opacity", "The opacity of the window when you're not currently using it");
+            _checkboxType = AddDropdownSetting(_leftPanel, Settings.CheckboxType, "Checkbox Type", 
+                "The visual appearance of the checkboxes of todo entries"); 
 
             _rightPanel = new FlowPanel
             {
@@ -110,6 +114,25 @@ namespace Todos.Source.Components
                 setting.SettingChanged -= settingChangedHandler;
             });
         }
+        
+        private static IDisposable AddDropdownSetting<T>(Container parent, SettingEntry<T> setting, string label, string tooltip = null) where T : Enum
+        {
+            var row = TodoEditRow.For(parent, new Dropdown { SelectedItem = setting.Value.ToString()}, label, tooltip);
+            foreach (var name in Enum.GetNames(typeof(T)))
+                row.Items.Add(name);
+            
+            var interactionHandler = new EventHandler<ValueChangedEventArgs>((sender, e) => setting.Value = (T) Enum.Parse(typeof(T), e.CurrentValue));
+            row.ValueChanged += interactionHandler;
+            
+            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<T>>((sender, e) => row.SelectedItem = e.NewValue.ToString());
+            setting.SettingChanged += settingChangedHandler;
+            
+            return new SimpleDisposable(() =>
+            {
+                row.ValueChanged -= interactionHandler;
+                setting.SettingChanged -= settingChangedHandler;
+            });
+        }
 
         protected override void Unload()
         {
@@ -118,10 +141,12 @@ namespace Todos.Source.Components
             _backgroundOpacity.Dispose();
             _opacityWhenNotFocussed.Dispose();
             _fixatedWindow.Dispose();
+            _checkboxType.Dispose();
             _leftPanel.Dispose();
-            
-            _rightPanel.Dispose();
+
             _toggleWindowHotkey.Dispose();
+            _rightPanel.Dispose();
+
             base.Unload();
         }
     }

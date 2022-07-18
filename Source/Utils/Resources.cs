@@ -23,9 +23,31 @@ namespace Todos.Source.Utils
         ReorderIcon,
         ReorderIconUp,
         ReorderIconDown,
-        CheckboxUnchecked,
-        CheckboxChecked,
-        CheckboxHovered
+        
+        // Checkboxes
+        CheckboxUncheckedStandard,
+        CheckboxCheckedStandard,
+        CheckboxHoveredStandard,
+        
+        CheckboxUncheckedGem,
+        CheckboxCheckedGem,
+        CheckboxHoveredGem,
+        
+        CheckboxUncheckedMastery,
+        CheckboxCheckedMastery,
+        CheckboxHoveredMastery,
+        
+        CheckboxUncheckedSquared,
+        CheckboxCheckedSquared,
+        CheckboxHoveredSquared,
+        
+        CheckboxUncheckedRound,
+        CheckboxCheckedRound,
+        CheckboxHoveredRound,
+        
+        CheckboxUncheckedCheckmark,
+        CheckboxCheckedCheckmark,
+        CheckboxHoveredCheckmark,
     }
     
     public static class Resources
@@ -52,9 +74,25 @@ namespace Todos.Source.Utils
             { Textures.ReorderIcon, @"textures\154963.png" },
             { Textures.ReorderIconUp, @"textures\154962_inverted.png" },
             { Textures.ReorderIconDown, @"textures\154962.png" },
-            { Textures.CheckboxUnchecked, @"textures\155921.png" },
-            { Textures.CheckboxChecked, @"textures\155919.png" },
-            { Textures.CheckboxHovered, @"textures\155923.png" },
+            
+            { Textures.CheckboxUncheckedStandard, @"textures\checkbox\155921.png" },
+            { Textures.CheckboxCheckedStandard, @"textures\checkbox\155919.png" },
+            { Textures.CheckboxHoveredStandard, @"textures\checkbox\155923.png" },
+            { Textures.CheckboxUncheckedGem, @"textures\checkbox\155090.png" },
+            { Textures.CheckboxCheckedGem, @"textures\checkbox\1466385.png" },
+            { Textures.CheckboxHoveredGem, @"textures\checkbox\156367.png" },
+            { Textures.CheckboxUncheckedMastery, @"textures\checkbox\1078541.png" },
+            { Textures.CheckboxCheckedMastery, @"textures\checkbox\1078543.png" },
+            { Textures.CheckboxHoveredMastery, @"textures\checkbox\1078542.png" },
+            { Textures.CheckboxUncheckedSquared, @"textures\checkbox\2208343.png" },
+            { Textures.CheckboxCheckedSquared, @"textures\checkbox\2208341.png" },
+            { Textures.CheckboxHoveredSquared, @"textures\checkbox\2208342.png" },
+            { Textures.CheckboxUncheckedRound, @"textures\checkbox\965768.png" },
+            { Textures.CheckboxCheckedRound, @"textures\checkbox\965769.png" },
+            { Textures.CheckboxHoveredRound, @"textures\checkbox\1032331.png" },
+            { Textures.CheckboxUncheckedCheckmark, @"textures\checkbox\2572079.png" },
+            { Textures.CheckboxCheckedCheckmark, @"textures\checkbox\784259.png" },
+            { Textures.CheckboxHoveredCheckmark, @"textures\checkbox\1032331.png" },
         };
         
         public static Texture2D GetTexture(Textures texture)

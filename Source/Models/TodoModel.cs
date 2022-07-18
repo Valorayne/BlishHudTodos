@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Blish_HUD;
 using Microsoft.Xna.Framework;
 using Todos.Source.Persistence;
 using Todos.Source.Utils;
@@ -21,6 +20,9 @@ namespace Todos.Source.Models
 
         public readonly TodoScheduleModel Schedule;
         public readonly Variable<bool> IsDone;
+        
+        public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
+        public DateTime? LastExecution => _json.Executions.Count > 0 ? _json.Executions.Max().WithoutSeconds() : (DateTime?)null;
 
         public TodoModel(TodoJson json, bool isNew)
         {
@@ -41,34 +43,31 @@ namespace Todos.Source.Models
             TimeService.NewMinute += OnNewMinute;
         }
 
-        private void OnNewMinute(object sender, GameTime e)
-        {
-            IsDone.Value = Done;
-        }
-        
-        public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
-
-        public DateTime? LastExecution => _json.Executions.Count > 0 
-            ? _json.Executions.Max().WithoutSeconds() 
-            : (DateTime?)null;
+        private void OnNewMinute(object sender, GameTime e) => IsDone.Value = Done;
 
         private bool Done
         {
             get => LastExecution.HasValue && Schedule.Reset.Value.IsDone(LastExecution.Value);
             set
             {
-                if (value) 
-                    _json.Executions.Add(DateTime.Now.WithoutSeconds());
-                else
-                {
-                    if (_json.Executions.Count > 0)
-                        _json.Executions.RemoveAt(_json.Executions.IndexOf(_json.Executions.Max()));
-                }
+                var executions = _json.Executions;
+                if (value) executions.Add(DateTime.Now.WithoutSeconds());
+                else if (executions.Count > 0) executions.RemoveAt(executions.IndexOf(executions.Max()));
             }
         }
 
         public void Dispose()
         {
+            Schedule.Dispose();
+            
+            OrderIndex.Dispose();
+            Description.Dispose();
+            ClipboardContent.Dispose();
+            
+            IsDeleted.Dispose();
+            IsEditing.Dispose();
+            IsDone.Dispose();
+            
             IsVisible.Dispose();
             TimeService.NewMinute -= OnNewMinute;
         }

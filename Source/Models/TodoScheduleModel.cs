@@ -4,7 +4,7 @@ using Todos.Source.Utils;
 
 namespace Todos.Source.Models
 {
-    public class TodoScheduleModel
+    public class TodoScheduleModel : IDisposable
     {
         public const string NO_RESET = "Never Resets";
         public const string DAILY_SERVER = "Daily Server Reset";
@@ -54,6 +54,13 @@ namespace Todos.Source.Models
                 case TodoScheduleType.Duration: return new DurationReset(Duration);
                 default: throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public void Dispose()
+        {
+            LocalTime.Dispose();
+            Duration.Dispose();
+            Reset.Dispose();
         }
     }
 }

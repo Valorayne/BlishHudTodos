@@ -6,15 +6,11 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoLocalTimeInput : FlowPanel
     {
-        private readonly Variable<TimeSpan> _localTime;
-        
         private readonly TimeInput _hours;
         private readonly TimeInput _minutes;
 
-        public TodoLocalTimeInput(Variable<TimeSpan> localTime)
+        public TodoLocalTimeInput(IVariable<TimeSpan> localTime)
         {
-            _localTime = localTime;
-            
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.AutoSize;
@@ -22,13 +18,11 @@ namespace Todos.Source.Components.Entry.Edit
             _hours = new TimeInput(localTime.Value.Hours, "Hours", 23) { Parent = this };
             _minutes = new TimeInput(localTime.Value.Minutes, "Minutes", 59) { Parent = this };
 
-            _hours.Time.Changed += OnTimeChanged;
-            _minutes.Time.Changed += OnTimeChanged;
-        }
+            void OnTimeChanged(int _) => 
+                localTime.Value = TimeSpan.FromHours(_hours.Time.Value) + TimeSpan.FromMinutes(_minutes.Time.Value);
 
-        private void OnTimeChanged(int _)
-        {
-            _localTime.Value = TimeSpan.FromHours(_hours.Time.Value) + TimeSpan.FromMinutes(_minutes.Time.Value);
+            _hours.Time.Subscribe(this, OnTimeChanged);
+            _minutes.Time.Subscribe(this, OnTimeChanged);
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -40,8 +34,8 @@ namespace Todos.Source.Components.Entry.Edit
         
         protected override void DisposeControl()
         {
-            _hours.Time.Changed -= OnTimeChanged;
-            _minutes.Time.Changed -= OnTimeChanged;
+            _hours.Time.Unsubscribe(this);
+            _minutes.Time.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -13,7 +13,7 @@ namespace Todos.Source.Components.Entry.Edit
     {
         private const int Y_DISTANCE_FOR_CHANGE = 10;
 
-        public readonly Variable<int> Time;
+        public readonly IVariable<int> Time;
 
         private readonly int _maxValue;
         private readonly int _minValue;
@@ -26,7 +26,7 @@ namespace Todos.Source.Components.Entry.Edit
             _maxValue = maxValue;
             _minValue = minValue;
 
-            Time = new Variable<int>(this, startValue);
+            Time = Variables.Transient(startValue);
             HorizontalAlignment = HorizontalAlignment.Center;
             Text = startValue.ToString();
             BasicTooltipText = $"{name} (drag to change)";

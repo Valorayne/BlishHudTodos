@@ -15,13 +15,12 @@ namespace Todos.Source.Components.Messages
 
         public NoTodosYetMessage() : base(TEXT, LOCATION)
         {
-            Data.AllTodos.Changed += UpdateVisibility;
-            UpdateVisibility(Data.AllTodos.Value);
+            Data.AllTodos.Subscribe(this, UpdateVisibility);
         }
 
         protected override void DisposeControl()
         {
-            Data.AllTodos.Changed -= UpdateVisibility;
+            Data.AllTodos.Unsubscribe(this);
             base.DisposeControl();
         }
 

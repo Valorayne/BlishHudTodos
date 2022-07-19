@@ -25,8 +25,7 @@ namespace Todos.Source.Components.Entry
             _row = new TodoEntryRow(todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
-            todo.IsEditing.Changed += OnEditModeChanged;
-            OnEditModeChanged(todo.IsEditing.Value);
+            todo.IsEditing.Subscribe(this, OnEditModeChanged);
             
             WidthSizingMode = SizingMode.Fill;
             Height = _row.Height;
@@ -87,7 +86,7 @@ namespace Todos.Source.Components.Entry
         protected override void DisposeControl()
         {
             _row.Resized -= OnRowResized;
-            Todo.IsEditing.Changed -= OnEditModeChanged;
+            Todo.IsEditing.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -6,15 +6,12 @@ namespace Todos.Source.Components.Entry.Edit
 {
     public sealed class TodoDurationInput : FlowPanel
     {
-        private readonly Variable<TimeSpan> _duration;
-        
         private readonly TimeInput _days;
         private readonly TimeInput _hours;
         private readonly TimeInput _minutes;
 
-        public TodoDurationInput(Variable<TimeSpan> duration)
+        public TodoDurationInput(IVariable<TimeSpan> duration)
         {
-            _duration = duration;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
             HeightSizingMode = SizingMode.AutoSize;
             WidthSizingMode = SizingMode.AutoSize;
@@ -23,14 +20,16 @@ namespace Todos.Source.Components.Entry.Edit
             _hours = new TimeInput(duration.Value.Hours, "Hours", 23) { Parent = this };
             _minutes = new TimeInput(duration.Value.Minutes, "Minutes", 59) { Parent = this };
 
-            _days.Time.Changed += OnTimeChanged;
-            _hours.Time.Changed += OnTimeChanged;
-            _minutes.Time.Changed += OnTimeChanged;
-        }
-
-        private void OnTimeChanged(int _)
-        {
-            _duration.Value = new TimeSpan(int.Parse(_days.Text), int.Parse(_hours.Text), int.Parse(_minutes.Text), 0);
+            void OnTimeChanged(int _) => duration.Value = new TimeSpan(
+                int.Parse(_days.Text), 
+                int.Parse(_hours.Text), 
+                int.Parse(_minutes.Text), 
+                0
+            );
+            
+            _days.Time.Subscribe(this, OnTimeChanged);
+            _hours.Time.Subscribe(this, OnTimeChanged);
+            _minutes.Time.Subscribe(this, OnTimeChanged);
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -43,9 +42,9 @@ namespace Todos.Source.Components.Entry.Edit
         
         protected override void DisposeControl()
         {
-            _days.Time.Changed -= OnTimeChanged;
-            _hours.Time.Changed -= OnTimeChanged;
-            _minutes.Time.Changed -= OnTimeChanged;
+            _days.Time.Unsubscribe(this);
+            _hours.Time.Unsubscribe(this);
+            _minutes.Time.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -9,17 +9,20 @@ namespace Todos.Source.Utils
 {
     public static class Data
     {
-        public static Variable<IReadOnlyList<TodoModel>> AllTodos;
-        public static Variable<IReadOnlyList<TodoModel>> VisibleTodos;
+        private static readonly object _that = new object();
+
+        private static IVariable<List<TodoModel>> _allTodos; 
+        public static IProperty<IReadOnlyList<TodoModel>> AllTodos => _allTodos;
+        
+        public static IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
         public static async Task Initialize(DirectoriesManager manager)
         {
             var storedTodos = await new Persistence.Persistence(manager).LoadAll();
             var sortedTodos = storedTodos.OrderBy(t => t.OrderIndex.Value).ToList();
-            
-            VisibleTodos = new Variable<IReadOnlyList<TodoModel>>(null, sortedTodos.Where(t => t.IsVisible.Value).ToList());
-            AllTodos = new Variable<IReadOnlyList<TodoModel>>(null, sortedTodos, 
-                v => VisibleTodos.Value = v.Where(t => t.IsVisible.Value).ToList());
+
+            _allTodos = Variables.Transient(sortedTodos);
+            VisibleTodos = AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList());
 
             foreach (var todo in sortedTodos)
                 SetupTodo(todo);
@@ -27,34 +30,34 @@ namespace Todos.Source.Utils
 
         private static void SetupTodo(TodoModel todo)
         {
-            todo.IsDeleted.PropertyChanged += OnTodoDeleted;
-            todo.OrderIndex.Changed += OnOrderChanged;
-            todo.IsVisible.Changed += OnVisibilityChanged;
+            todo.IsDeleted.Subscribe(_that, _ => OnTodoDeleted(todo), false);
+            todo.OrderIndex.Subscribe(_that, OnOrderChanged);
+            todo.IsVisible.Subscribe(_that, OnVisibilityChanged);
         }
 
         private static void TearDownTodo(TodoModel todo)
         {
-            todo.IsDeleted.PropertyChanged -= OnTodoDeleted;
-            todo.OrderIndex.Changed -= OnOrderChanged;
-            todo.IsVisible.Changed -= OnVisibilityChanged;
+            todo.IsDeleted.Unsubscribe(_that);
+            todo.OrderIndex.Unsubscribe(_that);
+            todo.IsVisible.Unsubscribe(_that);
             todo.Dispose();
         }
 
         private static void OnVisibilityChanged(bool isVisible)
         {
-            VisibleTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).Where(t => t.IsVisible.Value).ToList();
+            _allTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).ToList();
         }
 
         private static void OnOrderChanged(long newValue)
         {
-            AllTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).ToList();
+            _allTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).ToList();
         }
 
         public static void AddNewTodo()
         {
             var todo = new TodoModel(new TodoJson(), true);
             SetupTodo(todo);
-            AllTodos.Value = AllTodos.Value.Append(todo).ToList();
+            _allTodos.Value = AllTodos.Value.Append(todo).ToList();
         }
         
         public static void MoveUp(TodoModel todo)
@@ -87,11 +90,10 @@ namespace Todos.Source.Utils
                 update.Key.OrderIndex.Value = update.Value;
         }
 
-        private static void OnTodoDeleted(object owner, bool newValue)
+        private static void OnTodoDeleted(TodoModel todo)
         {
-            var todo = (TodoModel)owner;
             TearDownTodo(todo);
-            AllTodos.Value = AllTodos.Value.Where(t => t != todo).ToList();
+            _allTodos.Value = AllTodos.Value.Where(t => t != todo).ToList();
         }
 
         public static void Dispose()

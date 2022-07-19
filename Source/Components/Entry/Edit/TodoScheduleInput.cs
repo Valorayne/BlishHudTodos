@@ -30,21 +30,18 @@ namespace Todos.Source.Components.Entry.Edit
             _durationRow = new TodoEditRow(durationInput, "Duration",
                 "The duration after which this task should reset automatically") { Parent = this };
             
-            _schedule.Reset.Changed += OnScheduleTypeChanged;
-            OnScheduleTypeChanged(schedule.Reset.Value);
+            _schedule.Reset.Subscribe(this, v =>
+            {
+                _localTimeRow.Visible = v is LocalTimeReset;
+                _durationRow.Visible = v is DurationReset;
+                UpdateHeight();
+            });
         }
 
         protected override void OnResized(ResizedEventArgs e)
         {
             UpdateHeight();
             base.OnResized(e);
-        }
-
-        private void OnScheduleTypeChanged(IReset newValue)
-        {
-            _localTimeRow.Visible = newValue is LocalTimeReset;
-            _durationRow.Visible = newValue is DurationReset;
-            UpdateHeight();
         }
 
         private void UpdateHeight()
@@ -57,7 +54,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         protected override void DisposeControl()
         {
-            _schedule.Reset.Changed -= OnScheduleTypeChanged;
+            _schedule.Reset.Unsubscribe(this);
             base.DisposeControl();
         }
     }

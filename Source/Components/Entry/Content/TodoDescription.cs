@@ -43,22 +43,13 @@ namespace Todos.Source.Components.Entry.Content
                 Text = todo.Description.Value,
                 Location = new Point(0, 5)
             };
-            
-            todo.Description.Changed += OnDescriptionChanged;
+
             EditField.TextChanged += OnChange;
-
-            todo.IsEditing.Changed += OnEditModeChanged;
-            OnEditModeChanged(todo.IsEditing.Value);
-
-            todo.ClipboardContent.Changed += OnClipboardContentChanged;
-            OnClipboardContentChanged(todo.ClipboardContent.Value);
-        }
-
-        private void OnClipboardContentChanged(string newValue)
-        {
-            _label.BasicTooltipText = newValue?.Trim()?.IsNullOrEmpty() ?? true
-                ? null 
-                : "Click to copy to clipboard";
+            todo.Description.Subscribe(this, v => _label.Text = v);
+            todo.IsEditing.Subscribe(this, OnEditModeChanged);
+            todo.ClipboardContent.Subscribe(this, v => 
+                _label.BasicTooltipText = v?.Trim()?.IsNullOrEmpty() ?? true ? null : "Click to copy to clipboard"
+            );
         }
 
         private void OnEditModeChanged(bool isInEditMode)
@@ -98,17 +89,12 @@ namespace Todos.Source.Components.Entry.Content
             _todo.Description.Value = EditField.Text;
         }
 
-        private void OnDescriptionChanged(string newDescription)
-        {
-            _label.Text = newDescription;
-        }
-
         protected override void DisposeControl()
         {
             EditField.TextChanged -= OnChange;
-            _todo.IsEditing.Changed -= OnEditModeChanged;
-            _todo.Description.Changed -= OnDescriptionChanged;
-            _todo.ClipboardContent.Changed += OnClipboardContentChanged;
+            _todo.IsEditing.Unsubscribe(this);
+            _todo.Description.Unsubscribe(this);
+            _todo.ClipboardContent.Unsubscribe(this);
             base.DisposeControl();
         }
     }

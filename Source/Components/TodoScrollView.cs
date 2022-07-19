@@ -29,8 +29,7 @@ namespace Todos.Source.Components
             new AllTodosDoneMessage { Parent = this };
             new NoTodosYetMessage { Parent = this };
 
-            Data.VisibleTodos.Changed += OnVisibleTodosChanged;
-            OnVisibleTodosChanged(Data.VisibleTodos.Value);
+            Data.VisibleTodos.Subscribe(this, OnVisibleTodosChanged);
         }
 
         private void OnVisibleTodosChanged(IReadOnlyList<TodoModel> newValue)
@@ -45,7 +44,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            Data.VisibleTodos.Changed -= OnVisibleTodosChanged;
+            Data.VisibleTodos.Unsubscribe(this);
 
             foreach (var entry in _entries.Values)
                 entry.Dispose();

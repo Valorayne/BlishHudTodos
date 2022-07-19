@@ -35,7 +35,7 @@ namespace Todos.Source.Components.Entry.Content
                 BasicTooltipText = GetTooltipText(todo)
             };
             
-            todo.IsDone.Changed += OnDoneChanged;
+            todo.IsDone.Subscribe(this, _ => UpdateState());
             
             Settings.CheckboxType.SettingChanged += OnCheckboxTypeChanged;
         }
@@ -61,11 +61,6 @@ namespace Todos.Source.Components.Entry.Content
             base.OnMouseLeft(e);
         }
 
-        private void OnDoneChanged(bool newDone)
-        {
-            UpdateState();
-        }
-
         private void UpdateState()
         {
             _checked.Visible = _todo.IsDone.Value;
@@ -87,7 +82,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _todo.IsDone.Changed -= OnDoneChanged;
+            _todo.IsDone.Unsubscribe(this);
             Settings.CheckboxType.SettingChanged -= OnCheckboxTypeChanged;
             base.DisposeControl();
         }

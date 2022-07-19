@@ -32,20 +32,20 @@ namespace Todos.Source.Persistence
         public Task<List<TodoModel>> LoadAll()
         {
             var files = Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}");
-            var todos = new ConcurrentBag<TodoModel>();
+            var todos = new ConcurrentBag<TodoJson>();
             var tasks = files.Select(filePath => Task.Run(() =>
             {
                 Try(filePath, "deserialize", file =>
                 {
                     var jsonString = File.ReadAllText(file);
                     var migrated = Migrator.Migrate(jsonString);
-                    var todo = JsonConvert.DeserializeObject<TodoJson>(migrated, SETTINGS);
-                    if (todo != null)
-                        todos.Add(new TodoModel(todo, false));
+                    var json = JsonConvert.DeserializeObject<TodoJson>(migrated, SETTINGS);
+                    if (json != null)
+                        todos.Add(json);
                 });
             }));
             Task.WaitAll(tasks.ToArray());
-            return Task.FromResult(new List<TodoModel>(todos.ToArray()));
+            return Task.FromResult(todos.Select(json => new TodoModel(json, false)).ToList());
         }
 
         public void Persist(TodoJson todo)

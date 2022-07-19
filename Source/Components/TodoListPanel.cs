@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Components.Menu;
-using Todos.Source.Models;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components
@@ -26,12 +24,11 @@ namespace Todos.Source.Components
             _scrollView = new TodoScrollView(SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
 
-            Data.VisibleTodos.Changed += OnTodoAdded;
-        }
-
-        private void OnTodoAdded(IReadOnlyList<TodoModel> newValue)
-        {
-            Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
+            Data.AllTodos.Subscribe(this, (before, after) =>
+            {
+                if (before.Count < after.Count)
+                    Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
+            });
         }
 
         private float? _scrollTarget;
@@ -77,7 +74,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            Data.VisibleTodos.Changed -= OnTodoAdded;
+            Data.AllTodos.Unsubscribe(this);
             base.DisposeControl();
         }
     }

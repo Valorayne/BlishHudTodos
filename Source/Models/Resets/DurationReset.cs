@@ -10,9 +10,9 @@ namespace Todos.Source.Models.Resets
         public string DropdownEntry => TodoScheduleModel.DURATION;
         public string DropdownEntryTooltip => "This task will reset after the duration specified below has passed";
 
-        private readonly Variable<TimeSpan> _duration;
+        private readonly IProperty<TimeSpan> _duration;
 
-        public DurationReset(Variable<TimeSpan> duration)
+        public DurationReset(IProperty<TimeSpan> duration)
         {
             _duration = duration;
         }

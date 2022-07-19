@@ -28,14 +28,11 @@ namespace Todos.Source.Components.Entry
             _editMenu.Clipboard.EnterPressed += OnEnterPressed;
             _editMenu.Resized += OnEditMenuResized;
 
-            todo.IsEditing.Changed += OnEditMenuChanged;
-            OnEditMenuChanged(todo.IsEditing.Value);
-        }
-
-        private void OnEditMenuChanged(bool isInEditMode)
-        {
-            _editMenu.Visible = isInEditMode;
-            UpdateHeight();
+            todo.IsEditing.Subscribe(this, v =>
+            {
+                _editMenu.Visible = v;
+                UpdateHeight();
+            });
         }
 
         private void OnEditMenuResized(object sender, EventArgs eventArgs)
@@ -61,7 +58,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void DisposeControl()
         {
-            _todo.IsEditing.Changed -= OnEditMenuChanged;
+            _todo.IsEditing.Unsubscribe(this);
             _editMenu.Resized -= OnEditMenuResized;
             _content.Description.EditField.EnterPressed -= OnEnterPressed;
             _editMenu.Clipboard.EnterPressed -= OnEnterPressed;

@@ -15,9 +15,8 @@ namespace Todos.Source.Components.Messages
 
         public AllTodosDoneMessage() : base(TEXT, LOCATION)
         {
-            Data.AllTodos.Changed += UpdateVisibility;
-            Data.VisibleTodos.Changed += UpdateVisibility;
-            UpdateVisibility(Data.AllTodos.Value);
+            Data.AllTodos.Subscribe(this, UpdateVisibility);
+            Data.VisibleTodos.Subscribe(this, UpdateVisibility);
         }
 
         private void UpdateVisibility(IReadOnlyList<TodoModel> newValue)
@@ -27,8 +26,8 @@ namespace Todos.Source.Components.Messages
 
         protected override void DisposeControl()
         {
-            Data.AllTodos.Changed -= UpdateVisibility;
-            Data.VisibleTodos.Changed -= UpdateVisibility;
+            Data.AllTodos.Unsubscribe(this);
+            Data.VisibleTodos.Unsubscribe(this);
             base.DisposeControl();
         }
     }

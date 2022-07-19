@@ -18,18 +18,12 @@ namespace Todos.Source.Components.Entry.Menu
             _ => todo.IsEditing.Value = !todo.IsEditing.Value)
         {
             _todo = todo;
-            OnEditModeChanged(_todo.IsEditing.Value);
-            _todo.IsEditing.Changed += OnEditModeChanged;
-        }
-
-        private void OnEditModeChanged(bool isInEditMode)
-        {
-            BasicTooltipText = isInEditMode ? "Stop Editing" : "Edit";
+            _todo.IsEditing.Subscribe(this, inEditMode => BasicTooltipText = inEditMode ? "Stop Editing" : "Edit");
         }
 
         protected override void DisposeControl()
         {
-            _todo.IsEditing.Changed -= OnEditModeChanged;
+            _todo.IsEditing.Unsubscribe(this);
             base.DisposeControl();
         }
     }

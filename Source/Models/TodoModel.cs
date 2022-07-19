@@ -1,10 +1,9 @@
-﻿using System;
-using Todos.Source.Persistence;
+﻿using Todos.Source.Persistence;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Models
 {
-    public class TodoModel : IDisposable
+    public class TodoModel : ModelBase
     {
         public readonly IVariable<bool> IsDeleted;
         public readonly IVariable<bool> IsEditing;
@@ -20,28 +19,17 @@ namespace Todos.Source.Models
         {
             Schedule = new TodoScheduleModel(json.Schedule);
             
-            OrderIndex = Variables.Persistent(json.OrderIndex, v => json.OrderIndex = v, json.Persist);
-            Description = Variables.Persistent(json.Description, v => json.Description = v, json.Persist);
-            ClipboardContent = Variables.Persistent(json.ClipboardContent, v => json.ClipboardContent = v, json.Persist);
+            OrderIndex = Add(Variables.Persistent(json.OrderIndex, v => json.OrderIndex = v, json.Persist));
+            Description = Add(Variables.Persistent(json.Description, v => json.Description = v, json.Persist));
+            ClipboardContent = Add(Variables.Persistent(json.ClipboardContent, v => json.ClipboardContent = v, json.Persist));
             
-            IsDeleted = Variables.Persistent(false, v => json.IsDeleted = v, json.Persist);
-            IsEditing = Variables.Transient(isNew);
+            IsDeleted = Add(Variables.Persistent(false, v => json.IsDeleted = v, json.Persist));
+            IsEditing = Add(Variables.Transient(isNew));
 
-            IsVisible = Schedule.IsDone.CombineWith(IsEditing, Settings.ShowAlreadyDoneTasks,
-                (done, editing, show) => !done || editing || show);
+            IsVisible = Add(Schedule.IsDone.CombineWith(IsEditing, Settings.ShowAlreadyDoneTasks,
+                (done, editing, show) => !done || editing || show));
         }
 
-        public void Dispose()
-        {
-            Schedule.Dispose();
-            
-            OrderIndex.Dispose();
-            Description.Dispose();
-            ClipboardContent.Dispose();
-            
-            IsDeleted.Dispose();
-            IsEditing.Dispose();
-            IsVisible.Dispose();
-        }
+        protected override void DisposeModel() => Schedule.Dispose();
     }
 }

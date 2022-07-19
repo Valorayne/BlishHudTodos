@@ -7,7 +7,7 @@ using Todos.Source.Utils;
 
 namespace Todos.Source.Models
 {
-    public class TodoScheduleModel : IDisposable
+    public class TodoScheduleModel : ModelBase
     {
         public const string NO_RESET = "Never Resets";
         public const string DAILY_SERVER = "Daily Server Reset";
@@ -28,17 +28,17 @@ namespace Todos.Source.Models
 
         public TodoScheduleModel(TodoScheduleJson json)
         {
-            ScheduleDropdown = Variables.Persistent(FromType(json.Type).DropdownEntry, v => json.Type = FromString(v).Type, json.Persist);
-            LocalTime = Variables.Persistent(json.LocalTime, v => json.LocalTime = v, json.Persist);
-            Duration = Variables.Persistent(json.Duration, v => json.Duration = v, json.Persist);
+            ScheduleDropdown = Add(Variables.Persistent(FromType(json.Type).DropdownEntry, v => json.Type = FromString(v).Type, json.Persist));
+            LocalTime = Add(Variables.Persistent(json.LocalTime, v => json.LocalTime = v, json.Persist));
+            Duration = Add(Variables.Persistent(json.Duration, v => json.Duration = v, json.Persist));
             
-            Executions = Variables.Persistent(json.Executions, v => json.Executions = v, json.Persist);
+            Executions = Add(Variables.Persistent(json.Executions, v => json.Executions = v, json.Persist));
 
-            Reset = ScheduleDropdown.Select(FromString);
-            LastExecution = Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null);
-            IsDone = LastExecution.CombineWith(Reset, (lastExecution, schedule) => lastExecution.HasValue && schedule.IsDone(lastExecution.Value));
+            Reset = Add(ScheduleDropdown.Select(FromString));
+            LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null));
+            IsDone = Add(LastExecution.CombineWith(Reset, (lastExecution, schedule) => lastExecution.HasValue && schedule.IsDone(lastExecution.Value)));
 
-            IconTooltip = LastExecution.CombineWith(Reset, (lastExecution, schedule) => schedule.IconTooltip(lastExecution));
+            IconTooltip = Add(LastExecution.CombineWith(Reset, (lastExecution, schedule) => schedule.IconTooltip(lastExecution)));
             
             TimeService.NewMinute += OnNewMinute;
         }
@@ -81,19 +81,8 @@ namespace Todos.Source.Models
             }
         }
 
-        public void Dispose()
+        protected override void DisposeModel()
         {
-            ScheduleDropdown.Dispose();
-            LocalTime.Dispose();
-            Duration.Dispose();
-            Executions.Dispose();
-            
-            Reset.Dispose();
-            LastExecution.Dispose();
-            IsDone.Dispose();
-            
-            IconTooltip.Dispose();
-            
             TimeService.NewMinute -= OnNewMinute;
         }
     }

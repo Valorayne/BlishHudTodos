@@ -123,6 +123,7 @@
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\Reactive\IProperty.cs" />
     <Compile Include="Source\Utils\Reactive\IVariable.cs" />
+    <Compile Include="Source\Utils\Reactive\ModelBase.cs" />
     <Compile Include="Source\Utils\Reactive\Variable.cs" />
     <Compile Include="Source\Utils\Reactive\Variables.cs" />
     <Compile Include="Source\Utils\Resources.cs" />

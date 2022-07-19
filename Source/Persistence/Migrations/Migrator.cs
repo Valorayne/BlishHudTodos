@@ -6,12 +6,15 @@ namespace Todos.Source.Persistence.Migrations
 {
     public static class Migrator
     {
-        private static readonly IDictionary<int, MigrationBase> _migrations = new Dictionary<int, MigrationBase>
+        // ORDER IS CRUCIAL HERE. Always append, never change order
+        private static readonly List<MigrationBase> _migrations = new List<MigrationBase>
         {
-            {1, new MakeScheduleMandatory() },
-            {2, new AddOrderIndex() },
-            {3, new MoveExecutionsIntoSchedule() }
+            new MakeScheduleMandatory(),
+            new AddOrderIndex(),
+            new MoveExecutionsIntoSchedule()
         };
+
+        public static int CURRENT_VERSION = _migrations.Count + 1;
 
         public static string Migrate(string jsonString)
         {
@@ -19,13 +22,13 @@ namespace Todos.Source.Persistence.Migrations
             var fileVersion = json["Version"]?.ToObject<int>();
             Debug.Assert(fileVersion != null, nameof(fileVersion) + " != null");
 
-            if (fileVersion.Value == TodoJson.CURRENT_VERSION)
+            if (fileVersion.Value == CURRENT_VERSION)
                 return jsonString;
             
-            for (var version = fileVersion.Value; version < TodoJson.CURRENT_VERSION; version++)
-                _migrations[version].Migrate(json);
+            for (var version = fileVersion.Value; version < CURRENT_VERSION; version++)
+                _migrations[version-1].Migrate(json);
 
-            json["Version"] = TodoJson.CURRENT_VERSION;
+            json["Version"] = CURRENT_VERSION;
             return json.ToString();
         }
     }

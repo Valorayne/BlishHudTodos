@@ -8,6 +8,7 @@ namespace Todos.Source.Utils
         
         IProperty<T> Subscribe(object subscriber, Action<T> handler, bool executeImmediately = true);
         IProperty<T> Subscribe(object subscriber, Action<T, T> handler, bool executeImmediately = true);
+        
         void Unsubscribe(object subscriber);
     }
 }

@@ -12,14 +12,14 @@ namespace Todos.Source.Components.Entry.Content
         private readonly Point SIZE = new Point(32, 32);
         private readonly Point OFFSET = new Point(2, 2);
         
-        private readonly TodoModel _todo;
+        private readonly TodoScheduleModel _schedule;
         private readonly Image _background;
         private readonly Image _hovered;
         private readonly Image _checked;
 
-        public TodoCheckbox(TodoModel todo)
+        public TodoCheckbox(TodoScheduleModel schedule)
         {
-            _todo = todo;
+            _schedule = schedule;
             
             Width = HEADER_HEIGHT;
             Height = HEADER_HEIGHT;
@@ -31,11 +31,11 @@ namespace Todos.Source.Components.Entry.Content
                 Parent = this, 
                 Location = OFFSET, 
                 Size = SIZE, 
-                Visible = todo.IsDone.Value, 
-                BasicTooltipText = GetTooltipText(todo)
+                Visible = schedule.IsDone.Value, 
+                BasicTooltipText = GetTooltipText(schedule)
             };
             
-            todo.IsDone.Subscribe(this, _ => UpdateState());
+            schedule.IsDone.Subscribe(this, _ => UpdateState());
             
             Settings.CheckboxType.SettingChanged += OnCheckboxTypeChanged;
         }
@@ -63,26 +63,26 @@ namespace Todos.Source.Components.Entry.Content
 
         private void UpdateState()
         {
-            _checked.Visible = _todo.IsDone.Value;
-            _checked.BasicTooltipText = GetTooltipText(_todo);
+            _checked.Visible = _schedule.IsDone.Value;
+            _checked.BasicTooltipText = GetTooltipText(_schedule);
         }
 
         protected override void OnClick(MouseEventArgs e)
         {
-            _todo.IsDone.Value = !_todo.IsDone.Value;
+            _schedule.ToggleDone();
             base.OnClick(e);
         }
 
-        private string GetTooltipText(TodoModel todo)
+        private string GetTooltipText(TodoScheduleModel todo)
         {
             return todo.IsDone.Value
-                ? $"Done: {todo.LastExecution?.ToDaysSinceString()}, {_todo.LastExecution?.ToShortTimeString()}" 
+                ? $"Done: {todo.LastExecution.Value?.ToDaysSinceString()}, {_schedule.LastExecution.Value?.ToShortTimeString()}" 
                 : null;
         }
 
         protected override void DisposeControl()
         {
-            _todo.IsDone.Unsubscribe(this);
+            _schedule.IsDone.Unsubscribe(this);
             Settings.CheckboxType.SettingChanged -= OnCheckboxTypeChanged;
             base.DisposeControl();
         }

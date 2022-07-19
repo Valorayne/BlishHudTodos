@@ -23,7 +23,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         protected override void OnValueChanged(ValueChangedEventArgs e)
         {
-            _schedule.UpdateSchedule(e.CurrentValue);
+            _schedule.ScheduleDropdown.Value = e.CurrentValue;
             BasicTooltipText = _schedule.Reset.Value.DropdownEntryTooltip;
             base.OnValueChanged(e);
         }

@@ -22,8 +22,8 @@ namespace Todos.Source.Components.Entry.Content
             Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
-            _checkbox = new TodoCheckbox(todo) { Parent = this };
-            _icon = new TodoScheduleIcon(todo) { Parent = this };
+            _checkbox = new TodoCheckbox(todo.Schedule) { Parent = this };
+            _icon = new TodoScheduleIcon(todo.Schedule) { Parent = this };
             Description = new TodoDescription(todo, hoverMenu) { Parent = this };
 
             _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),

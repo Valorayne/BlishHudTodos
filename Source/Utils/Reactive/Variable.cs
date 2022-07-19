@@ -66,7 +66,7 @@ namespace Todos.Source.Utils
             return Subscribe(subscriber, (before, after) => handler(after), executeImmediately);
         }
 
-        public void Unsubscribe(object subscriber) => _handlers.Remove(subscriber);
+        public void Unsubscribe(object subscriber) => _handlers?.Remove(subscriber);
 
         public void Dispose()
         {

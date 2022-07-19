@@ -36,14 +36,18 @@ namespace Todos.Source.Models
 
             Reset = Add(ScheduleDropdown.Select(FromString));
             LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null));
-            IsDone = Add(LastExecution.CombineWith(Reset, (lastExecution, schedule) => lastExecution.HasValue && schedule.IsDone(lastExecution.Value)));
+            
+            IsDone = Add(LastExecution.CombineWith(Reset, LocalTime, Duration,
+                (lastExecution, schedule, localTime, duration) => lastExecution.HasValue && schedule.IsDone(lastExecution.Value, localTime, duration)));
 
-            IconTooltip = Add(LastExecution.CombineWith(Reset, (lastExecution, schedule) => schedule.IconTooltip(lastExecution)));
+            IconTooltip = Add(LastExecution.CombineWith(Reset, LocalTime, Duration,
+                (lastExecution, schedule, localTime, duration) => schedule.IconTooltip(lastExecution, localTime, duration)));
             
             TimeService.NewMinute += OnNewMinute;
         }
         
-        private void OnNewMinute(object sender, GameTime e) => ((Variable<bool>)IsDone).Value = LastExecution.Value.HasValue && Reset.Value.IsDone(LastExecution.Value.Value);
+        private void OnNewMinute(object sender, GameTime e) => ((Variable<bool>)IsDone).Value = LastExecution.Value.HasValue 
+            && Reset.Value.IsDone(LastExecution.Value.Value, LocalTime.Value, Duration.Value);
 
         public void ToggleDone()
         {
@@ -62,8 +66,8 @@ namespace Todos.Source.Models
                 case NO_RESET: return new NoReset();
                 case DAILY_SERVER: return new DailyReset();
                 case WEEKLY_SERVER: return new WeeklyReset();
-                case LOCAL_TIME: return new LocalTimeReset(LocalTime);
-                case DURATION: return new DurationReset(Duration);
+                case LOCAL_TIME: return new LocalTimeReset();
+                case DURATION: return new DurationReset();
                 default: throw new ArgumentOutOfRangeException();
             }
         }
@@ -75,8 +79,8 @@ namespace Todos.Source.Models
                 case TodoScheduleType.NoReset: return new NoReset();
                 case TodoScheduleType.DailyServer: return new DailyReset();
                 case TodoScheduleType.WeeklyServer: return new WeeklyReset();
-                case TodoScheduleType.LocalTime: return new LocalTimeReset(LocalTime);
-                case TodoScheduleType.Duration: return new DurationReset(Duration);
+                case TodoScheduleType.LocalTime: return new LocalTimeReset();
+                case TodoScheduleType.Duration: return new DurationReset();
                 default: throw new ArgumentOutOfRangeException();
             }
         }

@@ -10,23 +10,16 @@ namespace Todos.Source.Models.Resets
         public string DropdownEntry => TodoScheduleModel.DURATION;
         public string DropdownEntryTooltip => "This task will reset after the duration specified below has passed";
 
-        private readonly IProperty<TimeSpan> _duration;
+        public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => lastExecution > LastDurationReset(duration);
+        public string IconTooltip(DateTime? lastExecution, TimeSpan localTime, TimeSpan duration) => $"Duration reset in {NextDurationReset(lastExecution, duration).ToDurationString()}";
 
-        public DurationReset(IProperty<TimeSpan> duration)
-        {
-            _duration = duration;
-        }
-
-        public bool IsDone(DateTime lastExecution) => lastExecution > LastDurationReset;
-        public string IconTooltip(DateTime? lastExecution) => $"Duration reset in {NextDurationReset(lastExecution).ToDurationString()}";
-
-        private DateTime NextDurationReset(DateTime? lastExecution)
+        private static DateTime NextDurationReset(DateTime? lastExecution, TimeSpan duration)
         {
             var previousDurationReset = lastExecution ?? DateTime.Now;
-            var nextDurationReset = previousDurationReset + _duration.Value;
-            return nextDurationReset > DateTime.Now ? nextDurationReset : DateTime.Now + _duration.Value;
+            var nextDurationReset = previousDurationReset + duration;
+            return nextDurationReset > DateTime.Now ? nextDurationReset : DateTime.Now + duration;
         }
 
-        private DateTime LastDurationReset => DateTime.Now - _duration.Value; 
+        private static DateTime LastDurationReset(TimeSpan duration) => DateTime.Now - duration; 
     }
 }

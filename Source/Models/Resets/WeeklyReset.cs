@@ -23,7 +23,7 @@ namespace Todos.Source.Models.Resets
             }
         }
 
-        public bool IsDone(DateTime lastExecution) => lastExecution > LastWeeklyReset;
-        public string IconTooltip(DateTime? lastExecution) => $"Weekly reset in {NextWeeklyReset.ToDurationString()}";
+        public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => lastExecution > LastWeeklyReset;
+        public string IconTooltip(DateTime? lastExecution, TimeSpan localTime, TimeSpan duration) => $"Weekly reset in {NextWeeklyReset.ToDurationString()}";
     }
 }

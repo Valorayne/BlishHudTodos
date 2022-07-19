@@ -69,5 +69,22 @@ namespace Todos.Source.Utils
             };
             return result;
         }
+        
+        public static IProperty<T> CombineWith<A, B, C, D, T>(this IProperty<A> a, IProperty<B> b, IProperty<C> c, IProperty<D> d, Func<A, B, C, D, T> mapper)
+        {
+            var result = new Variable<T>(mapper(a.Value, b.Value, c.Value, d.Value));
+            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value, d.Value));
+            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value, d.Value));
+            c.Subscribe(result, newC => result.Value = mapper(a.Value, b.Value, newC, d.Value));
+            d.Subscribe(result, newD => result.Value = mapper(a.Value, b.Value, c.Value, newD));
+            result.OnDisposal = () =>
+            {
+                a.Unsubscribe(result);
+                b.Unsubscribe(result);
+                c.Unsubscribe(result);
+                d.Unsubscribe(result);
+            };
+            return result;
+        }
     }
 }

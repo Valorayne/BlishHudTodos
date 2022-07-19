@@ -10,32 +10,19 @@ namespace Todos.Source.Models.Resets
         public string DropdownEntry => TodoScheduleModel.LOCAL_TIME;
         public string DropdownEntryTooltip => "This task will reset every day at the local time specified below";
 
-        private readonly IProperty<TimeSpan> _localTime;
+        public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => lastExecution > LastLocalReset(localTime);
+        public string IconTooltip(DateTime? lastExecution, TimeSpan localTime, TimeSpan duration) => $"Local reset in {NextLocalReset(localTime).ToDurationString()}";
 
-        public LocalTimeReset(IProperty<TimeSpan> localTime)
+        private static DateTime LastLocalReset(TimeSpan localTime)
         {
-            _localTime = localTime;
-        }
-
-        public bool IsDone(DateTime lastExecution) => lastExecution > LastLocalReset;
-        public string IconTooltip(DateTime? lastExecution) => $"Local reset in {NextLocalReset.ToDurationString()}";
-
-        private DateTime LastLocalReset
-        {
-            get
-            {
-                var resetToday = DateTime.Today + _localTime.Value;
-                return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
-            }
+            var resetToday = DateTime.Today + localTime;
+            return DateTime.Now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
         }
         
-        private DateTime NextLocalReset
+        private static DateTime NextLocalReset(TimeSpan localTime)
         {
-            get
-            {
-                var resetToday = DateTime.Today + _localTime.Value;
-                return DateTime.Now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
-            }
+            var resetToday = DateTime.Today + localTime;
+            return DateTime.Now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
         }
     }
 }

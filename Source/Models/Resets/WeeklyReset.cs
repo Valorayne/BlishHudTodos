@@ -7,7 +7,7 @@ namespace Todos.Source.Models.Resets
     {
         public TodoScheduleType Type => TodoScheduleType.WeeklyServer;
         
-        public string DropdownEntry => TodoScheduleModel.WEEKLY_SERVER;
+        public string DropdownEntry => "Weekly Server Reset";
         public string DropdownEntryTooltip => "This task will reset every Monday, 7:30 UTC";
         
         private static DateTime LastWeeklyReset => NextWeeklyReset - TimeSpan.FromDays(7);

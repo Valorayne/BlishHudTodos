@@ -7,7 +7,7 @@ namespace Todos.Source.Models.Resets
     {
         public TodoScheduleType Type => TodoScheduleType.Duration;
         
-        public string DropdownEntry => TodoScheduleModel.DURATION;
+        public string DropdownEntry => "Duration";
         public string DropdownEntryTooltip => "This task will reset after the duration specified below has passed";
 
         public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => lastExecution > LastDurationReset(duration);

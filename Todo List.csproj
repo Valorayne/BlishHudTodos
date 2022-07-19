@@ -104,6 +104,7 @@
     <Compile Include="Source\Models\Resets\IReset.cs" />
     <Compile Include="Source\Models\Resets\LocalTimeReset.cs" />
     <Compile Include="Source\Models\Resets\NoReset.cs" />
+    <Compile Include="Source\Models\Resets\ResetFactory.cs" />
     <Compile Include="Source\Models\Resets\WeeklyReset.cs" />
     <Compile Include="Source\Models\TodoModel.cs" />
     <Compile Include="Source\Models\TodoScheduleModel.cs" />

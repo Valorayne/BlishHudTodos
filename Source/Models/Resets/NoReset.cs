@@ -6,7 +6,7 @@ namespace Todos.Source.Models.Resets
     {
         public TodoScheduleType Type => TodoScheduleType.NoReset;
         
-        public string DropdownEntry => TodoScheduleModel.NO_RESET;
+        public string DropdownEntry => "Never Resets";
         public string DropdownEntryTooltip => "This task will not reset automatically";
         
         public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => true;

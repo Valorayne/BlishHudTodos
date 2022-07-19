@@ -7,7 +7,7 @@ namespace Todos.Source.Models.Resets
     {
         public TodoScheduleType Type => TodoScheduleType.LocalTime;
         
-        public string DropdownEntry => TodoScheduleModel.LOCAL_TIME;
+        public string DropdownEntry => "Local Time";
         public string DropdownEntryTooltip => "This task will reset every day at the local time specified below";
 
         public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => lastExecution > LastLocalReset(localTime);

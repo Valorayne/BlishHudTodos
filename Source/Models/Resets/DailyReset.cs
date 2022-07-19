@@ -7,7 +7,7 @@ namespace Todos.Source.Models.Resets
     {
         public TodoScheduleType Type => TodoScheduleType.DailyServer;
         
-        public string DropdownEntry => TodoScheduleModel.DAILY_SERVER;
+        public string DropdownEntry => "Daily Server Reset";
         public string DropdownEntryTooltip => "This task will reset every day at 0:00 UTC";
         
         private static DateTime LastDailyReset => DateTime.UtcNow.Date;

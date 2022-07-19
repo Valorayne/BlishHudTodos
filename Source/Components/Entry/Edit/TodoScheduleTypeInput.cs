@@ -1,5 +1,6 @@
 ﻿using Blish_HUD.Controls;
 using Todos.Source.Models;
+using Todos.Source.Models.Resets;
 
 namespace Todos.Source.Components.Entry.Edit
 {
@@ -14,11 +15,8 @@ namespace Todos.Source.Components.Entry.Edit
             SelectedItem = schedule.Reset.Value.DropdownEntry;
             BasicTooltipText = schedule.Reset.Value.DropdownEntryTooltip;
             
-            Items.Add(TodoScheduleModel.NO_RESET);
-            Items.Add(TodoScheduleModel.DAILY_SERVER);
-            Items.Add(TodoScheduleModel.WEEKLY_SERVER);
-            Items.Add(TodoScheduleModel.LOCAL_TIME);
-            Items.Add(TodoScheduleModel.DURATION);
+            foreach (var dropdownEntry in ResetFactory.AllDropdownEntries)
+                Items.Add(dropdownEntry);
         }
 
         protected override void OnValueChanged(ValueChangedEventArgs e)

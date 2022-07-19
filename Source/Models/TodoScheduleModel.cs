@@ -9,12 +9,6 @@ namespace Todos.Source.Models
 {
     public class TodoScheduleModel : ModelBase
     {
-        public const string NO_RESET = "Never Resets";
-        public const string DAILY_SERVER = "Daily Server Reset";
-        public const string WEEKLY_SERVER = "Weekly Server Reset";
-        public const string LOCAL_TIME = "Local Time";
-        public const string DURATION = "Duration";
-
         public readonly IVariable<string> ScheduleDropdown;
         public readonly IVariable<TimeSpan> LocalTime;
         public readonly IVariable<TimeSpan> Duration;
@@ -28,13 +22,13 @@ namespace Todos.Source.Models
 
         public TodoScheduleModel(TodoScheduleJson json)
         {
-            ScheduleDropdown = Add(Variables.Persistent(FromType(json.Type).DropdownEntry, v => json.Type = FromString(v).Type, json.Persist));
+            ScheduleDropdown = Add(Variables.Persistent(ResetFactory.FromType(json.Type).DropdownEntry, v => json.Type = ResetFactory.FromDropdown(v).Type, json.Persist));
             LocalTime = Add(Variables.Persistent(json.LocalTime, v => json.LocalTime = v, json.Persist));
             Duration = Add(Variables.Persistent(json.Duration, v => json.Duration = v, json.Persist));
             
             Executions = Add(Variables.Persistent(json.Executions, v => json.Executions = v, json.Persist));
 
-            Reset = Add(ScheduleDropdown.Select(FromString));
+            Reset = Add(ScheduleDropdown.Select(ResetFactory.FromDropdown));
             LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null));
             
             IsDone = Add(LastExecution.CombineWith(Reset, LocalTime, Duration,
@@ -56,32 +50,6 @@ namespace Todos.Source.Models
             {
                 var latestExecution = Executions.Value.Max();
                 Executions.Value = Executions.Value.Where(execution => execution != latestExecution).ToList();
-            }
-        }
-
-        private IReset FromString(string dropdownEntry)
-        {
-            switch (dropdownEntry)
-            {
-                case NO_RESET: return new NoReset();
-                case DAILY_SERVER: return new DailyReset();
-                case WEEKLY_SERVER: return new WeeklyReset();
-                case LOCAL_TIME: return new LocalTimeReset();
-                case DURATION: return new DurationReset();
-                default: throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private IReset FromType(TodoScheduleType type)
-        {
-            switch (type)
-            {
-                case TodoScheduleType.NoReset: return new NoReset();
-                case TodoScheduleType.DailyServer: return new DailyReset();
-                case TodoScheduleType.WeeklyServer: return new WeeklyReset();
-                case TodoScheduleType.LocalTime: return new LocalTimeReset();
-                case TodoScheduleType.Duration: return new DurationReset();
-                default: throw new ArgumentOutOfRangeException();
             }
         }
 

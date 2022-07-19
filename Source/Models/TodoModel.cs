@@ -22,7 +22,7 @@ namespace Todos.Source.Models
         public readonly IVariable<bool> IsDone;
         
         public string IconTooltip => Schedule.Reset.Value.IconTooltip(LastExecution);
-        public DateTime? LastExecution => _json.Executions.Count > 0 ? _json.Executions.Max().WithoutSeconds() : (DateTime?)null;
+        public DateTime? LastExecution => _json.Schedule.Executions.Count > 0 ? _json.Schedule.Executions.Max().WithoutSeconds() : (DateTime?)null;
 
         public TodoModel(TodoJson json, bool isNew)
         {
@@ -51,7 +51,7 @@ namespace Todos.Source.Models
             get => LastExecution.HasValue && Schedule.Reset.Value.IsDone(LastExecution.Value);
             set
             {
-                var executions = _json.Executions;
+                var executions = _json.Schedule.Executions;
                 if (value) executions.Add(DateTime.Now.WithoutSeconds());
                 else if (executions.Count > 0) executions.RemoveAt(executions.IndexOf(executions.Max()));
             }

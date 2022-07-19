@@ -111,6 +111,7 @@
     <Compile Include="Source\Persistence\Migrations\MigrationBase.cs" />
     <Compile Include="Source\Persistence\Migrations\MakeScheduleMandatory.cs" />
     <Compile Include="Source\Persistence\Migrations\Migrator.cs" />
+    <Compile Include="Source\Persistence\Migrations\MoveExecutionsIntoSchedule.cs" />
     <Compile Include="Source\Persistence\Persistence.cs" />
     <Compile Include="Source\Persistence\SaveScheduler.cs" />
     <Compile Include="Source\Persistence\TodoJson.cs" />

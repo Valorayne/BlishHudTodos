@@ -8,7 +8,7 @@ namespace Todos.Source.Persistence
     [JsonObject(MemberSerialization.OptIn)]
     public class TodoJson
     {
-        public const int CURRENT_VERSION = 2;
+        public const int CURRENT_VERSION = 3;
         
         [JsonProperty] public int Version { get; private set; }
         [JsonProperty] public DateTime CreatedAt { get; private set; }
@@ -28,13 +28,13 @@ namespace Todos.Source.Persistence
             CreatedAt = createdAt;
             Executions = executions;
             Schedule = schedule;
-
-            if (OrderIndex == default)
-                OrderIndex = CreatedAt.Ticks;
         }
 
-        public TodoJson() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>(), 
-            new TodoScheduleJson { Duration = TimeSpan.FromDays(1) }) { }
+        public TodoJson() : this(CURRENT_VERSION, DateTime.Now, new List<DateTime>(),
+            new TodoScheduleJson { Duration = TimeSpan.FromDays(1) })
+        {
+            OrderIndex = CreatedAt.Ticks;
+        }
 
         public void Persist()
         {

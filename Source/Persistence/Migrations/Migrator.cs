@@ -8,7 +8,8 @@ namespace Todos.Source.Persistence.Migrations
     {
         private static readonly IDictionary<int, MigrationBase> _migrations = new Dictionary<int, MigrationBase>
         {
-            {1, new MakeScheduleMandatory() }
+            {1, new MakeScheduleMandatory() },
+            {2, new AddOrderIndex() }
         };
 
         public static string Migrate(string jsonString)

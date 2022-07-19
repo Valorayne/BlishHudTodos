@@ -107,6 +107,7 @@
     <Compile Include="Source\Models\Resets\WeeklyReset.cs" />
     <Compile Include="Source\Models\TodoModel.cs" />
     <Compile Include="Source\Models\TodoScheduleModel.cs" />
+    <Compile Include="Source\Persistence\Migrations\AddOrderIndex.cs" />
     <Compile Include="Source\Persistence\Migrations\MigrationBase.cs" />
     <Compile Include="Source\Persistence\Migrations\MakeScheduleMandatory.cs" />
     <Compile Include="Source\Persistence\Migrations\Migrator.cs" />

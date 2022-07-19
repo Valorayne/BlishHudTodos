@@ -16,11 +16,11 @@ namespace Todos.Source.Models
         public readonly IVariable<TimeSpan> LocalTime;
         public readonly IVariable<TimeSpan> Duration;
 
-        public TodoScheduleModel(TodoScheduleJson json, Action persist)
+        public TodoScheduleModel(TodoScheduleJson json)
         {
-            LocalTime = Variables.Persistent(json.LocalTime, v => json.LocalTime = v, persist);
-            Duration = Variables.Persistent(json.Duration, v => json.Duration = v, persist);
-            Reset = Variables.Persistent(FromType(json.Type), v => json.Type = v.Type, persist);
+            LocalTime = Variables.Persistent(json.LocalTime, v => json.LocalTime = v, json.Persist);
+            Duration = Variables.Persistent(json.Duration, v => json.Duration = v, json.Persist);
+            Reset = Variables.Persistent(FromType(json.Type), v => json.Type = v.Type, json.Persist);
         }
 
         public void UpdateSchedule(string dropdownEntry)

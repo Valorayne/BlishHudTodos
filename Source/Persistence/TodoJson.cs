@@ -8,12 +8,12 @@ namespace Todos.Source.Persistence
     public class TodoJson
     {
         public const int CURRENT_VERSION = 4;
+        
+        public bool IsDeleted;
 
         [JsonProperty] public int Version;
         [JsonProperty] public DateTime CreatedAt;
         [JsonProperty] public TodoScheduleJson Schedule;
-
-        public bool IsDeleted;
 
         [JsonProperty] public long OrderIndex;
         [JsonProperty] public string Description;
@@ -23,8 +23,15 @@ namespace Todos.Source.Persistence
         {
             Version = CURRENT_VERSION;
             CreatedAt = DateTime.Now;
-            Schedule = new TodoScheduleJson();
+            Schedule = new TodoScheduleJson { Parent = this };
             OrderIndex = CreatedAt.Ticks;
+        }
+
+        [JsonConstructor]
+        public TodoJson(TodoScheduleJson schedule)
+        {
+            Schedule = schedule;
+            Schedule.Parent = this;
         }
 
         public void Persist()

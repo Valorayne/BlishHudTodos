@@ -28,7 +28,7 @@ namespace Todos.Source.Models
         {
             _json = json;
             
-            Schedule = new TodoScheduleModel(_json.Schedule, _json.Persist);
+            Schedule = new TodoScheduleModel(_json.Schedule);
             
             OrderIndex = Variables.Persistent(_json.OrderIndex, v => _json.OrderIndex = v, _json.Persist);
             Description = Variables.Persistent(_json.Description, v => _json.Description = v, _json.Persist);

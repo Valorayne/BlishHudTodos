@@ -29,14 +29,16 @@ namespace Todos.Source.Models
 
             Reset = Add(ScheduleDropdown.Select(ResetFactory.FromDropdown));
             LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null));
-            
-            IsDone = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration,
-                (now, lastExecution, schedule, localTime, duration) => lastExecution.HasValue 
-                                                                       && schedule.IsDone(now, lastExecution.Value, localTime, duration)));
 
-            IconTooltip = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration,
-                (now, lastExecution, schedule, localTime, duration) => schedule.IconTooltip(now, lastExecution, localTime, duration)));
+            IsDone = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIsDone));
+            IconTooltip = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIconTooltip));
         }
+
+        private static bool GetIsDone(DateTime now, DateTime? lastExecution, IReset schedule, TimeSpan localTime, TimeSpan duration) 
+            => lastExecution.HasValue && schedule.IsDone(now, lastExecution.Value, localTime, duration);
+
+        private static string GetIconTooltip(DateTime now, DateTime? lastExecution, IReset schedule, TimeSpan localTime, TimeSpan duration) 
+            => schedule.IconTooltip(now, lastExecution, localTime, duration);
 
         public void ToggleDone()
         {

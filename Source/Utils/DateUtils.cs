@@ -22,7 +22,7 @@ namespace Todos.Source.Utils
         
         public static string ToDurationString(this DateTime target)
         {
-            var until = target - DateTime.Now;
+            var until = target - DateTime.Now.WithoutSeconds();
             var dayString = until.Days == 0 ? "" : until.Days == 1 ? "1 day" : $"{until.Days} days";
             var hourString = until.Hours == 0 ? "" : $"{until.Hours}h ";
             var minuteString = until.Minutes == 0 

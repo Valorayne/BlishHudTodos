@@ -5,25 +5,18 @@ namespace Todos.Source.Utils
 {
     public static class TimeService
     {
-        private static DateTime? _lastMinute;
-
-        public static event EventHandler<GameTime> NewMinute;
+        public static Variable<DateTime> NewMinute = new Variable<DateTime>(DateTime.Now.WithoutSeconds());
 
         public static void ProgressTimer(GameTime time)
         {
-            if (time.IsRunningSlowly)
-                return;
-
-            if (!_lastMinute.HasValue || (DateTime.Now - _lastMinute.Value).TotalMinutes > 1)
-            {
-                _lastMinute = DateTime.Now.WithoutSeconds();
-                NewMinute?.Invoke(time, time);
-            }
+            if (!time.IsRunningSlowly) 
+                NewMinute.Value = DateTime.Now.WithoutSeconds();
         }
 
         public static void Dispose()
         {
-            _lastMinute = null;
+            NewMinute.Dispose();
+            NewMinute = new Variable<DateTime>(DateTime.Now.WithoutSeconds());
         }
     }
 }

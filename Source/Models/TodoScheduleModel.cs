@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Todos.Source.Models.Resets;
 using Todos.Source.Utils;
 
@@ -31,17 +30,13 @@ namespace Todos.Source.Models
             Reset = Add(ScheduleDropdown.Select(ResetFactory.FromDropdown));
             LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null));
             
-            IsDone = Add(LastExecution.CombineWith(Reset, LocalTime, Duration,
-                (lastExecution, schedule, localTime, duration) => lastExecution.HasValue && schedule.IsDone(lastExecution.Value, localTime, duration)));
+            IsDone = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration,
+                (now, lastExecution, schedule, localTime, duration) => lastExecution.HasValue 
+                                                                       && schedule.IsDone(now, lastExecution.Value, localTime, duration)));
 
-            IconTooltip = Add(LastExecution.CombineWith(Reset, LocalTime, Duration,
-                (lastExecution, schedule, localTime, duration) => schedule.IconTooltip(lastExecution, localTime, duration)));
-            
-            TimeService.NewMinute += OnNewMinute;
+            IconTooltip = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration,
+                (now, lastExecution, schedule, localTime, duration) => schedule.IconTooltip(now, lastExecution, localTime, duration)));
         }
-        
-        private void OnNewMinute(object sender, GameTime e) => ((Variable<bool>)IsDone).Value = LastExecution.Value.HasValue 
-            && Reset.Value.IsDone(LastExecution.Value.Value, LocalTime.Value, Duration.Value);
 
         public void ToggleDone()
         {
@@ -51,11 +46,6 @@ namespace Todos.Source.Models
                 var latestExecution = Executions.Value.Max();
                 Executions.Value = Executions.Value.Where(execution => execution != latestExecution).ToList();
             }
-        }
-
-        protected override void DisposeModel()
-        {
-            TimeService.NewMinute -= OnNewMinute;
         }
     }
 }

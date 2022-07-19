@@ -13,7 +13,14 @@ namespace Todos.Source.Models.Resets
         private static DateTime LastDailyReset => DateTime.UtcNow.Date;
         private static DateTime NextDailyReset => DateTime.UtcNow.Date + TimeSpan.FromDays(1);
 
-        public bool IsDone(DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => lastExecution > LastDailyReset;
-        public string IconTooltip(DateTime? lastExecution, TimeSpan localTime, TimeSpan duration) => $"Daily reset in {NextDailyReset.ToDurationString()}";
+        public bool IsDone(DateTime now, DateTime lastExecution, TimeSpan localTime, TimeSpan duration)
+        {
+            return lastExecution > LastDailyReset;
+        }
+
+        public string IconTooltip(DateTime now, DateTime? lastExecution, TimeSpan localTime, TimeSpan duration)
+        {
+            return $"Daily reset in {NextDailyReset.ToDurationString()}";
+        }
     }
 }

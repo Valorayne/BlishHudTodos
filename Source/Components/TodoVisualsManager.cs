@@ -17,33 +17,19 @@ namespace Todos.Source.Components
         {
             _todoList = todoList;
             _hotkeyManager = new TodoWindowToggleHotkey();
-            
-            Settings.WindowMinimized.SettingChanged += OnSettingChanged;
+
             GameService.Gw2Mumble.UI.IsMapOpenChanged += OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged += OnInGameChanged;
-            Settings.ShowWindowOnMap.SettingChanged += OnSettingChanged;
-            Settings.AlwaysShowWindow.SettingChanged += OnSettingChanged;
+            
+            Settings.WindowMinimized.Subscribe(this, _ => UpdateDisplay());
+            Settings.ShowWindowOnMap.Subscribe(this, _ => UpdateDisplay());
+            Settings.AlwaysShowWindow.Subscribe(this, _ => UpdateDisplay());
         }
 
-        private void OnInGameChanged(object sender, ValueEventArgs<bool> e)
-        {
-            UpdateDisplay();
-        }
+        private void OnInGameChanged(object sender, ValueEventArgs<bool> e) => UpdateDisplay();
+        private void OnMapStatusChanged(object sender, ValueEventArgs<bool> valueEventArgs) => UpdateDisplay();
 
-        public void OnModuleLoaded()
-        {
-            UpdateDisplay();
-        }
-
-        private void OnMapStatusChanged(object sender, ValueEventArgs<bool> valueEventArgs)
-        {
-            UpdateDisplay();
-        }
-
-        private void OnSettingChanged(object sender, ValueChangedEventArgs<bool> e)
-        {
-            UpdateDisplay();
-        }
+        public void OnModuleLoaded() => UpdateDisplay();
 
         private void UpdateDisplay()
         {
@@ -82,9 +68,7 @@ namespace Todos.Source.Components
             _cornerIcon = null;
 
             if (_window == null)
-            {
                 _window = new TodoListWindow(_todoList);
-            }
         }
 
         private void DisplayMinimized()
@@ -101,10 +85,13 @@ namespace Todos.Source.Components
 
         public void Dispose()
         {
-            Settings.WindowMinimized.SettingChanged -= OnSettingChanged;
-            Settings.ShowWindowOnMap.SettingChanged -= OnSettingChanged;
+            Settings.WindowMinimized.Unsubscribe(this);
+            Settings.ShowWindowOnMap.Unsubscribe(this);
+            Settings.AlwaysShowWindow.Unsubscribe(this);
+            
             GameService.Gw2Mumble.UI.IsMapOpenChanged -= OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged -= OnInGameChanged;
+            
             _window?.Dispose();
             _cornerIcon?.Dispose();
             _hotkeyManager.Dispose();

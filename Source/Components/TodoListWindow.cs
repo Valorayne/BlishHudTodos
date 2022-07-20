@@ -35,34 +35,11 @@ namespace Todos.Source.Components
 
             new TodoListPanel(todoList) { Parent = this };
 
-            Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
-            Settings.FixatedWindow.SettingChanged += OnFixatedWindowChanged;
+            Settings.WindowOpacityWhenNotFocussed.Subscribe(this, newOpacity => { if (!_hovered) Opacity = newOpacity; });
+            Settings.FixatedWindow.Subscribe(this, fixated => CanResize = !fixated);
 
             BackgroundColor = new Color(0, 0, 0, Settings.BackgroundOpacity.Value);
-            Settings.BackgroundOpacity.SettingChanged += OnBackgroundOpacityChanged;
-        }
-
-        private void OnBackgroundOpacityChanged(object sender, ValueChangedEventArgs<float> e)
-        {
-            BackgroundColor = new Color(0, 0, 0, e.NewValue);
-        }
-
-        private void OnFixatedWindowChanged(object sender, ValueChangedEventArgs<bool> fixated)
-        {
-            CanResize = !fixated.NewValue;
-        }
-
-        protected override void OnMoved(MovedEventArgs e)
-        {
-            if (Settings.FixatedWindow.Value)
-            {
-                Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
-                return;
-            }
-
-            Settings.WindowLocationX.Value = e.CurrentLocation.X;
-            Settings.WindowLocationY.Value = e.CurrentLocation.Y;
-            base.OnMoved(e);
+            Settings.BackgroundOpacity.Subscribe(this, opacity => BackgroundColor = new Color(0, 0, 0, opacity));
         }
 
         protected override void OnMouseEntered(MouseEventArgs e)
@@ -79,10 +56,17 @@ namespace Todos.Source.Components
             base.OnMouseLeft(e);
         }
 
-        private void OnOpacityChanged(object sender, ValueChangedEventArgs<float> e)
+        protected override void OnMoved(MovedEventArgs e)
         {
-            if (!_hovered)
-                Opacity = e.NewValue;
+            if (Settings.FixatedWindow.Value)
+            {
+                Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
+                return;
+            }
+
+            Settings.WindowLocationX.Value = e.CurrentLocation.X;
+            Settings.WindowLocationY.Value = e.CurrentLocation.Y;
+            base.OnMoved(e);
         }
 
         protected override void OnClick(MouseEventArgs e)
@@ -105,9 +89,9 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            Settings.WindowOpacityWhenNotFocussed.SettingChanged -= OnOpacityChanged;
-            Settings.FixatedWindow.SettingChanged -= OnFixatedWindowChanged;
-            Settings.BackgroundOpacity.SettingChanged -= OnBackgroundOpacityChanged;
+            Settings.WindowOpacityWhenNotFocussed.Unsubscribe(this);
+            Settings.FixatedWindow.Unsubscribe(this);
+            Settings.BackgroundOpacity.Unsubscribe(this);
             base.DisposeControl();
         }
     }

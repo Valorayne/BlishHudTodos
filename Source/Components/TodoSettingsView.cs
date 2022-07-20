@@ -4,10 +4,10 @@ using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Graphics.UI;
 using Blish_HUD.Input;
-using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Generic;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components
 {
@@ -64,58 +64,55 @@ namespace Todos.Source.Components
             base.Build(buildPanel);
         }
 
-        private static IDisposable AddKeybindingSetting(Container parent, SettingEntry<KeyBinding> setting, string label, string tooltip = null)
+        private IDisposable AddKeybindingSetting(Container parent, IVariable<KeyBinding> setting, string label, string tooltip = null)
         {
             var row = new KeybindingAssigner(setting.Value) { Parent = parent, KeyBindingName = label, BasicTooltipText = tooltip };
             
             var interactionHandler = new EventHandler<EventArgs>((sender, e) => setting.Value = row.KeyBinding);
             row.BindingChanged += interactionHandler;
             
-            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<KeyBinding>>((sender, e) => row.KeyBinding = e.NewValue);
-            setting.SettingChanged += settingChangedHandler;
+            setting.Subscribe(this, newValue => row.KeyBinding = newValue);
             
             return new SimpleDisposable(() =>
             {
                 row.BindingChanged -= interactionHandler;
-                setting.SettingChanged -= settingChangedHandler;
+                setting.Unsubscribe(this);
             });
         }
         
-        private static IDisposable AddBooleanSetting(Container parent, SettingEntry<bool> setting, string label, string tooltip = null)
+        private IDisposable AddBooleanSetting(Container parent, IVariable<bool> setting, string label, string tooltip = null)
         {
             var row = TodoEditRow.For(parent, new Checkbox { Checked = setting.Value }, label, tooltip);
             
             var interactionHandler = new EventHandler<CheckChangedEvent>((sender, e) => setting.Value = e.Checked);
             row.CheckedChanged += interactionHandler;
             
-            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<bool>>((sender, e) => row.Checked = e.NewValue);
-            setting.SettingChanged += settingChangedHandler;
+            setting.Subscribe(this, newValue => row.Checked = newValue);
             
             return new SimpleDisposable(() =>
             {
                 row.CheckedChanged -= interactionHandler;
-                setting.SettingChanged -= settingChangedHandler;
+                setting.Unsubscribe(this);
             });
         }
         
-        private static IDisposable AddSliderSetting(Container parent, SettingEntry<float> setting, string label, string tooltip = null)
+        private IDisposable AddSliderSetting(Container parent, IVariable<float> setting, string label, string tooltip = null)
         {
             var row = TodoEditRow.For(parent, new TrackBar { Value = setting.Value, MinValue = 0, MaxValue = 1, SmallStep = true }, label, tooltip);
             
             var interactionHandler = new EventHandler<ValueEventArgs<float>>((sender, e) => setting.Value = e.Value);
             row.ValueChanged += interactionHandler;
             
-            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<float>>((sender, e) => row.Value = e.NewValue);
-            setting.SettingChanged += settingChangedHandler;
+            setting.Subscribe(this, newValue => row.Value = newValue);
             
             return new SimpleDisposable(() =>
             {
                 row.ValueChanged -= interactionHandler;
-                setting.SettingChanged -= settingChangedHandler;
+                setting.Unsubscribe(this);
             });
         }
         
-        private static IDisposable AddDropdownSetting<T>(Container parent, SettingEntry<T> setting, string label, string tooltip = null) where T : Enum
+        private IDisposable AddDropdownSetting<T>(Container parent, IVariable<T> setting, string label, string tooltip = null) where T : Enum
         {
             var row = TodoEditRow.For(parent, new Dropdown { SelectedItem = setting.Value.ToString()}, label, tooltip);
             foreach (var name in Enum.GetNames(typeof(T)))
@@ -124,13 +121,12 @@ namespace Todos.Source.Components
             var interactionHandler = new EventHandler<ValueChangedEventArgs>((sender, e) => setting.Value = (T) Enum.Parse(typeof(T), e.CurrentValue));
             row.ValueChanged += interactionHandler;
             
-            var settingChangedHandler = new EventHandler<ValueChangedEventArgs<T>>((sender, e) => row.SelectedItem = e.NewValue.ToString());
-            setting.SettingChanged += settingChangedHandler;
+            setting.Subscribe(this, newValue => row.SelectedItem = newValue.ToString());
             
             return new SimpleDisposable(() =>
             {
                 row.ValueChanged -= interactionHandler;
-                setting.SettingChanged -= settingChangedHandler;
+                setting.Unsubscribe(this);
             });
         }
 

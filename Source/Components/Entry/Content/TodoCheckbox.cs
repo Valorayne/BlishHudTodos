@@ -1,5 +1,4 @@
-﻿using Blish_HUD;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Todos.Source.Models;
@@ -13,9 +12,7 @@ namespace Todos.Source.Components.Entry.Content
         private readonly Point OFFSET = new Point(2, 2);
         
         private readonly TodoScheduleModel _schedule;
-        private readonly Image _background;
         private readonly Image _hovered;
-        private readonly Image _checked;
 
         public TodoCheckbox(TodoScheduleModel schedule)
         {
@@ -24,9 +21,9 @@ namespace Todos.Source.Components.Entry.Content
             Width = HEADER_HEIGHT;
             Height = HEADER_HEIGHT;
 
-            _background = new Image(CheckboxType.GetBackgroundImage()) { Parent = this, Location = OFFSET, Size = SIZE };
+            var background = new Image(CheckboxType.GetBackgroundImage()) { Parent = this, Location = OFFSET, Size = SIZE };
             _hovered = new Image(CheckboxType.GetHoveredImage()) { Parent = this, Location = OFFSET, Size = SIZE, Visible = false };
-            _checked = new Image(CheckboxType.GetCheckedImage())
+            var @checked = new Image(CheckboxType.GetCheckedImage())
             {
                 Parent = this, 
                 Location = OFFSET, 
@@ -35,19 +32,21 @@ namespace Todos.Source.Components.Entry.Content
                 BasicTooltipText = GetTooltipText(schedule)
             };
             
-            schedule.IsDone.Subscribe(this, _ => UpdateState());
+            schedule.IsDone.Subscribe(this, isDone =>
+            {
+                @checked.Visible = isDone;
+                @checked.BasicTooltipText = GetTooltipText(_schedule);
+            });
             
-            Settings.CheckboxType.SettingChanged += OnCheckboxTypeChanged;
+            Settings.CheckboxType.Subscribe(this, _ =>
+            {
+                background.Texture = CheckboxType.GetBackgroundImage();
+                _hovered.Texture = CheckboxType.GetHoveredImage();
+                @checked.Texture = CheckboxType.GetCheckedImage();
+            });
         }
 
         private static CheckboxType CheckboxType => Settings.CheckboxType.Value;
-
-        private void OnCheckboxTypeChanged(object sender, ValueChangedEventArgs<CheckboxType> e)
-        {
-            _background.Texture = CheckboxType.GetBackgroundImage();
-            _hovered.Texture = CheckboxType.GetHoveredImage();
-            _checked.Texture = CheckboxType.GetCheckedImage();
-        }
 
         protected override void OnMouseEntered(MouseEventArgs e)
         {
@@ -59,12 +58,6 @@ namespace Todos.Source.Components.Entry.Content
         {
             _hovered.Visible = false;
             base.OnMouseLeft(e);
-        }
-
-        private void UpdateState()
-        {
-            _checked.Visible = _schedule.IsDone.Value;
-            _checked.BasicTooltipText = GetTooltipText(_schedule);
         }
 
         protected override void OnClick(MouseEventArgs e)
@@ -83,7 +76,7 @@ namespace Todos.Source.Components.Entry.Content
         protected override void DisposeControl()
         {
             _schedule.IsDone.Unsubscribe(this);
-            Settings.CheckboxType.SettingChanged -= OnCheckboxTypeChanged;
+            Settings.CheckboxType.Unsubscribe(this);
             base.DisposeControl();
         }
     }

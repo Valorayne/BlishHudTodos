@@ -31,7 +31,7 @@ namespace Todos.Source.Utils.Reactive
             }
         }
 
-        public IVariable<T> Subscribe(object subscriber, Action<T, T> handler, bool executeImmediately = true)
+        public IProperty<T> Subscribe(object subscriber, Action<T, T> handler, bool executeImmediately = true)
         {
             if (!_handlers.ContainsKey(subscriber))
                 _handlers[subscriber] = handler;
@@ -51,17 +51,7 @@ namespace Todos.Source.Utils.Reactive
             return this;
         }
 
-        IProperty<T> IProperty<T>.Subscribe(object subscriber, Action<T> handler, bool executeImmediately)
-        {
-            return Subscribe(subscriber, handler, executeImmediately);
-        }
-
-        IProperty<T> IProperty<T>.Subscribe(object subscriber, Action<T, T> handler, bool executeImmediately)
-        {
-            return Subscribe(subscriber, handler, executeImmediately);
-        }
-
-        public IVariable<T> Subscribe(object subscriber, Action<T> handler, bool executeImmediately = true)
+        public IProperty<T> Subscribe(object subscriber, Action<T> handler, bool executeImmediately = true)
         {
             return Subscribe(subscriber, (before, after) => handler(after), executeImmediately);
         }

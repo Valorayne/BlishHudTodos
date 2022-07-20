@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components.Messages
 {
@@ -13,21 +13,18 @@ namespace Todos.Source.Components.Messages
 
         private static readonly Point LOCATION = new Point(0, 25);
 
-        public AllTodosDoneMessage() : base(TEXT, LOCATION)
-        {
-            Data.AllTodos.Subscribe(this, UpdateVisibility);
-            Data.VisibleTodos.Subscribe(this, UpdateVisibility);
-        }
+        private readonly IProperty<bool> _subscription;
 
-        private void UpdateVisibility(IReadOnlyList<TodoModel> newValue)
+        public AllTodosDoneMessage(TodoListModel todoList) : base(TEXT, LOCATION)
         {
-            Visible = Data.AllTodos.Value.Count > 0 && Data.VisibleTodos.Value.Count == 0;
+            _subscription = todoList.AllTodos.CombineWith(todoList.VisibleTodos, 
+                (all, visible) => all.Count > 0 && visible.Count == 0)
+                .Subscribe(this, v => Visible = v);
         }
 
         protected override void DisposeControl()
         {
-            Data.AllTodos.Unsubscribe(this);
-            Data.VisibleTodos.Unsubscribe(this);
+            _subscription.Dispose();
             base.DisposeControl();
         }
     }

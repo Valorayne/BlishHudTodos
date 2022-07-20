@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Utils.Reactive
 {
     public class Variable<T> : IVariable<T>
     {

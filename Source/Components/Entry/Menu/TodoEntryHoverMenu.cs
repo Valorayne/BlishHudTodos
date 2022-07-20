@@ -2,6 +2,7 @@
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Todos.Source.Models;
+using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry.Menu
 {
@@ -9,7 +10,7 @@ namespace Todos.Source.Components.Entry.Menu
     {
         private const int PADDING_RIGHT = 8;
 
-        public TodoEntryHoverMenu(TodoModel todo, Action<Point> onDelete)
+        public TodoEntryHoverMenu(TodoListModel todoList, TodoModel todo, Action<Point> onDelete)
         {
             Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
@@ -17,7 +18,7 @@ namespace Todos.Source.Components.Entry.Menu
 
             var deleteButton = new TodoDeleteButton(onDelete) { Parent = this };
             var editButton = new TodoEditButton(todo) { Parent = this };
-            var reorderButton = new TodoReorderButton(todo) { Parent = this };
+            var reorderButton = new TodoReorderButton(todoList, todo) { Parent = this };
 
             Width = deleteButton.Width + editButton.Width + reorderButton.Width + PADDING_RIGHT;
         }

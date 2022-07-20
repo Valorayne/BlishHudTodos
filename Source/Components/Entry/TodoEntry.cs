@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Messages;
 using Todos.Source.Models;
+using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry
 {
@@ -16,12 +17,12 @@ namespace Todos.Source.Components.Entry
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly TodoEntryRow _row;
 
-        public TodoEntry(TodoModel todo, Action saveScroll)
+        public TodoEntry(TodoListModel todoList, TodoModel todo, Action saveScroll)
         {
             Todo = todo;
             _saveScroll = saveScroll;
 
-            _hoverMenu = new TodoEntryHoverMenu(todo, OnDelete) { Parent = this };
+            _hoverMenu = new TodoEntryHoverMenu(todoList, todo, OnDelete) { Parent = this };
             _row = new TodoEntryRow(todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 

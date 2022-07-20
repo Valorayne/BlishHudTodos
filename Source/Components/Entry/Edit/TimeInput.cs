@@ -6,6 +6,7 @@ using Blish_HUD.Input;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Xna.Framework;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components.Entry.Edit
 {

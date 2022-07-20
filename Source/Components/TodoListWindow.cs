@@ -4,6 +4,7 @@ using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Messages;
+using Todos.Source.Models;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components
@@ -22,7 +23,7 @@ namespace Todos.Source.Components
             Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, Settings.WindowHeight.Value)));
         private static Rectangle GetContentRegion => new Rectangle(0, -28, GetWindowRegion.Width, GetWindowRegion.Height + 33);
 
-        public TodoListWindow() : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
+        public TodoListWindow(TodoListModel todoList) : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
             Title = "To-Dos";
@@ -32,7 +33,7 @@ namespace Todos.Source.Components
             Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
             Visible = true;
 
-            new TodoListPanel { Parent = this };
+            new TodoListPanel(todoList) { Parent = this };
 
             Settings.WindowOpacityWhenNotFocussed.SettingChanged += OnOpacityChanged;
             Settings.FixatedWindow.SettingChanged += OnFixatedWindowChanged;

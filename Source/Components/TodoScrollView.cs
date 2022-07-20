@@ -17,19 +17,21 @@ namespace Todos.Source.Components
         private const int INNER_PADDING = 5;
         
         private readonly Dictionary<TodoModel, TodoEntry> _entries = new Dictionary<TodoModel, TodoEntry>();
+        private readonly TodoListModel _todoList;
         
-        public TodoScrollView(Action saveScroll)
+        public TodoScrollView(TodoListModel todoList, Action saveScroll)
         {
+            _todoList = todoList;
             _saveScroll = saveScroll;
             
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
-            new AllTodosDoneMessage { Parent = this };
-            new NoTodosYetMessage { Parent = this };
+            new AllTodosDoneMessage(todoList) { Parent = this };
+            new NoTodosYetMessage(todoList) { Parent = this };
 
-            Data.VisibleTodos.Subscribe(this, OnVisibleTodosChanged);
+            todoList.VisibleTodos.Subscribe(this, OnVisibleTodosChanged);
         }
 
         private void OnVisibleTodosChanged(IReadOnlyList<TodoModel> newValue)
@@ -39,12 +41,12 @@ namespace Todos.Source.Components
                 entry.Dispose();
             _entries.Clear();
             foreach (var todo in newValue)
-                _entries.Add(todo, new TodoEntry(todo, _saveScroll) { Parent = this });            
+                _entries.Add(todo, new TodoEntry(_todoList, todo, _saveScroll) { Parent = this });            
         }
 
         protected override void DisposeControl()
         {
-            Data.VisibleTodos.Unsubscribe(this);
+            _todoList.VisibleTodos.Unsubscribe(this);
 
             foreach (var entry in _entries.Values)
                 entry.Dispose();

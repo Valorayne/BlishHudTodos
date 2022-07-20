@@ -1,4 +1,4 @@
-﻿namespace Todos.Source.Models
+﻿namespace Todos.Source.Persistence
 {
     public enum TodoScheduleType
     {

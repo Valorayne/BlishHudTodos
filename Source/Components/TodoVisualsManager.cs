@@ -1,18 +1,21 @@
 ﻿using System;
 using Blish_HUD;
+using Todos.Source.Models;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components
 {
     public class TodoVisualsManager : IDisposable
     {
+        private readonly TodoListModel _todoList;
         private readonly TodoWindowToggleHotkey _hotkeyManager; 
         
         private TodoListWindow _window;
         private TodoCornerIcon _cornerIcon;
 
-        public TodoVisualsManager()
+        public TodoVisualsManager(TodoListModel todoList)
         {
+            _todoList = todoList;
             _hotkeyManager = new TodoWindowToggleHotkey();
             
             Settings.WindowMinimized.SettingChanged += OnSettingChanged;
@@ -80,7 +83,7 @@ namespace Todos.Source.Components
 
             if (_window == null)
             {
-                _window = new TodoListWindow();
+                _window = new TodoListWindow(_todoList);
             }
         }
 

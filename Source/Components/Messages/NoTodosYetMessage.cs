@@ -12,15 +12,18 @@ namespace Todos.Source.Components.Messages
             "Nothing to do yet!\r\nUse the plus button above to\r\nstart working towards your goals!";
 
         private static readonly Point LOCATION = new Point(0, 25);
+        
+        private readonly TodoListModel _todoList;
 
-        public NoTodosYetMessage() : base(TEXT, LOCATION)
+        public NoTodosYetMessage(TodoListModel todoList) : base(TEXT, LOCATION)
         {
-            Data.AllTodos.Subscribe(this, UpdateVisibility);
+            _todoList = todoList;
+            _todoList.AllTodos.Subscribe(this, UpdateVisibility);
         }
 
         protected override void DisposeControl()
         {
-            Data.AllTodos.Unsubscribe(this);
+            _todoList.AllTodos.Unsubscribe(this);
             base.DisposeControl();
         }
 

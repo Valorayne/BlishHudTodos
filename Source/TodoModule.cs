@@ -7,6 +7,7 @@ using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components;
 using Todos.Source.Components.Messages;
+using Todos.Source.Models;
 using Todos.Source.Persistence;
 using Todos.Source.Utils;
 
@@ -16,6 +17,7 @@ namespace Todos.Source
 	public class TodoModule : Module
 	{
 		private TodoVisualsManager _visuals;
+		private TodoListModel _todoList;
 		
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
@@ -28,15 +30,15 @@ namespace Todos.Source
 		protected override async Task LoadAsync()
 		{
 			Resources.Initialize(ModuleParameters.ContentsManager);
-			await Data.Initialize(ModuleParameters.DirectoriesManager);
+			_todoList = await TodoListModel.Initialize(ModuleParameters.DirectoriesManager);
 			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
 			ConfirmDeletionWindow.Initialize();
-			_visuals = new TodoVisualsManager();
+			_visuals = new TodoVisualsManager(_todoList);
 		}
 
 		protected override void OnModuleLoaded(EventArgs e)
 		{
-			_visuals.OnModuleLoaded();
+			_visuals?.OnModuleLoaded();
 			base.OnModuleLoaded(e);
 		}
 
@@ -53,8 +55,8 @@ namespace Todos.Source
 		
 		protected override void Unload()
 		{
-			_visuals.Dispose();
-			Data.Dispose();
+			_visuals?.Dispose();
+			_todoList?.Dispose();
 			Settings.Dispose();
 
 			TimeService.Dispose();

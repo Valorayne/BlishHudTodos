@@ -1,4 +1,4 @@
-﻿namespace Todos.Source.Utils
+﻿namespace Todos.Source.Utils.Reactive
 {
     public interface IVariable<T> : IProperty<T>
     {

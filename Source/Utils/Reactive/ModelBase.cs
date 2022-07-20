@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Utils.Reactive
 {
     public abstract class ModelBase : IDisposable
     {

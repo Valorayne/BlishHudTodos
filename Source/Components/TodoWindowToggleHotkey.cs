@@ -1,7 +1,7 @@
 ﻿using System;
 using Todos.Source.Utils;
 
-namespace Todos.Source
+namespace Todos.Source.Components
 {
     public class TodoWindowToggleHotkey : IDisposable
     {

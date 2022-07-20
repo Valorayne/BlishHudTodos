@@ -8,12 +8,14 @@ namespace Todos.Source.Components.Entry.Menu
 {
     public class TodoReorderButton : FlowPanel
     {
+        private readonly TodoListModel _todoList;
         private readonly TodoModel _todo;
         private readonly Panel _upButton;
         private readonly Panel _downButton;
 
-        public TodoReorderButton(TodoModel todo)
+        public TodoReorderButton(TodoListModel todoList, TodoModel todo)
         {
+            _todoList = todoList;
             _todo = todo;
             
             Width = HEADER_HEIGHT;
@@ -34,19 +36,19 @@ namespace Todos.Source.Components.Entry.Menu
             BackgroundTexture = Resources.GetTexture(Textures.ReorderIcon);
         }
 
-        private bool CanBeMovedUp => Data.VisibleTodos.Value.FirstOrDefault() != _todo;
-        private bool CanBeMovedDown => Data.VisibleTodos.Value.LastOrDefault() != _todo;
+        private bool CanBeMovedUp => _todoList.VisibleTodos.Value.FirstOrDefault() != _todo;
+        private bool CanBeMovedDown => _todoList.VisibleTodos.Value.LastOrDefault() != _todo;
 
         private void OnUpClicked(object sender, MouseEventArgs e)
         {
             if (CanBeMovedUp)
-                Data.MoveUp(_todo);
+                _todoList.MoveUp(_todo);
         }
 
         private void OnDownClicked(object sender, MouseEventArgs e)
         {
             if (CanBeMovedDown)
-                Data.MoveDown(_todo);
+                _todoList.MoveDown(_todo);
         }
 
         private void OnMouseEnteredDown(object sender, MouseEventArgs e)

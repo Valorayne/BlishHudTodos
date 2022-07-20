@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Components.Menu;
+using Todos.Source.Models;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components
@@ -10,21 +11,23 @@ namespace Todos.Source.Components
     {
         private const int SCROLL_BAR_WIDTH = 15;
 
+        private readonly TodoListModel _todoList;
         private readonly Scrollbar _scrollBar;
         private readonly TodoListMenuBar _menuBar;
         private readonly TodoScrollView _scrollView;
 
-        public TodoListPanel()
+        public TodoListPanel(TodoListModel todoList)
         {
+            _todoList = todoList;
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.Fill;
 
-            _menuBar = new TodoListMenuBar { Parent = this };
-            _scrollView = new TodoScrollView(SaveScroll) { Parent = this };
+            _menuBar = new TodoListMenuBar(todoList) { Parent = this };
+            _scrollView = new TodoScrollView(todoList, SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
 
-            Data.AllTodos.Subscribe(this, (before, after) =>
+            _todoList.AllTodos.Subscribe(this, (before, after) =>
             {
                 if (before.Count < after.Count)
                     Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
@@ -74,7 +77,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            Data.AllTodos.Unsubscribe(this);
+            _todoList.AllTodos.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Todos.Source.Models.Resets;
+using Todos.Source.Persistence;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Models
 {
@@ -34,11 +36,11 @@ namespace Todos.Source.Models
             IconTooltip = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIconTooltip));
         }
 
-        private static bool GetIsDone(DateTime now, DateTime? lastExecution, IReset schedule, TimeSpan localTime, TimeSpan duration) 
-            => lastExecution.HasValue && schedule.IsDone(now, lastExecution.Value, localTime, duration);
+        private static bool GetIsDone(DateTime now, DateTime? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
+            => lastExecution.HasValue && reset.IsDone(now, lastExecution.Value, localTime, duration);
 
-        private static string GetIconTooltip(DateTime now, DateTime? lastExecution, IReset schedule, TimeSpan localTime, TimeSpan duration) 
-            => schedule.IconTooltip(now, lastExecution, localTime, duration);
+        private static string GetIconTooltip(DateTime now, DateTime? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
+            => reset.IconTooltip(now, lastExecution, localTime, duration);
 
         public void ToggleDone()
         {

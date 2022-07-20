@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Utils.Reactive
 {
     public interface IProperty<out T> : IDisposable
     {

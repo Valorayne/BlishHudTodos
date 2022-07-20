@@ -99,6 +99,7 @@
     <Compile Include="Source\Components\TodoSettingsView.cs" />
     <Compile Include="Source\Components\TodoVisualsManager.cs" />
     <Compile Include="Source\Components\TodoWindowToggleHotkey.cs" />
+    <Compile Include="Source\Models\TodoListModel.cs" />
     <Compile Include="Source\Models\Resets\DailyReset.cs" />
     <Compile Include="Source\Models\Resets\DurationReset.cs" />
     <Compile Include="Source\Models\Resets\IReset.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Source\Persistence\TodoScheduleType.cs" />
     <Compile Include="Source\TodoModule.cs" />
     <Compile Include="Source\Utils\CheckboxType.cs" />
-    <Compile Include="Source\Utils\Data.cs" />
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\Reactive\IProperty.cs" />
     <Compile Include="Source\Utils\Reactive\IVariable.cs" />

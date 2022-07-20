@@ -7,8 +7,11 @@ namespace Todos.Source.Components.Menu
 {
     public class AddNewTodoButton : Image
     {
-        public AddNewTodoButton() : base(Resources.GetTexture(Textures.AddNewIcon))
+        private readonly TodoListModel _todoList;
+
+        public AddNewTodoButton(TodoListModel todoList) : base(Resources.GetTexture(Textures.AddNewIcon))
         {
+            _todoList = todoList;
             Width = 40;
             Height = 40;
             BasicTooltipText = "Add new Todo";
@@ -16,7 +19,7 @@ namespace Todos.Source.Components.Menu
 
         protected override void OnClick(MouseEventArgs e)
         {
-            Data.AddNewTodo();
+            _todoList.AddNewTodo();
             base.OnClick(e);
         }
     }

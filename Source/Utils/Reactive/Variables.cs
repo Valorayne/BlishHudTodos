@@ -2,7 +2,7 @@
 using Blish_HUD;
 using Blish_HUD.Settings;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Utils.Reactive
 {
     public static class Variables
     {

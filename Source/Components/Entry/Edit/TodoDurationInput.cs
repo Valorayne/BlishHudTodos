@@ -1,6 +1,7 @@
 ﻿using System;
 using Blish_HUD.Controls;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components.Entry.Edit
 {

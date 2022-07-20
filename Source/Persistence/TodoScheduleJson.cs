@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Todos.Source.Persistence;
 
-namespace Todos.Source.Models
+namespace Todos.Source.Persistence
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class TodoScheduleJson

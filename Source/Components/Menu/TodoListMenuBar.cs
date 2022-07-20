@@ -1,5 +1,7 @@
 ﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
+using Todos.Source.Models;
+using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Menu
 {
@@ -7,7 +9,7 @@ namespace Todos.Source.Components.Menu
     {
         public const int HEIGHT = 40;
 
-        public TodoListMenuBar()
+        public TodoListMenuBar(TodoListModel todoList)
         {
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
             Height = HEIGHT;
@@ -16,7 +18,7 @@ namespace Todos.Source.Components.Menu
 
             new CloseTodoWindowButton { Parent = this };
             new TodoShowAlreadyDoneToggle { Parent = this };
-            new AddNewTodoButton { Parent = this };
+            new AddNewTodoButton(todoList) { Parent = this };
         }
     }
 }

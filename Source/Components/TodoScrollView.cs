@@ -39,21 +39,22 @@ namespace Todos.Source.Components
         private void OnVisibleTodosChanged(IReadOnlyList<TodoModel> newValue)
         {
             _saveScroll();
+            RemoveEntries();
+            foreach (var todo in newValue)
+                _entries.Add(todo, new TodoEntry(_settings, _todoList, todo, _saveScroll) { Parent = this });            
+        }
+
+        private void RemoveEntries()
+        {
             foreach (var entry in _entries.Values)
                 entry.Dispose();
             _entries.Clear();
-            foreach (var todo in newValue)
-                _entries.Add(todo, new TodoEntry(_settings, _todoList, todo, _saveScroll) { Parent = this });            
         }
 
         protected override void DisposeControl()
         {
             _todoList.VisibleTodos.Unsubscribe(this);
-
-            foreach (var entry in _entries.Values)
-                entry.Dispose();
-
-            _entries.Clear();
+            RemoveEntries();
             base.DisposeControl();
         }
     }

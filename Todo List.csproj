@@ -94,11 +94,14 @@
     <Compile Include="Source\Components\Messages\AllTodosDoneMessage.cs" />
     <Compile Include="Source\Components\Messages\ConfirmDeletionWindow.cs" />
     <Compile Include="Source\Components\Messages\NoTodosYetMessage.cs" />
+    <Compile Include="Source\Components\Settings\SettingRow.cs" />
+    <Compile Include="Source\Components\Settings\TodoSettingsLeft.cs" />
+    <Compile Include="Source\Components\Settings\TodoSettingsRight.cs" />
+    <Compile Include="Source\Components\Settings\TodoSettingsView.cs" />
     <Compile Include="Source\Components\TodoCornerIcon.cs" />
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
-    <Compile Include="Source\Components\TodoSettingsView.cs" />
     <Compile Include="Source\Components\TodoVisualsManager.cs" />
     <Compile Include="Source\Components\TodoWindowToggleHotkey.cs" />
     <Compile Include="Source\Models\SettingsModel.cs" />

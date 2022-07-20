@@ -19,6 +19,7 @@ namespace Todos.Source.Components
         public TodoListPanel(SettingsModel settings, TodoListModel todoList)
         {
             _todoList = todoList;
+            
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.Fill;

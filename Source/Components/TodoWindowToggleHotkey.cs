@@ -1,5 +1,6 @@
 ﻿using System;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components
 {
@@ -14,10 +15,7 @@ namespace Todos.Source.Components
             settings.ToggleWindowHotkey.Value.Activated += OnHotkeyActivated;
         }
 
-        private void OnHotkeyActivated(object sender, EventArgs e)
-        {
-            _settings.WindowMinimized.Value = !_settings.WindowMinimized.Value;
-        }
+        private void OnHotkeyActivated(object sender, EventArgs e) => _settings.WindowMinimized.Toggle();
 
         public void Dispose()
         {

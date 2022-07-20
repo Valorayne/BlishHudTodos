@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Source\Components\Entry\Content\TodoCheckbox.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoDescription.cs" />
+    <Compile Include="Source\Components\Entry\Content\TodoDescriptionInput.cs" />
+    <Compile Include="Source\Components\Entry\Content\TodoDescriptionLabel.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoEntryContent.cs" />
     <Compile Include="Source\Components\Entry\Content\TodoScheduleIcon.cs" />
     <Compile Include="Source\Components\Entry\Edit\TimeInput.cs" />

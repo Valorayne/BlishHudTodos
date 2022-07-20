@@ -13,17 +13,22 @@ namespace Todos.Source.Components.Entry.Edit
             _schedule = schedule;
             
             SelectedItem = schedule.Reset.Value.DropdownEntry;
-            BasicTooltipText = schedule.Reset.Value.DropdownEntryTooltip;
-            
             foreach (var dropdownEntry in ResetFactory.AllDropdownEntries)
                 Items.Add(dropdownEntry);
+
+            _schedule.Reset.Subscribe(this, reset => BasicTooltipText = reset.DropdownEntryTooltip);
         }
 
         protected override void OnValueChanged(ValueChangedEventArgs e)
         {
             _schedule.ScheduleDropdown.Value = e.CurrentValue;
-            BasicTooltipText = _schedule.Reset.Value.DropdownEntryTooltip;
             base.OnValueChanged(e);
+        }
+
+        protected override void DisposeControl()
+        {
+            _schedule.Reset.Unsubscribe(this);
+            base.DisposeControl();
         }
     }
 }

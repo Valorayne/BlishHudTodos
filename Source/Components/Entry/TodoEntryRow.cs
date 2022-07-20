@@ -18,32 +18,21 @@ namespace Todos.Source.Components.Entry
         public TodoEntryRow(SettingsModel settings, TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
             _todo = todo;
-            _content = new TodoEntryContent(settings, todo, hoverMenu) { Parent = this, Location = Point.Zero };
-            _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
             
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
-            UpdateHeight();
-
-            _editMenu.Clipboard.EnterPressed += OnEnterPressed;
+            
+            _content = new TodoEntryContent(settings, todo, hoverMenu) { Parent = this, Location = Point.Zero };
+            _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
+            
             _editMenu.Resized += OnEditMenuResized;
-
-            todo.IsEditing.Subscribe(this, v =>
-            {
-                _editMenu.Visible = v;
-                UpdateHeight();
-            });
+            todo.IsEditing
+                .Subscribe(this, v => _editMenu.Visible = v)
+                .Subscribe(this, _ => UpdateHeight());
         }
 
-        private void OnEditMenuResized(object sender, EventArgs eventArgs)
-        {
-            UpdateHeight();
-        }
-
-        private void OnEnterPressed(object sender, EventArgs e)
-        {
-            _todo.IsEditing.Value = false;
-        }
+        private void UpdateHeight() => Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
+        private void OnEditMenuResized(object sender, EventArgs eventArgs) => UpdateHeight();
 
         protected override void OnResized(ResizedEventArgs e)
         {
@@ -51,16 +40,10 @@ namespace Todos.Source.Components.Entry
             base.OnResized(e);
         }
 
-        private void UpdateHeight()
-        {
-            Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
-        }
-
         protected override void DisposeControl()
         {
             _todo.IsEditing.Unsubscribe(this);
             _editMenu.Resized -= OnEditMenuResized;
-            _editMenu.Clipboard.EnterPressed -= OnEnterPressed;
             base.DisposeControl();
         }
     }

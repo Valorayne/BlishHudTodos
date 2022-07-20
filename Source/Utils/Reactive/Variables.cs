@@ -122,5 +122,10 @@ namespace Todos.Source.Utils.Reactive
         {
             variable.Value = variable.Value.OrderBy(sorter).ToList();
         }
+        
+        public static void Toggle(this IVariable<bool> variable)
+        {
+            variable.Value = !variable.Value;
+        }
     }
 }

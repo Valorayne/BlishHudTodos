@@ -16,6 +16,12 @@ namespace Todos.Source.Components.Entry.Edit
         }
         
         private void OnTextChanged(object sender, EventArgs e) => _todo.ClipboardContent.Value = Text;
+        
+        protected override void OnEnterPressed(EventArgs e)
+        {
+            _todo.IsEditing.Value = false;
+            base.OnEnterPressed(e);
+        }
 
         protected override void DisposeControl()
         {

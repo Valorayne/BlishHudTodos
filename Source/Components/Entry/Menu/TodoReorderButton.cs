@@ -83,9 +83,12 @@ namespace Todos.Source.Components.Entry.Menu
         {
             _upButton.MouseEntered -= OnMouseEnteredUp;
             _upButton.MouseLeft -= OnMouseLeft;
+            _upButton.Click -= OnUpClicked;
             
             _downButton.MouseEntered -= OnMouseEnteredDown;
             _downButton.MouseLeft -= OnMouseLeft;
+            _downButton.Click -= OnDownClicked;
+            
             base.DisposeControl();
         }
     }

@@ -6,32 +6,39 @@ using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Components.Messages;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Subscriptions;
 
 namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntry : Panel
     {
-        public readonly TodoModel Todo;
-        
+        private readonly TodoModel _todo;
         private readonly Action _saveScroll;
+        
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly TodoEntryRow _row;
+        private readonly HoverSubscription _hoverSubscription;
 
         public TodoEntry(SettingsModel settings, TodoListModel todoList, TodoModel todo, Action saveScroll)
         {
-            Todo = todo;
+            _todo = todo;
             _saveScroll = saveScroll;
+            
+            WidthSizingMode = SizingMode.Fill;
 
             _hoverMenu = new TodoEntryHoverMenu(todoList, todo, OnDelete) { Parent = this };
             _row = new TodoEntryRow(settings, todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
-
-            todo.IsEditing.Subscribe(this, OnEditModeChanged);
-            
-            WidthSizingMode = SizingMode.Fill;
             Height = _row.Height;
 
+            todo.IsEditing.Subscribe(this, OnEditModeChanged);
             _row.Resized += OnRowResized;
+
+            _hoverSubscription = new HoverSubscription(this, _hoverMenu.Show, () =>
+            {
+                if (!_todo.IsEditing.Value)
+                    _hoverMenu.Hide();
+            });
         }
 
         private void OnEditModeChanged(bool isInEditMode)
@@ -55,39 +62,22 @@ namespace Todos.Source.Components.Entry
             ConfirmDeletionWindow.Spawn(location, () =>
             {
                 _saveScroll();
-                Todo.IsDeleted.Value = true;
+                _todo.IsDeleted.Value = true;
             });
-        }
-
-        private void RepositionHoverMenu()
-        {
-            if (_hoverMenu != null)
-                _hoverMenu.Location = new Point(Width - _hoverMenu.Width, 0);
         }
 
         protected override void OnResized(ResizedEventArgs e)
         {
-            RepositionHoverMenu();
+            if (_hoverMenu != null)
+                _hoverMenu.Location = new Point(Width - _hoverMenu.Width, 0);
             base.OnResized(e);
-        }
-
-        protected override void OnMouseEntered(MouseEventArgs e)
-        {
-            _hoverMenu.Show();
-            base.OnMouseEntered(e);
-        }
-
-        protected override void OnMouseLeft(MouseEventArgs e)
-        {
-            if (!Todo.IsEditing.Value)
-                _hoverMenu.Hide();
-            base.OnMouseLeft(e);
         }
 
         protected override void DisposeControl()
         {
             _row.Resized -= OnRowResized;
-            Todo.IsEditing.Unsubscribe(this);
+            _todo.IsEditing.Unsubscribe(this);
+            _hoverSubscription.Dispose();
             base.DisposeControl();
         }
     }

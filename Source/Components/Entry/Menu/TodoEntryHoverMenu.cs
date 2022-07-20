@@ -2,7 +2,6 @@
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Todos.Source.Models;
-using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry.Menu
 {

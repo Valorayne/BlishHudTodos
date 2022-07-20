@@ -2,6 +2,7 @@
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components.Entry.Menu
 {
@@ -15,7 +16,7 @@ namespace Todos.Source.Components.Entry.Menu
             Resources.GetTexture(Textures.EditIcon),
             Resources.GetTexture(Textures.EditIconHovered),
             WIDTH, WIDTH,
-            _ => todo.IsEditing.Value = !todo.IsEditing.Value)
+            _ => todo.IsEditing.Toggle())
         {
             _todo = todo;
             _todo.IsEditing.Subscribe(this, inEditMode => BasicTooltipText = inEditMode ? "Stop Editing" : "Edit");

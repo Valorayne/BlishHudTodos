@@ -3,6 +3,7 @@ using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components.Menu
 {
@@ -38,7 +39,7 @@ namespace Todos.Source.Components.Menu
 
         protected override void OnClick(MouseEventArgs e)
         {
-            _settings.ShowAlreadyDoneTasks.Value = !_settings.ShowAlreadyDoneTasks.Value;
+            _settings.ShowAlreadyDoneTasks.Toggle();
             _icon.Texture = EyeTexture;
             _icon.BasicTooltipText = EyeTooltip;
             base.OnClick(e);

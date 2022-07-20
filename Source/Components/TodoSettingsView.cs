@@ -89,7 +89,7 @@ namespace Todos.Source.Components
         
         private IDisposable AddBooleanSetting(Container parent, IVariable<bool> setting, string label, string tooltip = null)
         {
-            var row = TodoEditRow.For(parent, new Checkbox { Checked = setting.Value }, label, tooltip);
+            var row = TodoInputRow.For(parent, new Checkbox { Checked = setting.Value }, label, tooltip);
             
             var interactionHandler = new EventHandler<CheckChangedEvent>((sender, e) => setting.Value = e.Checked);
             row.CheckedChanged += interactionHandler;
@@ -105,7 +105,7 @@ namespace Todos.Source.Components
         
         private IDisposable AddSliderSetting(Container parent, IVariable<float> setting, string label, string tooltip = null)
         {
-            var row = TodoEditRow.For(parent, new TrackBar { Value = setting.Value, MinValue = 0, MaxValue = 1, SmallStep = true }, label, tooltip);
+            var row = TodoInputRow.For(parent, new TrackBar { Value = setting.Value, MinValue = 0, MaxValue = 1, SmallStep = true }, label, tooltip);
             
             var interactionHandler = new EventHandler<ValueEventArgs<float>>((sender, e) => setting.Value = e.Value);
             row.ValueChanged += interactionHandler;
@@ -121,7 +121,7 @@ namespace Todos.Source.Components
         
         private IDisposable AddDropdownSetting<T>(Container parent, IVariable<T> setting, string label, string tooltip = null) where T : Enum
         {
-            var row = TodoEditRow.For(parent, new Dropdown { SelectedItem = setting.Value.ToString()}, label, tooltip);
+            var row = TodoInputRow.For(parent, new Dropdown { SelectedItem = setting.Value.ToString()}, label, tooltip);
             foreach (var name in Enum.GetNames(typeof(T)))
                 row.Items.Add(name);
             

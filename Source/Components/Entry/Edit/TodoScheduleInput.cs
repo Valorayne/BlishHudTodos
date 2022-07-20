@@ -9,9 +9,9 @@ namespace Todos.Source.Components.Entry.Edit
     {
         private readonly TodoScheduleModel _schedule;
         
-        private readonly TodoEditRow _localTimeRow;
+        private readonly TodoInputRow _localTimeRow;
         private readonly TodoScheduleTypeInput _scheduleType;
-        private readonly TodoEditRow _durationRow;
+        private readonly TodoInputRow _durationRow;
 
         public TodoScheduleInput(TodoScheduleModel schedule)
         {
@@ -21,13 +21,13 @@ namespace Todos.Source.Components.Entry.Edit
             HeightSizingMode = SizingMode.AutoSize;
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             
-            _scheduleType = TodoEditRow.For(this, new TodoScheduleTypeInput(schedule), "Reset Schedule",
+            _scheduleType = TodoInputRow.For(this, new TodoScheduleTypeInput(schedule), "Reset Schedule",
                 "Whether/when this task should automatically be reset");
             var localTimeInput = new TodoLocalTimeInput(schedule.LocalTime);
-            _localTimeRow = new TodoEditRow(localTimeInput, "Local Time", 
+            _localTimeRow = new TodoInputRow(localTimeInput, "Local Time", 
                 "The local time at which this task should reset automatically") { Parent = this };
             var durationInput = new TodoDurationInput(schedule.Duration);
-            _durationRow = new TodoEditRow(durationInput, "Duration",
+            _durationRow = new TodoInputRow(durationInput, "Duration",
                 "The duration after which this task should reset automatically") { Parent = this };
             
             _schedule.Reset.Subscribe(this, v =>

@@ -20,7 +20,7 @@ namespace Todos.Source.Components.Entry.Edit
             OuterControlPadding = Vector2.One * PADDING;
             
             _schedule = new TodoScheduleInput(todo.Schedule) { Parent = this };
-            _clipboard = TodoEditRow.For(this, new TodoClipboardContentInput(todo), "Clipboard Content",
+            _clipboard = TodoInputRow.For(this, new TodoClipboardContentInput(todo), "Clipboard Content",
                 "Content (e.g. map waypoints) to copy to your clipboard when clicking on this task");
 
             _schedule.Resized += OnScheduleResized;

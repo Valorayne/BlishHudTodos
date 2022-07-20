@@ -18,18 +18,13 @@ namespace Todos.Source.Components.Messages
         public NoTodosYetMessage(TodoListModel todoList) : base(TEXT, LOCATION)
         {
             _todoList = todoList;
-            _todoList.AllTodos.Subscribe(this, UpdateVisibility);
+            _todoList.AllTodos.Subscribe(this, newValue => Visible = newValue.Count == 0);
         }
 
         protected override void DisposeControl()
         {
             _todoList.AllTodos.Unsubscribe(this);
             base.DisposeControl();
-        }
-
-        private void UpdateVisibility(IReadOnlyList<TodoModel> newValue)
-        {
-            Visible = newValue.Count == 0;
         }
     }
 }

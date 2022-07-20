@@ -85,7 +85,7 @@
     <Compile Include="Source\Components\Entry\TodoEntryRow.cs" />
     <Compile Include="Source\Components\Generic\CenteredMessage.cs" />
     <Compile Include="Source\Components\Generic\HoverButton.cs" />
-    <Compile Include="Source\Components\Generic\TodoEditRow.cs" />
+    <Compile Include="Source\Components\Generic\TodoInputRow.cs" />
     <Compile Include="Source\Components\Generic\TooltipNotification.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\CloseTodoWindowButton.cs" />

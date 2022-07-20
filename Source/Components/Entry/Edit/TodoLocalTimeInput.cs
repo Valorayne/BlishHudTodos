@@ -9,6 +9,7 @@ namespace Todos.Source.Components.Entry.Edit
     {
         private readonly TimeInput _hours;
         private readonly TimeInput _minutes;
+        private readonly IProperty<TimeSpan> _updater;
 
         public TodoLocalTimeInput(IVariable<TimeSpan> localTime)
         {
@@ -19,11 +20,8 @@ namespace Todos.Source.Components.Entry.Edit
             _hours = new TimeInput(localTime.Value.Hours, "Hours", 23) { Parent = this };
             _minutes = new TimeInput(localTime.Value.Minutes, "Minutes", 59) { Parent = this };
 
-            void OnTimeChanged(int _) => 
-                localTime.Value = TimeSpan.FromHours(_hours.Time.Value) + TimeSpan.FromMinutes(_minutes.Time.Value);
-
-            _hours.Time.Subscribe(this, OnTimeChanged);
-            _minutes.Time.Subscribe(this, OnTimeChanged);
+            _updater = _hours.Time.CombineWith(_minutes.Time, (hours, minutes) => new TimeSpan(0, hours, minutes, 0))
+                .Subscribe(this, v => localTime.Value = v);
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -35,8 +33,7 @@ namespace Todos.Source.Components.Entry.Edit
         
         protected override void DisposeControl()
         {
-            _hours.Time.Unsubscribe(this);
-            _minutes.Time.Unsubscribe(this);
+            _updater.Dispose();
             base.DisposeControl();
         }
     }

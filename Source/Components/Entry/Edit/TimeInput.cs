@@ -38,15 +38,8 @@ namespace Todos.Source.Components.Entry.Edit
             TextChanged += OnTextChanged;
         }
         
-        private void OnTextChanged(object sender, EventArgs e)
-        {
-            AssertValidity();
-        }
-        
-        private void OnLeftMouseReleased(object sender, MouseEventArgs e)
-        {
-            _dragStartPoint = null;
-        }
+        private void OnTextChanged(object sender, EventArgs e) => AssertValidity();
+        private void OnLeftMouseReleased(object sender, MouseEventArgs e) => _dragStartPoint = null;
 
         protected override void OnLeftMouseButtonPressed(MouseEventArgs e)
         {
@@ -78,6 +71,8 @@ namespace Todos.Source.Components.Entry.Edit
 
         protected override void DisposeControl()
         {
+            Time.Dispose();
+            TextChanged -= OnTextChanged;
             GameService.Input.Mouse.LeftMouseButtonReleased -= OnLeftMouseReleased;
             GameService.Input.Mouse.MouseMoved -= OnMouseMoved;
             base.DisposeControl();

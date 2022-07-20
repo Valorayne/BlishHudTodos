@@ -10,6 +10,7 @@ namespace Todos.Source.Components.Entry.Edit
         private readonly TimeInput _days;
         private readonly TimeInput _hours;
         private readonly TimeInput _minutes;
+        private readonly IProperty<TimeSpan> _updater;
 
         public TodoDurationInput(IVariable<TimeSpan> duration)
         {
@@ -21,16 +22,8 @@ namespace Todos.Source.Components.Entry.Edit
             _hours = new TimeInput(duration.Value.Hours, "Hours", 23) { Parent = this };
             _minutes = new TimeInput(duration.Value.Minutes, "Minutes", 59) { Parent = this };
 
-            void OnTimeChanged(int _) => duration.Value = new TimeSpan(
-                int.Parse(_days.Text), 
-                int.Parse(_hours.Text), 
-                int.Parse(_minutes.Text), 
-                0
-            );
-            
-            _days.Time.Subscribe(this, OnTimeChanged);
-            _hours.Time.Subscribe(this, OnTimeChanged);
-            _minutes.Time.Subscribe(this, OnTimeChanged);
+            _updater = _days.Time.CombineWith(_hours.Time, _minutes.Time, (days, hours, minutes) => new TimeSpan(days, hours, minutes, 0))
+                .Subscribe(this, v => duration.Value = v);
         }
 
         protected override void OnResized(ResizedEventArgs e)
@@ -43,9 +36,7 @@ namespace Todos.Source.Components.Entry.Edit
         
         protected override void DisposeControl()
         {
-            _days.Time.Unsubscribe(this);
-            _hours.Time.Unsubscribe(this);
-            _minutes.Time.Unsubscribe(this);
+            _updater.Dispose();
             base.DisposeControl();
         }
     }

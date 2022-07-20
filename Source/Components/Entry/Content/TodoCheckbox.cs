@@ -3,6 +3,7 @@ using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Subscriptions;
 
 namespace Todos.Source.Components.Entry.Content
 {
@@ -13,7 +14,7 @@ namespace Todos.Source.Components.Entry.Content
 
         private readonly SettingsModel _settings;
         private readonly TodoScheduleModel _schedule;
-        private readonly Image _hovered;
+        private readonly HoverSubscription _hoverSubscription;
 
         public TodoCheckbox(SettingsModel settings, TodoScheduleModel schedule)
         {
@@ -23,43 +24,18 @@ namespace Todos.Source.Components.Entry.Content
             Width = HEADER_HEIGHT;
             Height = HEADER_HEIGHT;
 
-            var background = new Image(CheckboxType.GetBackgroundImage()) { Parent = this, Location = OFFSET, Size = SIZE };
-            _hovered = new Image(CheckboxType.GetHoveredImage()) { Parent = this, Location = OFFSET, Size = SIZE, Visible = false };
-            var @checked = new Image(CheckboxType.GetCheckedImage())
-            {
-                Parent = this, 
-                Location = OFFSET, 
-                Size = SIZE, 
-                Visible = schedule.IsDone.Value, 
-                BasicTooltipText = GetTooltipText(schedule)
-            };
-            
-            schedule.IsDone.Subscribe(this, isDone =>
-            {
-                @checked.Visible = isDone;
-                @checked.BasicTooltipText = GetTooltipText(_schedule);
-            });
-            
-            settings.CheckboxType.Subscribe(this, _ =>
-            {
-                background.Texture = CheckboxType.GetBackgroundImage();
-                _hovered.Texture = CheckboxType.GetHoveredImage();
-                @checked.Texture = CheckboxType.GetCheckedImage();
-            });
-        }
+            var background = new Image(Resources.GetTexture(Textures.Empty)) { Parent = this, Location = OFFSET, Size = SIZE };
+            var hovered = new Image(Resources.GetTexture(Textures.Empty)) { Parent = this, Location = OFFSET, Size = SIZE, Visible = false };
+            var @checked = new Image(Resources.GetTexture(Textures.Empty)) { Parent = this, Location = OFFSET, Size = SIZE };
 
-        private CheckboxType CheckboxType => _settings.CheckboxType.Value;
+            schedule.IsDone.Subscribe(this, isDone => @checked.Visible = isDone);
+            schedule.CheckboxTooltip.Subscribe(this, tooltip => @checked.BasicTooltipText = tooltip);
+            settings.CheckboxType
+                .Subscribe(this, checkboxType => background.Texture = checkboxType.GetBackgroundImage())
+                .Subscribe(this, checkboxType => hovered.Texture = checkboxType.GetHoveredImage())
+                .Subscribe(this, checkboxType => @checked.Texture = checkboxType.GetCheckedImage());
 
-        protected override void OnMouseEntered(MouseEventArgs e)
-        {
-            _hovered.Visible = true;
-            base.OnMouseEntered(e);
-        }
-
-        protected override void OnMouseLeft(MouseEventArgs e)
-        {
-            _hovered.Visible = false;
-            base.OnMouseLeft(e);
+            _hoverSubscription = new HoverSubscription(this, () => hovered.Visible = true, () => hovered.Visible = false);
         }
 
         protected override void OnClick(MouseEventArgs e)
@@ -68,17 +44,12 @@ namespace Todos.Source.Components.Entry.Content
             base.OnClick(e);
         }
 
-        private string GetTooltipText(TodoScheduleModel todo)
-        {
-            return todo.IsDone.Value
-                ? $"Done: {todo.LastExecution.Value?.ToDaysSinceString()}, {_schedule.LastExecution.Value?.ToShortTimeString()}" 
-                : null;
-        }
-
         protected override void DisposeControl()
         {
             _schedule.IsDone.Unsubscribe(this);
+            _schedule.CheckboxTooltip.Unsubscribe(this);
             _settings.CheckboxType.Unsubscribe(this);
+            _hoverSubscription.Dispose();
             base.DisposeControl();
         }
     }

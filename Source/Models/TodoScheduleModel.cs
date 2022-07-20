@@ -20,6 +20,7 @@ namespace Todos.Source.Models
         public readonly IProperty<DateTime?> LastExecution;
         public readonly IProperty<bool> IsDone;
         public readonly IProperty<string> IconTooltip;
+        public readonly IProperty<string> CheckboxTooltip;
 
         public TodoScheduleModel(TodoScheduleJson json)
         {
@@ -34,6 +35,7 @@ namespace Todos.Source.Models
 
             IsDone = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIsDone));
             IconTooltip = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIconTooltip));
+            CheckboxTooltip = Add(IsDone.CombineWith(LastExecution, GetCheckboxTooltip));
         }
 
         private static bool GetIsDone(DateTime now, DateTime? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
@@ -41,6 +43,9 @@ namespace Todos.Source.Models
 
         private static string GetIconTooltip(DateTime now, DateTime? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
             => reset.IconTooltip(now, lastExecution, localTime, duration);
+
+        private static string GetCheckboxTooltip(bool isDone, DateTime? lastExecution)
+            => !isDone ? null : $"Done: {lastExecution?.ToDaysSinceString()}, {lastExecution?.ToShortTimeString()}";
 
         public void ToggleDone()
         {

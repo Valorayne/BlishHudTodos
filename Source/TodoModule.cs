@@ -23,10 +23,8 @@ namespace Todos.Source
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
-		protected override void DefineSettings(SettingCollection settings)
-		{
-			_settings = new SettingsModel(settings);
-		}
+		protected override void DefineSettings(SettingCollection settings) => _settings = new SettingsModel(settings);
+		public override IView GetSettingsView() => new TodoSettingsView(_settings);
 
 		protected override async Task LoadAsync()
 		{
@@ -41,11 +39,6 @@ namespace Todos.Source
 		{
 			_visuals?.OnModuleLoaded();
 			base.OnModuleLoaded(e);
-		}
-
-		public override IView GetSettingsView()
-		{
-			return new TodoSettingsView(_settings);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -64,7 +57,7 @@ namespace Todos.Source
 			ConfirmDeletionWindow.Dispose();
 
 			Resources.Dispose();
-			_settings.Dispose();
+			_settings?.Dispose();
 		}
 	}
 }

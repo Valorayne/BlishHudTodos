@@ -131,6 +131,7 @@
     <Compile Include="Source\Utils\Resources.cs" />
     <Compile Include="Source\Utils\SimpleDisposable.cs" />
     <Compile Include="Source\Utils\Subscriptions\BackgroundTextureSubscription.cs" />
+    <Compile Include="Source\Utils\Subscriptions\HoverSubscription.cs" />
     <Compile Include="Source\Utils\TimeService.cs" />
     <Compile Include="Source\Utils\Utility.cs" />
   </ItemGroup>

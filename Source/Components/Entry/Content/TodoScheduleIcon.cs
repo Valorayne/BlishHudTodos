@@ -27,11 +27,10 @@ namespace Todos.Source.Components.Entry.Content
                 Height = 32,
             };
 
-            schedule.IconTooltip.Subscribe(this, tooltip =>
-            {
-                icon.Texture = Resources.GetTexture(tooltip.IsNullOrEmpty() ? Textures.Empty : Textures.ScheduleIcon);
-                icon.BasicTooltipText = tooltip;
-            });
+            schedule.IconTooltip
+                .Subscribe(this, tooltip => icon.BasicTooltipText = tooltip)
+                .Subscribe(this, tooltip => icon.Texture = Resources.GetTexture(
+                    tooltip.IsNullOrEmpty() ? Textures.Empty : Textures.ScheduleIcon));
         }
 
         protected override void DisposeControl()

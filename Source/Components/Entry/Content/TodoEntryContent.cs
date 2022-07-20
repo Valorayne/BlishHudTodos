@@ -13,8 +13,7 @@ namespace Todos.Source.Components.Entry.Content
         private readonly BackgroundTextureSubscription _hoverSubscription;
         private readonly TodoCheckbox _checkbox;
         private readonly TodoScheduleIcon _icon;
-        
-        public TodoDescription Description { get; }
+        private readonly TodoDescription _description;
 
         public TodoEntryContent(SettingsModel settings, TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
@@ -24,16 +23,17 @@ namespace Todos.Source.Components.Entry.Content
 
             _checkbox = new TodoCheckbox(settings, todo.Schedule) { Parent = this };
             _icon = new TodoScheduleIcon(todo.Schedule) { Parent = this };
-            Description = new TodoDescription(todo, hoverMenu) { Parent = this };
+            _description = new TodoDescription(todo, hoverMenu) { Parent = this };
 
-            _hoverSubscription = new BackgroundTextureSubscription(this, Resources.GetTexture(Textures.Header),
+            _hoverSubscription = new BackgroundTextureSubscription(this, 
+                Resources.GetTexture(Textures.Header),
                 Resources.GetTexture(Textures.HeaderHovered));
         }
 
         protected override void OnResized(ResizedEventArgs e)
         {
-            if (Description != null)
-                Description.Width = Width - _checkbox.Width - _icon.Width - PADDING_RIGHT;
+            if (_description != null)
+                _description.Width = Width - _checkbox.Width - _icon.Width - PADDING_RIGHT;
             base.OnResized(e);
         }
 

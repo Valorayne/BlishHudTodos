@@ -28,14 +28,7 @@ namespace Todos.Source.Components.Entry.Content
         }
         
         private static string GetTooltip(string clipboardContent) 
-            => clipboardContent?.Trim()?.IsNullOrEmpty() ?? true ? null : "Click to copy to clipboard";
-
-        protected override void DisposeControl()
-        {
-            _todo.Description.Unsubscribe(this);
-            _todo.ClipboardContent.Unsubscribe(this);
-            base.DisposeControl();
-        }
+            => clipboardContent?.Trim().IsNullOrEmpty() ?? true ? null : "Click to copy to clipboard";
 
         protected override void OnClick(MouseEventArgs e)
         {
@@ -45,6 +38,14 @@ namespace Todos.Source.Components.Entry.Content
                     .ContinueWith(_ => TooltipNotification.Spawn("Content copied to clipboard!", e.MousePosition));
             }
             base.OnClick(e);
+        }
+
+        protected override void DisposeControl()
+        {
+            _todo.Description.Unsubscribe(this);
+            _todo.ClipboardContent.Unsubscribe(this);
+            _todo.IsEditing.Unsubscribe(this);
+            base.DisposeControl();
         }
     }
 }

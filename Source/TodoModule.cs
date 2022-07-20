@@ -58,12 +58,13 @@ namespace Todos.Source
 		{
 			_visuals?.Dispose();
 			_todoList?.Dispose();
-			_settings.Dispose();
 
 			TimeService.Dispose();
 			SaveScheduler.Dispose();
-			Resources.Dispose();
 			ConfirmDeletionWindow.Dispose();
+
+			Resources.Dispose();
+			_settings.Dispose();
 		}
 	}
 }

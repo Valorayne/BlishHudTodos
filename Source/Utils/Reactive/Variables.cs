@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Blish_HUD;
 using Blish_HUD.Settings;
 
@@ -104,6 +106,21 @@ namespace Todos.Source.Utils.Reactive
                 e.Unsubscribe(result);
             };
             return result;
+        }
+
+        public static void Add<T>(this IVariable<List<T>> variable, T element)
+        {
+            variable.Value = variable.Value.Append(element).ToList();
+        }
+        
+        public static void Remove<T>(this IVariable<List<T>> variable, T element)
+        {
+            variable.Value = variable.Value.Where(v => !EqualityComparer<T>.Default.Equals(v, element)).ToList();
+        }
+        
+        public static void OrderBy<T>(this IVariable<List<T>> variable, Func<T, long> sorter)
+        {
+            variable.Value = variable.Value.OrderBy(sorter).ToList();
         }
     }
 }

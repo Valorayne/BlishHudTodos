@@ -33,34 +33,24 @@ namespace Todos.Source.Models
                 SetupTodo(todo);
         }
 
-        private void SetupTodo(TodoModel todo)
+        private TodoModel SetupTodo(TodoModel todo)
         {
-            void SortAllTodos() => _allTodos.Value = AllTodos.Value.OrderBy(t => t.OrderIndex.Value).ToList();
-            todo.OrderIndex.Subscribe(this, _ => SortAllTodos());
-            todo.IsVisible.Subscribe(this, _ => SortAllTodos());
-            todo.IsDeleted.Subscribe(this, _ => OnTodoDeleted(todo), false);
+            todo.OrderIndex.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
+            todo.IsVisible.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
+            todo.IsDeleted.Subscribe(this, _ => _allTodos.Remove(TearDownTodo(todo)), false);
+            return todo;
         }
 
-        private void OnTodoDeleted(TodoModel todo)
-        {
-            TearDownTodo(todo);
-            _allTodos.Value = AllTodos.Value.Where(t => t != todo).ToList();
-        }
-
-        private void TearDownTodo(TodoModel todo)
+        private TodoModel TearDownTodo(TodoModel todo)
         {
             todo.IsDeleted.Unsubscribe(this);
             todo.OrderIndex.Unsubscribe(this);
             todo.IsVisible.Unsubscribe(this);
             todo.Dispose();
+            return todo;
         }
 
-        public void AddNewTodo()
-        {
-            var todo = new TodoModel(_settings, new TodoJson(), true);
-            SetupTodo(todo);
-            _allTodos.Value = AllTodos.Value.Append(todo).ToList();
-        }
+        public void AddNewTodo() => _allTodos.Add(SetupTodo(new TodoModel(_settings, new TodoJson(), true)));
 
         public void MoveUp(TodoModel todo)
         {

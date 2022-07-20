@@ -6,15 +6,18 @@ namespace Todos.Source.Components
 {
     public sealed class TodoCornerIcon : CornerIcon
     {
-        public TodoCornerIcon()
+        private readonly SettingsModel _settings;
+
+        public TodoCornerIcon(SettingsModel settings)
         {
+            _settings = settings;
             Icon = Resources.GetTexture(Textures.CornerIcon);
             BasicTooltipText = "Todos";
         }
 
         protected override void OnClick(MouseEventArgs e)
         {
-            Settings.WindowMinimized.Value = false;
+            _settings.WindowMinimized.Value = false;
             base.OnClick(e);
         }
     }

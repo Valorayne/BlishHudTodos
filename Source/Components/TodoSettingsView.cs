@@ -13,6 +13,8 @@ namespace Todos.Source.Components
 {
     public class TodoSettingsView : View
     {
+        private readonly SettingsModel _settings;
+        
         private FlowPanel _leftPanel;
         private IDisposable _showWindowOnMap;
         private IDisposable _backgroundOpacity;
@@ -23,6 +25,11 @@ namespace Todos.Source.Components
         private FlowPanel _rightPanel;
         private IDisposable _toggleWindowHotkey;
         private IDisposable _checkboxType;
+
+        public TodoSettingsView(SettingsModel settings)
+        {
+            _settings = settings;
+        }
 
         protected override void Build(Container buildPanel)
         {
@@ -35,17 +42,17 @@ namespace Todos.Source.Components
                 OuterControlPadding = new Vector2(10, 10)
             };
 
-            _alwaysShowWindow = AddBooleanSetting(_leftPanel, Settings.AlwaysShowWindow, "Always visible",
+            _alwaysShowWindow = AddBooleanSetting(_leftPanel, _settings.AlwaysShowWindow, "Always visible",
                 "Whether or not the Todos window should also be shown during\r\ncutscenes, the character selection screen and loading screens");
-            _showWindowOnMap = AddBooleanSetting(_leftPanel, Settings.ShowWindowOnMap, "Show on map", 
+            _showWindowOnMap = AddBooleanSetting(_leftPanel, _settings.ShowWindowOnMap, "Show on map", 
                 "Whether or not the Todos window should\r\nalso be shown while the map is opened");
-            _fixatedWindow = AddBooleanSetting(_leftPanel, Settings.FixatedWindow, "Fixated Window",
+            _fixatedWindow = AddBooleanSetting(_leftPanel, _settings.FixatedWindow, "Fixated Window",
                 "When fixated, the Todos window can neither be moved nor resized");
-            _backgroundOpacity = AddSliderSetting(_leftPanel, Settings.BackgroundOpacity,
+            _backgroundOpacity = AddSliderSetting(_leftPanel, _settings.BackgroundOpacity,
                 "Background opacity", "The opacity of the window background");
-            _opacityWhenNotFocussed = AddSliderSetting(_leftPanel, Settings.WindowOpacityWhenNotFocussed,
+            _opacityWhenNotFocussed = AddSliderSetting(_leftPanel, _settings.WindowOpacityWhenNotFocussed,
                 "Unfocused opacity", "The opacity of the window when you're not currently using it");
-            _checkboxType = AddDropdownSetting(_leftPanel, Settings.CheckboxType, "Checkbox Type", 
+            _checkboxType = AddDropdownSetting(_leftPanel, _settings.CheckboxType, "Checkbox Type", 
                 "The visual appearance of the checkboxes of todo entries"); 
 
             _rightPanel = new FlowPanel
@@ -58,7 +65,7 @@ namespace Todos.Source.Components
                 Location = new Point(buildPanel.Width / 2, 0)
             };
 
-            _toggleWindowHotkey = AddKeybindingSetting(_rightPanel, Settings.ToggleWindowHotkey, "Show/Hide Window",
+            _toggleWindowHotkey = AddKeybindingSetting(_rightPanel, _settings.ToggleWindowHotkey, "Show/Hide Window",
                 "Maximizes or minimizes the Todos window");
             
             base.Build(buildPanel);

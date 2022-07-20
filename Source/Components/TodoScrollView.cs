@@ -17,10 +17,12 @@ namespace Todos.Source.Components
         private const int INNER_PADDING = 5;
         
         private readonly Dictionary<TodoModel, TodoEntry> _entries = new Dictionary<TodoModel, TodoEntry>();
+        private readonly SettingsModel _settings;
         private readonly TodoListModel _todoList;
         
-        public TodoScrollView(TodoListModel todoList, Action saveScroll)
+        public TodoScrollView(SettingsModel settings, TodoListModel todoList, Action saveScroll)
         {
+            _settings = settings;
             _todoList = todoList;
             _saveScroll = saveScroll;
             
@@ -41,7 +43,7 @@ namespace Todos.Source.Components
                 entry.Dispose();
             _entries.Clear();
             foreach (var todo in newValue)
-                _entries.Add(todo, new TodoEntry(_todoList, todo, _saveScroll) { Parent = this });            
+                _entries.Add(todo, new TodoEntry(_settings, _todoList, todo, _saveScroll) { Parent = this });            
         }
 
         protected override void DisposeControl()

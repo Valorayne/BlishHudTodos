@@ -10,12 +10,14 @@ namespace Todos.Source.Components.Entry.Content
     {
         private readonly Point SIZE = new Point(32, 32);
         private readonly Point OFFSET = new Point(2, 2);
-        
+
+        private readonly SettingsModel _settings;
         private readonly TodoScheduleModel _schedule;
         private readonly Image _hovered;
 
-        public TodoCheckbox(TodoScheduleModel schedule)
+        public TodoCheckbox(SettingsModel settings, TodoScheduleModel schedule)
         {
+            _settings = settings;
             _schedule = schedule;
             
             Width = HEADER_HEIGHT;
@@ -38,7 +40,7 @@ namespace Todos.Source.Components.Entry.Content
                 @checked.BasicTooltipText = GetTooltipText(_schedule);
             });
             
-            Settings.CheckboxType.Subscribe(this, _ =>
+            settings.CheckboxType.Subscribe(this, _ =>
             {
                 background.Texture = CheckboxType.GetBackgroundImage();
                 _hovered.Texture = CheckboxType.GetHoveredImage();
@@ -46,7 +48,7 @@ namespace Todos.Source.Components.Entry.Content
             });
         }
 
-        private static CheckboxType CheckboxType => Settings.CheckboxType.Value;
+        private CheckboxType CheckboxType => _settings.CheckboxType.Value;
 
         protected override void OnMouseEntered(MouseEventArgs e)
         {
@@ -76,7 +78,7 @@ namespace Todos.Source.Components.Entry.Content
         protected override void DisposeControl()
         {
             _schedule.IsDone.Unsubscribe(this);
-            Settings.CheckboxType.Unsubscribe(this);
+            _settings.CheckboxType.Unsubscribe(this);
             base.DisposeControl();
         }
     }

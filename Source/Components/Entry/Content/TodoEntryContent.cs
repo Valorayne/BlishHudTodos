@@ -16,13 +16,13 @@ namespace Todos.Source.Components.Entry.Content
         
         public TodoDescription Description { get; }
 
-        public TodoEntryContent(TodoModel todo, TodoEntryHoverMenu hoverMenu)
+        public TodoEntryContent(SettingsModel settings, TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleLeftToRight;
 
-            _checkbox = new TodoCheckbox(todo.Schedule) { Parent = this };
+            _checkbox = new TodoCheckbox(settings, todo.Schedule) { Parent = this };
             _icon = new TodoScheduleIcon(todo.Schedule) { Parent = this };
             Description = new TodoDescription(todo, hoverMenu) { Parent = this };
 

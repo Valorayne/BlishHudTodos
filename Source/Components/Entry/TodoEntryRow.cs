@@ -5,6 +5,7 @@ using Todos.Source.Components.Entry.Content;
 using Todos.Source.Components.Entry.Edit;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Models;
+using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry
 {
@@ -14,10 +15,10 @@ namespace Todos.Source.Components.Entry
         private readonly TodoEntryContent _content;
         private readonly TodoEditPanel _editMenu;
 
-        public TodoEntryRow(TodoModel todo, TodoEntryHoverMenu hoverMenu)
+        public TodoEntryRow(SettingsModel settings, TodoModel todo, TodoEntryHoverMenu hoverMenu)
         {
             _todo = todo;
-            _content = new TodoEntryContent(todo, hoverMenu) { Parent = this, Location = Point.Zero };
+            _content = new TodoEntryContent(settings, todo, hoverMenu) { Parent = this, Location = Point.Zero };
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
             
             FlowDirection = ControlFlowDirection.SingleTopToBottom;

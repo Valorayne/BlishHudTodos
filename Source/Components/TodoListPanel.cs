@@ -16,15 +16,15 @@ namespace Todos.Source.Components
         private readonly TodoListMenuBar _menuBar;
         private readonly TodoScrollView _scrollView;
 
-        public TodoListPanel(TodoListModel todoList)
+        public TodoListPanel(SettingsModel settings, TodoListModel todoList)
         {
             _todoList = todoList;
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.Fill;
 
-            _menuBar = new TodoListMenuBar(todoList) { Parent = this };
-            _scrollView = new TodoScrollView(todoList, SaveScroll) { Parent = this };
+            _menuBar = new TodoListMenuBar(settings, todoList) { Parent = this };
+            _scrollView = new TodoScrollView(settings, todoList, SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
 
             _todoList.AllTodos.Subscribe(this, (before, after) =>

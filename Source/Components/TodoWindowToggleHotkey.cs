@@ -5,20 +5,23 @@ namespace Todos.Source.Components
 {
     public class TodoWindowToggleHotkey : IDisposable
     {
-        public TodoWindowToggleHotkey()
+        private readonly SettingsModel _settings;
+
+        public TodoWindowToggleHotkey(SettingsModel settings)
         {
-            Settings.ToggleWindowHotkey.Value.Enabled = true;
-            Settings.ToggleWindowHotkey.Value.Activated += OnHotkeyActivated;
+            _settings = settings;
+            settings.ToggleWindowHotkey.Value.Enabled = true;
+            settings.ToggleWindowHotkey.Value.Activated += OnHotkeyActivated;
         }
 
-        private static void OnHotkeyActivated(object sender, EventArgs e)
+        private void OnHotkeyActivated(object sender, EventArgs e)
         {
-            Settings.WindowMinimized.Value = !Settings.WindowMinimized.Value;
+            _settings.WindowMinimized.Value = !_settings.WindowMinimized.Value;
         }
 
         public void Dispose()
         {
-            Settings.ToggleWindowHotkey.Value.Activated -= OnHotkeyActivated;
+            _settings.ToggleWindowHotkey.Value.Activated -= OnHotkeyActivated;
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Todos.Source.Components
 {
     public class TodoListWindow : StandardWindow
     {
+        private readonly SettingsModel _settings;
+        
         private const int MIN_WIDTH = 300;
         private const int MAX_WIDTH = 1000;
         private const int MIN_HEIGHT = 150;
@@ -18,28 +20,30 @@ namespace Todos.Source.Components
 
         private bool _hovered;
 
-        private static Rectangle GetWindowRegion => new Rectangle(0, -28,
-            Math.Max(MIN_WIDTH, Math.Min(MAX_WIDTH, Settings.WindowWidth.Value)),
-            Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, Settings.WindowHeight.Value)));
-        private static Rectangle GetContentRegion => new Rectangle(0, -28, GetWindowRegion.Width, GetWindowRegion.Height + 33);
+        private static Rectangle GetWindowRegion(SettingsModel settings) => new Rectangle(0, -28,
+            Math.Max(MIN_WIDTH, Math.Min(MAX_WIDTH, settings.WindowWidth.Value)),
+            Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, settings.WindowHeight.Value)));
+        
+        private static Rectangle GetContentRegion(SettingsModel settings) => new Rectangle(0, -28, 
+            GetWindowRegion(settings).Width, GetWindowRegion(settings).Height + 33);
 
-        public TodoListWindow(TodoListModel todoList) : base(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion)
+        public TodoListWindow(SettingsModel settings, TodoListModel todoList) 
+            : base(Resources.GetTexture(Textures.Empty), GetWindowRegion(settings), GetContentRegion(settings))
         {
+            _settings = settings;
             Parent = GameService.Graphics.SpriteScreen;
             Title = "To-Dos";
-            CanResize = !Settings.FixatedWindow.Value;
+            CanResize = !settings.FixatedWindow.Value;
             CanClose = false;
-            Opacity = Settings.WindowOpacityWhenNotFocussed.Value;
-            Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
+            Opacity = settings.WindowOpacityWhenNotFocussed.Value;
+            Location = new Point(settings.WindowLocationX.Value, settings.WindowLocationY.Value);
             Visible = true;
 
-            new TodoListPanel(todoList) { Parent = this };
+            new TodoListPanel(settings, todoList) { Parent = this };
 
-            Settings.WindowOpacityWhenNotFocussed.Subscribe(this, newOpacity => { if (!_hovered) Opacity = newOpacity; });
-            Settings.FixatedWindow.Subscribe(this, fixated => CanResize = !fixated);
-
-            BackgroundColor = new Color(0, 0, 0, Settings.BackgroundOpacity.Value);
-            Settings.BackgroundOpacity.Subscribe(this, opacity => BackgroundColor = new Color(0, 0, 0, opacity));
+            settings.WindowOpacityWhenNotFocussed.Subscribe(this, newOpacity => { if (!_hovered) Opacity = newOpacity; });
+            settings.FixatedWindow.Subscribe(this, fixated => CanResize = !fixated);
+            settings.BackgroundOpacity.Subscribe(this, opacity => BackgroundColor = new Color(0, 0, 0, opacity));
         }
 
         protected override void OnMouseEntered(MouseEventArgs e)
@@ -52,20 +56,20 @@ namespace Todos.Source.Components
         protected override void OnMouseLeft(MouseEventArgs e)
         {
             _hovered = false;
-            Opacity = Settings.WindowOpacityWhenNotFocussed.Value;
+            Opacity = _settings.WindowOpacityWhenNotFocussed.Value;
             base.OnMouseLeft(e);
         }
 
         protected override void OnMoved(MovedEventArgs e)
         {
-            if (Settings.FixatedWindow.Value)
+            if (_settings.FixatedWindow.Value)
             {
-                Location = new Point(Settings.WindowLocationX.Value, Settings.WindowLocationY.Value);
+                Location = new Point(_settings.WindowLocationX.Value, _settings.WindowLocationY.Value);
                 return;
             }
 
-            Settings.WindowLocationX.Value = e.CurrentLocation.X;
-            Settings.WindowLocationY.Value = e.CurrentLocation.Y;
+            _settings.WindowLocationX.Value = e.CurrentLocation.X;
+            _settings.WindowLocationY.Value = e.CurrentLocation.Y;
             base.OnMoved(e);
         }
 
@@ -77,21 +81,27 @@ namespace Todos.Source.Components
 
         protected override void OnResized(ResizedEventArgs e)
         {
-            // hacky check to prevent infinite recursive call
-            if (!Size.Equals(new Point(GetWindowRegion.Width, GetWindowRegion.Height + 40)))
-                ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion, GetContentRegion);
+            if (_settings == null)
+            {
+                base.OnResized(e);
+                return;
+            }
             
-            Settings.WindowWidth.Value = e.CurrentSize.X;
-            Settings.WindowHeight.Value = e.CurrentSize.Y - 40;
+            // hacky check to prevent infinite recursive call
+            if (!Size.Equals(new Point(GetWindowRegion(_settings).Width, GetWindowRegion(_settings).Height + 40)))
+                ConstructWindow(Resources.GetTexture(Textures.Empty), GetWindowRegion(_settings), GetContentRegion(_settings));
+            
+            _settings.WindowWidth.Value = e.CurrentSize.X;
+            _settings.WindowHeight.Value = e.CurrentSize.Y - 40;
             
             base.OnResized(e);
         }
 
         protected override void DisposeControl()
         {
-            Settings.WindowOpacityWhenNotFocussed.Unsubscribe(this);
-            Settings.FixatedWindow.Unsubscribe(this);
-            Settings.BackgroundOpacity.Unsubscribe(this);
+            _settings.WindowOpacityWhenNotFocussed.Unsubscribe(this);
+            _settings.FixatedWindow.Unsubscribe(this);
+            _settings.BackgroundOpacity.Unsubscribe(this);
             base.DisposeControl();
         }
     }

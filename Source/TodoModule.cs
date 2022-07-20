@@ -18,22 +18,23 @@ namespace Todos.Source
 	{
 		private TodoVisualsManager _visuals;
 		private TodoListModel _todoList;
-		
+		private SettingsModel _settings;
+
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
 
 		protected override void DefineSettings(SettingCollection settings)
 		{
-			Settings.Initialize(settings);
+			_settings = new SettingsModel(settings);
 		}
 
 		protected override async Task LoadAsync()
 		{
 			Resources.Initialize(ModuleParameters.ContentsManager);
-			_todoList = await TodoListModel.Initialize(ModuleParameters.DirectoriesManager);
+			_todoList = await TodoListModel.Initialize(_settings, ModuleParameters.DirectoriesManager);
 			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
 			ConfirmDeletionWindow.Initialize();
-			_visuals = new TodoVisualsManager(_todoList);
+			_visuals = new TodoVisualsManager(_settings, _todoList);
 		}
 
 		protected override void OnModuleLoaded(EventArgs e)
@@ -44,7 +45,7 @@ namespace Todos.Source
 
 		public override IView GetSettingsView()
 		{
-			return new TodoSettingsView();
+			return new TodoSettingsView(_settings);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -57,7 +58,7 @@ namespace Todos.Source
 		{
 			_visuals?.Dispose();
 			_todoList?.Dispose();
-			Settings.Dispose();
+			_settings.Dispose();
 
 			TimeService.Dispose();
 			SaveScheduler.Dispose();

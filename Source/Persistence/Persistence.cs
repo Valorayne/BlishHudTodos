@@ -29,7 +29,7 @@ namespace Todos.Source.Persistence
             _directoryPath = manager.GetFullDirectoryPath("todos");
         }
 
-        public Task<List<TodoModel>> LoadAll()
+        public Task<List<TodoJson>> LoadAll()
         {
             var files = Directory.GetFiles(_directoryPath, $"*{FILE_ENDING}");
             var todos = new ConcurrentBag<TodoJson>();
@@ -45,7 +45,7 @@ namespace Todos.Source.Persistence
                 });
             }));
             Task.WaitAll(tasks.ToArray());
-            return Task.FromResult(todos.Select(json => new TodoModel(json, false)).ToList());
+            return Task.FromResult(todos.ToList());
         }
 
         public void Persist(TodoJson todo)

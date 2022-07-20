@@ -9,15 +9,15 @@ namespace Todos.Source.Components.Menu
     {
         public const int HEIGHT = 40;
 
-        public TodoListMenuBar(TodoListModel todoList)
+        public TodoListMenuBar(SettingsModel settings, TodoListModel todoList)
         {
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
             Height = HEIGHT;
             WidthSizingMode = SizingMode.Fill;
             OuterControlPadding = new Vector2(8, 0);
 
-            new CloseTodoWindowButton { Parent = this };
-            new TodoShowAlreadyDoneToggle { Parent = this };
+            new CloseTodoWindowButton(settings) { Parent = this };
+            new TodoShowAlreadyDoneToggle(settings) { Parent = this };
             new AddNewTodoButton(todoList) { Parent = this };
         }
     }

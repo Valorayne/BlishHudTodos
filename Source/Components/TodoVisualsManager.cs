@@ -7,23 +7,25 @@ namespace Todos.Source.Components
 {
     public class TodoVisualsManager : IDisposable
     {
+        private readonly SettingsModel _settings;
         private readonly TodoListModel _todoList;
         private readonly TodoWindowToggleHotkey _hotkeyManager; 
         
         private TodoListWindow _window;
         private TodoCornerIcon _cornerIcon;
 
-        public TodoVisualsManager(TodoListModel todoList)
+        public TodoVisualsManager(SettingsModel settings, TodoListModel todoList)
         {
+            _settings = settings;
             _todoList = todoList;
-            _hotkeyManager = new TodoWindowToggleHotkey();
+            _hotkeyManager = new TodoWindowToggleHotkey(settings);
 
             GameService.Gw2Mumble.UI.IsMapOpenChanged += OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged += OnInGameChanged;
             
-            Settings.WindowMinimized.Subscribe(this, _ => UpdateDisplay());
-            Settings.ShowWindowOnMap.Subscribe(this, _ => UpdateDisplay());
-            Settings.AlwaysShowWindow.Subscribe(this, _ => UpdateDisplay());
+            _settings.WindowMinimized.Subscribe(this, _ => UpdateDisplay());
+            _settings.ShowWindowOnMap.Subscribe(this, _ => UpdateDisplay());
+            _settings.AlwaysShowWindow.Subscribe(this, _ => UpdateDisplay());
         }
 
         private void OnInGameChanged(object sender, ValueEventArgs<bool> e) => UpdateDisplay();
@@ -34,20 +36,20 @@ namespace Todos.Source.Components
         private void UpdateDisplay()
         {
             var isInGame = GameService.GameIntegration.Gw2Instance.IsInGame;
-            if (!isInGame && !Settings.AlwaysShowWindow.Value)
+            if (!isInGame && !_settings.AlwaysShowWindow.Value)
             {
                 DisplayNothing();
                 return;
             }
             
             var isInMap = GameService.Gw2Mumble.UI.IsMapOpen;
-            if (isInMap && !Settings.ShowWindowOnMap.Value)
+            if (isInMap && !_settings.ShowWindowOnMap.Value)
             {
                 DisplayNothing();
                 return;
             }
 
-            if (Settings.WindowMinimized.Value)
+            if (_settings.WindowMinimized.Value)
                 DisplayMinimized();
             else
                 DisplayWindow();
@@ -68,7 +70,7 @@ namespace Todos.Source.Components
             _cornerIcon = null;
 
             if (_window == null)
-                _window = new TodoListWindow(_todoList);
+                _window = new TodoListWindow(_settings, _todoList);
         }
 
         private void DisplayMinimized()
@@ -78,16 +80,16 @@ namespace Todos.Source.Components
 
             if (_cornerIcon == null)
             {
-                _cornerIcon = new TodoCornerIcon();
+                _cornerIcon = new TodoCornerIcon(_settings);
                 _cornerIcon.Show();
             }
         }
 
         public void Dispose()
         {
-            Settings.WindowMinimized.Unsubscribe(this);
-            Settings.ShowWindowOnMap.Unsubscribe(this);
-            Settings.AlwaysShowWindow.Unsubscribe(this);
+            _settings.WindowMinimized.Unsubscribe(this);
+            _settings.ShowWindowOnMap.Unsubscribe(this);
+            _settings.AlwaysShowWindow.Unsubscribe(this);
             
             GameService.Gw2Mumble.UI.IsMapOpenChanged -= OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged -= OnInGameChanged;

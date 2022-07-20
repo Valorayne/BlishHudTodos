@@ -99,6 +99,7 @@
     <Compile Include="Source\Components\TodoSettingsView.cs" />
     <Compile Include="Source\Components\TodoVisualsManager.cs" />
     <Compile Include="Source\Components\TodoWindowToggleHotkey.cs" />
+    <Compile Include="Source\Models\SettingsModel.cs" />
     <Compile Include="Source\Models\TodoListModel.cs" />
     <Compile Include="Source\Models\Resets\DailyReset.cs" />
     <Compile Include="Source\Models\Resets\DurationReset.cs" />
@@ -128,7 +129,6 @@
     <Compile Include="Source\Utils\Reactive\Variable.cs" />
     <Compile Include="Source\Utils\Reactive\Variables.cs" />
     <Compile Include="Source\Utils\Resources.cs" />
-    <Compile Include="Source\Utils\Settings.cs" />
     <Compile Include="Source\Utils\SimpleDisposable.cs" />
     <Compile Include="Source\Utils\Subscriptions\BackgroundTextureSubscription.cs" />
     <Compile Include="Source\Utils\TimeService.cs" />

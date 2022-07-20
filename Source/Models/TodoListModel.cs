@@ -3,25 +3,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Todos.Source.Persistence;
+using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Models
 {
     public class TodoListModel : ModelBase
     {
+        private readonly SettingsModel _settings;
         private readonly IVariable<List<TodoModel>> _allTodos; 
         
         public IProperty<IReadOnlyList<TodoModel>> AllTodos => _allTodos;
         public IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
-        public static async Task<TodoListModel> Initialize(DirectoriesManager manager)
+        public static async Task<TodoListModel> Initialize(SettingsModel settings, DirectoriesManager manager)
         {
             var storedTodos = await new Persistence.Persistence(manager).LoadAll();
-            return new TodoListModel(storedTodos.OrderBy(t => t.OrderIndex.Value).ToList());
+            var todoModels = storedTodos.Select(json => new TodoModel(settings, json, false));
+            return new TodoListModel(settings, todoModels.OrderBy(t => t.OrderIndex.Value).ToList());
         }
 
-        private TodoListModel(List<TodoModel> sortedTodos)
+        private TodoListModel(SettingsModel settings, List<TodoModel> sortedTodos)
         {
+            _settings = settings;
             _allTodos = Add(Variables.Transient(sortedTodos));
             VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
 
@@ -53,7 +57,7 @@ namespace Todos.Source.Models
 
         public void AddNewTodo()
         {
-            var todo = new TodoModel(new TodoJson(), true);
+            var todo = new TodoModel(_settings, new TodoJson(), true);
             SetupTodo(todo);
             _allTodos.Value = AllTodos.Value.Append(todo).ToList();
         }

@@ -17,13 +17,13 @@ namespace Todos.Source.Components.Entry
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly TodoEntryRow _row;
 
-        public TodoEntry(TodoListModel todoList, TodoModel todo, Action saveScroll)
+        public TodoEntry(SettingsModel settings, TodoListModel todoList, TodoModel todo, Action saveScroll)
         {
             Todo = todo;
             _saveScroll = saveScroll;
 
             _hoverMenu = new TodoEntryHoverMenu(todoList, todo, OnDelete) { Parent = this };
-            _row = new TodoEntryRow(todo, _hoverMenu) { Parent = this };
+            _row = new TodoEntryRow(settings, todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
 
             todo.IsEditing.Subscribe(this, OnEditModeChanged);

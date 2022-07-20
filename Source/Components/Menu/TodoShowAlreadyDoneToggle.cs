@@ -8,10 +8,12 @@ namespace Todos.Source.Components.Menu
 {
     public class TodoShowAlreadyDoneToggle : Panel
     {
+        private readonly SettingsModel _settings;
         private readonly Image _icon;
 
-        public TodoShowAlreadyDoneToggle()
+        public TodoShowAlreadyDoneToggle(SettingsModel settings)
         {
+            _settings = settings;
             _icon = new Image
             {
                 Parent = this,
@@ -26,17 +28,17 @@ namespace Todos.Source.Components.Menu
             Width = 40;
         }
 
-        private static Texture2D EyeTexture => Settings.ShowAlreadyDoneTasks.Value
+        private Texture2D EyeTexture => _settings.ShowAlreadyDoneTasks.Value
             ? Resources.GetTexture(Textures.EyeIcon)
             : Resources.GetTexture(Textures.EyeIconClosed);
 
-        private static string EyeTooltip => Settings.ShowAlreadyDoneTasks.Value
+        private string EyeTooltip => _settings.ShowAlreadyDoneTasks.Value
             ? "Hide already done tasks"
             : "Show already done tasks";
 
         protected override void OnClick(MouseEventArgs e)
         {
-            Settings.ShowAlreadyDoneTasks.Value = !Settings.ShowAlreadyDoneTasks.Value;
+            _settings.ShowAlreadyDoneTasks.Value = !_settings.ShowAlreadyDoneTasks.Value;
             _icon.Texture = EyeTexture;
             _icon.BasicTooltipText = EyeTooltip;
             base.OnClick(e);

@@ -16,7 +16,7 @@ namespace Todos.Source.Models
 
         public readonly TodoScheduleModel Schedule;
 
-        public TodoModel(TodoJson json, bool isNew)
+        public TodoModel(SettingsModel settings, TodoJson json, bool isNew)
         {
             Schedule = new TodoScheduleModel(json.Schedule);
             
@@ -27,7 +27,7 @@ namespace Todos.Source.Models
             IsDeleted = Add(Variables.Persistent(false, v => json.IsDeleted = v, json.Persist));
             IsEditing = Add(Variables.Transient(isNew));
 
-            IsVisible = Add(Schedule.IsDone.CombineWith(IsEditing, Settings.ShowAlreadyDoneTasks,
+            IsVisible = Add(Schedule.IsDone.CombineWith(IsEditing, settings.ShowAlreadyDoneTasks,
                 (done, editing, show) => !done || editing || show));
         }
 

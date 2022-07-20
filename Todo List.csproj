@@ -102,7 +102,6 @@
     <Compile Include="Source\Components\TodoListPanel.cs" />
     <Compile Include="Source\Components\TodoScrollView.cs" />
     <Compile Include="Source\Components\TodoListWindow.cs" />
-    <Compile Include="Source\Components\TodoVisualsManager.cs" />
     <Compile Include="Source\Components\TodoWindowToggleHotkey.cs" />
     <Compile Include="Source\Models\SettingsModel.cs" />
     <Compile Include="Source\Models\TodoListModel.cs" />
@@ -126,6 +125,7 @@
     <Compile Include="Source\Persistence\TodoScheduleJson.cs" />
     <Compile Include="Source\Persistence\TodoScheduleType.cs" />
     <Compile Include="Source\TodoModule.cs" />
+    <Compile Include="Source\TodoVisualsManager.cs" />
     <Compile Include="Source\Utils\CheckboxType.cs" />
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\Reactive\IProperty.cs" />

@@ -6,7 +6,7 @@ using Todos.Source.Components.Generic;
 using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
-namespace Todos.Source.Components
+namespace Todos.Source.Components.Settings
 {
     public static class SettingRow
     {

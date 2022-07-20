@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
-using Todos.Source.Utils;
+using Todos.Source.Models;
 
-namespace Todos.Source.Components
+namespace Todos.Source.Components.Settings
 {
     public class TodoSettingsLeft : FlowPanel
     {

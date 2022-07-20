@@ -1,8 +1,9 @@
 ﻿using Blish_HUD.Input;
 using Blish_HUD.Settings;
+using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
-namespace Todos.Source.Utils
+namespace Todos.Source.Models
 {
     public class SettingsModel : ModelBase
     {

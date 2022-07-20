@@ -2,6 +2,7 @@
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Todos.Source.Models;
 using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 

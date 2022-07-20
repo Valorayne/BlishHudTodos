@@ -1,5 +1,6 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
+using Todos.Source.Models;
 using Todos.Source.Utils;
 
 namespace Todos.Source.Components

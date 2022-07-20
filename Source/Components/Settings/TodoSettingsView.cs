@@ -1,9 +1,9 @@
 ﻿using Blish_HUD.Controls;
 using Blish_HUD.Graphics.UI;
 using Microsoft.Xna.Framework;
-using Todos.Source.Utils;
+using Todos.Source.Models;
 
-namespace Todos.Source.Components
+namespace Todos.Source.Components.Settings
 {
     public class TodoSettingsView : View
     {

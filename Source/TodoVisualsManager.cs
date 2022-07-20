@@ -1,9 +1,9 @@
 ﻿using System;
 using Blish_HUD;
+using Todos.Source.Components;
 using Todos.Source.Models;
-using Todos.Source.Utils;
 
-namespace Todos.Source.Components
+namespace Todos.Source
 {
     public class TodoVisualsManager : IDisposable
     {

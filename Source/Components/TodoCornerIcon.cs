@@ -15,6 +15,7 @@ namespace Todos.Source.Components
             _settings = settings;
             Icon = Resources.GetTexture(Textures.CornerIcon);
             BasicTooltipText = "Todos";
+            Visible = true;
         }
 
         protected override void OnClick(MouseEventArgs e)

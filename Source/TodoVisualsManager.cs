@@ -11,7 +11,6 @@ namespace Todos.Source
         private readonly TodoListModel _todoList;
         private readonly TodoWindowToggleHotkey _hotkeyManager; 
         
-        private readonly TodoCornerIcon _cornerIcon;
         private TodoListWindow _window;
         
         public TodoVisualsManager(SettingsModel settings, TodoListModel todoList)
@@ -19,8 +18,6 @@ namespace Todos.Source
             _settings = settings;
             _todoList = todoList;
             _hotkeyManager = new TodoWindowToggleHotkey(settings);
-
-            _cornerIcon = new TodoCornerIcon(settings) { Visible = true };
 
             GameService.Gw2Mumble.UI.IsMapOpenChanged += OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged += OnInGameChanged;
@@ -77,7 +74,6 @@ namespace Todos.Source
             GameService.GameIntegration.Gw2Instance.IsInGameChanged -= OnInGameChanged;
             
             _window?.Dispose();
-            _cornerIcon?.Dispose();
             _hotkeyManager.Dispose();
         }
     }

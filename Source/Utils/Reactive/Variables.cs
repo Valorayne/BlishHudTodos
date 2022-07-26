@@ -24,6 +24,26 @@ namespace Todos.Source.Utils.Reactive
             return result;
         }
 
+        public static IProperty<T> FromEvent<T>(T startValue, Action<EventHandler<T>> subscribe,
+            Action<EventHandler<T>> unsubscribe)
+        {
+            var result = new Variable<T>(startValue);
+            var eventHandler = new EventHandler<T>((sender, newValue) => result.Value = newValue);
+            subscribe(eventHandler);
+            result.OnDisposal = () => unsubscribe(eventHandler);
+            return result;
+        }
+        
+        public static IProperty<T> FromEvent<T>(T startValue, Action<EventHandler<ValueEventArgs<T>>> subscribe,
+            Action<EventHandler<ValueEventArgs<T>>> unsubscribe)
+        {
+            var result = new Variable<T>(startValue);
+            var eventHandler = new EventHandler<ValueEventArgs<T>>((sender, e) => result.Value = e.Value);
+            subscribe(eventHandler);
+            result.OnDisposal = () => unsubscribe(eventHandler);
+            return result;
+        }
+
         public static IVariable<T> ToVariable<T>(this SettingEntry<T> setting)
         {
             var result = new Variable<T>(setting.Value);
@@ -47,7 +67,7 @@ namespace Todos.Source.Utils.Reactive
         public static IProperty<T> CombineWith<A, B, T>(this IProperty<A> a, IProperty<B> b, Func<A, B, T> mapper)
         {
             var result = new Variable<T>(mapper(a.Value, b.Value));
-            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value));
+            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value), false);
             b.Subscribe(result, newB => result.Value = mapper(a.Value, newB));
             result.OnDisposal = () =>
             {
@@ -60,8 +80,8 @@ namespace Todos.Source.Utils.Reactive
         public static IProperty<T> CombineWith<A, B, C, T>(this IProperty<A> a, IProperty<B> b, IProperty<C> c, Func<A, B, C, T> mapper)
         {
             var result = new Variable<T>(mapper(a.Value, b.Value, c.Value));
-            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value));
-            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value));
+            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value), false);
+            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value), false);
             c.Subscribe(result, newC => result.Value = mapper(a.Value, b.Value, newC));
             result.OnDisposal = () =>
             {
@@ -75,9 +95,9 @@ namespace Todos.Source.Utils.Reactive
         public static IProperty<T> CombineWith<A, B, C, D, T>(this IProperty<A> a, IProperty<B> b, IProperty<C> c, IProperty<D> d, Func<A, B, C, D, T> mapper)
         {
             var result = new Variable<T>(mapper(a.Value, b.Value, c.Value, d.Value));
-            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value, d.Value));
-            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value, d.Value));
-            c.Subscribe(result, newC => result.Value = mapper(a.Value, b.Value, newC, d.Value));
+            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value, d.Value), false);
+            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value, d.Value), false);
+            c.Subscribe(result, newC => result.Value = mapper(a.Value, b.Value, newC, d.Value), false);
             d.Subscribe(result, newD => result.Value = mapper(a.Value, b.Value, c.Value, newD));
             result.OnDisposal = () =>
             {
@@ -92,10 +112,10 @@ namespace Todos.Source.Utils.Reactive
         public static IProperty<T> CombineWith<A, B, C, D, E, T>(this IProperty<A> a, IProperty<B> b, IProperty<C> c, IProperty<D> d, IProperty<E> e, Func<A, B, C, D, E, T> mapper)
         {
             var result = new Variable<T>(mapper(a.Value, b.Value, c.Value, d.Value, e.Value));
-            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value, d.Value, e.Value));
-            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value, d.Value, e.Value));
-            c.Subscribe(result, newC => result.Value = mapper(a.Value, b.Value, newC, d.Value, e.Value));
-            d.Subscribe(result, newD => result.Value = mapper(a.Value, b.Value, c.Value, newD, e.Value));
+            a.Subscribe(result, newA => result.Value = mapper(newA, b.Value, c.Value, d.Value, e.Value), false);
+            b.Subscribe(result, newB => result.Value = mapper(a.Value, newB, c.Value, d.Value, e.Value), false);
+            c.Subscribe(result, newC => result.Value = mapper(a.Value, b.Value, newC, d.Value, e.Value), false);
+            d.Subscribe(result, newD => result.Value = mapper(a.Value, b.Value, c.Value, newD, e.Value), false);
             e.Subscribe(result, newE => result.Value = mapper(a.Value, b.Value, c.Value, d.Value, newE));
             result.OnDisposal = () =>
             {

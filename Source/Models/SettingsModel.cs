@@ -8,7 +8,7 @@ namespace Todos.Source.Models
     public class SettingsModel : ModelBase
     {
         public readonly IVariable<bool> WindowMinimized;
-        public readonly IVariable<bool> AlwaysShowWindow;
+        public readonly IVariable<bool> ShowWindowOutOfGame;
         public readonly IVariable<bool> ShowWindowOnMap;
         public readonly IVariable<bool> FixatedWindow;
 
@@ -28,7 +28,7 @@ namespace Todos.Source.Models
         public SettingsModel(SettingCollection settings)
         {
             WindowMinimized = Add(settings.DefineSetting("Window.Visibility.Minimized", false).ToVariable());
-            AlwaysShowWindow = Add(settings.DefineSetting("Window.Visibility.Always", false).ToVariable());
+            ShowWindowOutOfGame = Add(settings.DefineSetting("Window.Visibility.Always", false).ToVariable());
             ShowWindowOnMap = Add(settings.DefineSetting("Window.Visibility.OnMap", false).ToVariable());
             FixatedWindow = Add(settings.DefineSetting("Window.Location.Fixed", false).ToVariable());
 

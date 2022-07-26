@@ -22,6 +22,7 @@ namespace Todos.Source
 		private TodoCornerIcon _cornerIcon;
 		private TodoListModel _todoList;
 		private SettingsModel _settings;
+		private GameModel _game;
 
 		[ImportingConstructor]
 		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
@@ -32,17 +33,12 @@ namespace Todos.Source
 		protected override async Task LoadAsync()
 		{
 			Resources.Initialize(ModuleParameters.ContentsManager);
+			_game = new GameModel();
 			_todoList = await TodoListModel.Initialize(_settings, ModuleParameters.DirectoriesManager);
 			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
 			ConfirmDeletionWindow.Initialize();
 			_cornerIcon = new TodoCornerIcon(_settings);
-			_visuals = new TodoVisualsManager(_settings, _todoList);
-		}
-
-		protected override void OnModuleLoaded(EventArgs e)
-		{
-			_visuals?.OnModuleLoaded();
-			base.OnModuleLoaded(e);
+			_visuals = new TodoVisualsManager(_settings, _game, _todoList);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -63,6 +59,7 @@ namespace Todos.Source
 
 			Resources.Dispose();
 			_settings?.Dispose();
+			_game?.Dispose();
 			
 			if (Debug.TrackVariableDisposals)
 				Variable<object>.CheckForNotDisposedVariables();

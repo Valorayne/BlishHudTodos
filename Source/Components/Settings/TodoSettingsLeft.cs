@@ -17,7 +17,7 @@ namespace Todos.Source.Components.Settings
 
             _rows = new List<IDisposable>
             {
-                SettingRow.Boolean(this, settings.AlwaysShowWindow, "Always visible",
+                SettingRow.Boolean(this, settings.ShowWindowOutOfGame, "Show outside of game",
                     "Whether or not the Todos window should also be shown during\r\ncutscenes, the character selection screen and loading screens"),
                 SettingRow.Boolean(this, settings.ShowWindowOnMap, "Show on map", 
                     "Whether or not the Todos window should\r\nalso be shown while the map is opened"),

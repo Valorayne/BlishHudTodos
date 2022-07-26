@@ -42,9 +42,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _todo.Description.Unsubscribe(this);
-            _todo.ClipboardContent.Unsubscribe(this);
-            _todo.IsEditing.Unsubscribe(this);
+            _todo.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -76,7 +76,7 @@ namespace Todos.Source.Components.Entry
         protected override void DisposeControl()
         {
             _row.Resized -= OnRowResized;
-            _todo.IsEditing.Unsubscribe(this);
+            _todo.Unsubscribe(this);
             _hoverSubscription.Dispose();
             base.DisposeControl();
         }

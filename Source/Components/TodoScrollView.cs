@@ -53,7 +53,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            _todoList.VisibleTodos.Unsubscribe(this);
+            _todoList.Unsubscribe(this);
             RemoveEntries();
             base.DisposeControl();
         }

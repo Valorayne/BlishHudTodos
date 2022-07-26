@@ -2,6 +2,7 @@
 using Blish_HUD.Input;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components
 {
@@ -18,7 +19,7 @@ namespace Todos.Source.Components
 
         protected override void OnClick(MouseEventArgs e)
         {
-            _settings.WindowMinimized.Value = false;
+            _settings.WindowMinimized.Toggle();
             base.OnClick(e);
         }
     }

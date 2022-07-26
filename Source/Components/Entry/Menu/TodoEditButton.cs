@@ -24,7 +24,7 @@ namespace Todos.Source.Components.Entry.Menu
 
         protected override void DisposeControl()
         {
-            _todo.IsEditing.Unsubscribe(this);
+            _todo.Unsubscribe(this);
             base.DisposeControl();
         }
     }

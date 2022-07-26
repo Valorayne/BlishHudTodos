@@ -43,9 +43,7 @@ namespace Todos.Source.Models
 
         private TodoModel TearDownTodo(TodoModel todo)
         {
-            todo.IsDeleted.Unsubscribe(this);
-            todo.OrderIndex.Unsubscribe(this);
-            todo.IsVisible.Unsubscribe(this);
+            todo.Unsubscribe(this);
             todo.Dispose();
             return todo;
         }

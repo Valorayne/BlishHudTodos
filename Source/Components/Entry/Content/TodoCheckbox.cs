@@ -46,9 +46,8 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _schedule.IsDone.Unsubscribe(this);
-            _schedule.CheckboxTooltip.Unsubscribe(this);
-            _settings.CheckboxType.Unsubscribe(this);
+            _schedule.Unsubscribe(this);
+            _settings.Unsubscribe(this);
             _hoverSubscription.Dispose();
             base.DisposeControl();
         }

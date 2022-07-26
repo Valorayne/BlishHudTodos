@@ -27,7 +27,7 @@ namespace Todos.Source.Components.Entry.Edit
 
         protected override void DisposeControl()
         {
-            _schedule.Reset.Unsubscribe(this);
+            _schedule.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Todos.Source.Utils.Reactive
 {
@@ -14,6 +15,12 @@ namespace Todos.Source.Utils.Reactive
         }
 
         protected virtual void DisposeModel() { }
+
+        public void Unsubscribe(object subscriber)
+        {
+            foreach (var property in _properties.OfType<IProperty>())
+                property.Unsubscribe(subscriber);
+        }
 
         public void Dispose()
         {

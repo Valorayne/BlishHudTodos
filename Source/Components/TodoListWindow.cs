@@ -99,9 +99,7 @@ namespace Todos.Source.Components
 
         protected override void DisposeControl()
         {
-            _settings.WindowOpacityWhenNotFocussed.Unsubscribe(this);
-            _settings.FixatedWindow.Unsubscribe(this);
-            _settings.BackgroundOpacity.Unsubscribe(this);
+            _settings.Unsubscribe(this);
             base.DisposeControl();
         }
     }

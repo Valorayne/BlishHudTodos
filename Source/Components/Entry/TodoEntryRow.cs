@@ -42,7 +42,7 @@ namespace Todos.Source.Components.Entry
 
         protected override void DisposeControl()
         {
-            _todo.IsEditing.Unsubscribe(this);
+            _todo.Unsubscribe(this);
             _editMenu.Resized -= OnEditMenuResized;
             base.DisposeControl();
         }

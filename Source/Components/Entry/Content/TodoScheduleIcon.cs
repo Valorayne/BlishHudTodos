@@ -35,7 +35,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _schedule.IconTooltip.Unsubscribe(this);
+            _schedule.Unsubscribe(this);
             base.DisposeControl();
         }
     }

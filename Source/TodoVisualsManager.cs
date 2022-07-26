@@ -11,14 +11,16 @@ namespace Todos.Source
         private readonly TodoListModel _todoList;
         private readonly TodoWindowToggleHotkey _hotkeyManager; 
         
+        private readonly TodoCornerIcon _cornerIcon;
         private TodoListWindow _window;
-        private TodoCornerIcon _cornerIcon;
-
+        
         public TodoVisualsManager(SettingsModel settings, TodoListModel todoList)
         {
             _settings = settings;
             _todoList = todoList;
             _hotkeyManager = new TodoWindowToggleHotkey(settings);
+
+            _cornerIcon = new TodoCornerIcon(settings) { Visible = true };
 
             GameService.Gw2Mumble.UI.IsMapOpenChanged += OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged += OnInGameChanged;
@@ -38,14 +40,14 @@ namespace Todos.Source
             var isInGame = GameService.GameIntegration.Gw2Instance.IsInGame;
             if (!isInGame && !_settings.AlwaysShowWindow.Value)
             {
-                DisplayNothing();
+                DisplayMinimized();
                 return;
             }
             
             var isInMap = GameService.Gw2Mumble.UI.IsMapOpen;
             if (isInMap && !_settings.ShowWindowOnMap.Value)
             {
-                DisplayNothing();
+                DisplayMinimized();
                 return;
             }
 
@@ -55,20 +57,8 @@ namespace Todos.Source
                 DisplayWindow();
         }
 
-        private void DisplayNothing()
-        {
-            _cornerIcon?.Dispose();
-            _cornerIcon = null;
-            
-            _window?.Dispose();
-            _window = null;
-        }
-
         private void DisplayWindow()
         {
-            _cornerIcon?.Dispose();
-            _cornerIcon = null;
-
             if (_window == null)
                 _window = new TodoListWindow(_settings, _todoList);
         }
@@ -77,19 +67,11 @@ namespace Todos.Source
         {
             _window?.Dispose();
             _window = null;
-
-            if (_cornerIcon == null)
-            {
-                _cornerIcon = new TodoCornerIcon(_settings);
-                _cornerIcon.Show();
-            }
         }
 
         public void Dispose()
         {
-            _settings.WindowMinimized.Unsubscribe(this);
-            _settings.ShowWindowOnMap.Unsubscribe(this);
-            _settings.AlwaysShowWindow.Unsubscribe(this);
+            _settings.Unsubscribe(this);
             
             GameService.Gw2Mumble.UI.IsMapOpenChanged -= OnMapStatusChanged;
             GameService.GameIntegration.Gw2Instance.IsInGameChanged -= OnInGameChanged;

@@ -14,10 +14,10 @@ namespace Todos.Source.Models
         public readonly IVariable<TimeSpan> LocalTime;
         public readonly IVariable<TimeSpan> Duration;
         
-        private readonly IVariable<List<DateTime>> Executions;
+        private readonly IVariable<List<DateTimeOffset>> Executions;
 
         public readonly IProperty<IReset> Reset;
-        public readonly IProperty<DateTime?> LastExecution;
+        public readonly IProperty<DateTimeOffset?> LastExecution;
         public readonly IProperty<bool> IsDone;
         public readonly IProperty<string> IconTooltip;
         public readonly IProperty<string> CheckboxTooltip;
@@ -31,25 +31,25 @@ namespace Todos.Source.Models
             Executions = Add(Variables.Persistent(json.Executions, v => json.Executions = v, json.Persist));
 
             Reset = Add(ScheduleDropdown.Select(ResetFactory.FromDropdown));
-            LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTime?) null));
+            LastExecution = Add(Executions.Select(executions => executions.Count > 0 ? executions.Max().WithoutSeconds() : (DateTimeOffset?) null));
 
             IsDone = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIsDone));
             IconTooltip = Add(TimeService.NewMinute.CombineWith(LastExecution, Reset, LocalTime, Duration, GetIconTooltip));
             CheckboxTooltip = Add(IsDone.CombineWith(LastExecution, GetCheckboxTooltip));
         }
 
-        private static bool GetIsDone(DateTime now, DateTime? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
+        private static bool GetIsDone(DateTimeOffset now, DateTimeOffset? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
             => lastExecution.HasValue && reset.IsDone(now, lastExecution.Value, localTime, duration);
 
-        private static string GetIconTooltip(DateTime now, DateTime? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
+        private static string GetIconTooltip(DateTimeOffset now, DateTimeOffset? lastExecution, IReset reset, TimeSpan localTime, TimeSpan duration) 
             => reset.IconTooltip(now, lastExecution, localTime, duration);
 
-        private static string GetCheckboxTooltip(bool isDone, DateTime? lastExecution)
-            => !isDone ? null : $"Done: {lastExecution?.ToDaysSinceString()}, {lastExecution?.ToShortTimeString()}";
+        private static string GetCheckboxTooltip(bool isDone, DateTimeOffset? lastExecution)
+            => !isDone ? null : $"Done: {lastExecution?.ToDaysSinceString()}, {lastExecution?.LocalDateTime.ToShortTimeString()}";
 
         public void ToggleDone()
         {
-            if (!IsDone.Value) Executions.Value = Executions.Value.Append(DateTime.Now.WithoutSeconds()).ToList();
+            if (!IsDone.Value) Executions.Value = Executions.Value.Append(DateTimeOffset.Now.WithoutSeconds()).ToList();
             else if (Executions.Value.Count > 0)
             {
                 var latestExecution = Executions.Value.Max();

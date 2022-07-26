@@ -10,7 +10,7 @@ namespace Todos.Source.Models.Resets
         string DropdownEntry { get; }
         string DropdownEntryTooltip { get; }
         
-        bool IsDone(DateTime now, DateTime lastExecution, TimeSpan localTime, TimeSpan duration);
-        string IconTooltip(DateTime now, DateTime? lastExecution, TimeSpan localTime, TimeSpan duration);
+        bool IsDone(DateTimeOffset now, DateTimeOffset lastExecution, TimeSpan localTime, TimeSpan duration);
+        string IconTooltip(DateTimeOffset now, DateTimeOffset? lastExecution, TimeSpan localTime, TimeSpan duration);
     }
 }

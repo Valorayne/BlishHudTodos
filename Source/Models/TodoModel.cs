@@ -1,5 +1,4 @@
 ﻿using Todos.Source.Persistence;
-using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Models

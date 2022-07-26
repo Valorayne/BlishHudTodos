@@ -11,16 +11,16 @@ namespace Todos.Source.Models.Resets
         public string DropdownEntry => "Local Time";
         public string DropdownEntryTooltip => "This task will reset every day at the local time specified below";
 
-        public bool IsDone(DateTime now, DateTime lastExecution, TimeSpan localTime, TimeSpan duration)
+        public bool IsDone(DateTimeOffset now, DateTimeOffset lastExecution, TimeSpan localTime, TimeSpan duration)
         {
-            var resetToday = DateTime.Today + localTime;
+            var resetToday = DateTimeOffset.Now.StartOfDay() + localTime;
             var lastLocalReset = now > resetToday ? resetToday : resetToday - TimeSpan.FromDays(1);
             return lastExecution > lastLocalReset;
         }
 
-        public string IconTooltip(DateTime now, DateTime? lastExecution, TimeSpan localTime, TimeSpan duration)
+        public string IconTooltip(DateTimeOffset now, DateTimeOffset? lastExecution, TimeSpan localTime, TimeSpan duration)
         {
-            var resetToday = DateTime.Today + localTime;
+            var resetToday = DateTimeOffset.Now.StartOfDay() + localTime;
             var nextLocalReset = now < resetToday ? resetToday : resetToday + TimeSpan.FromDays(1);
             return $"Local reset in {nextLocalReset.ToDurationString()}";
         }

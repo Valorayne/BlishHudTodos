@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Todos.Source.Models;
 using Todos.Source.Persistence.Migrations;
 
 namespace Todos.Source.Persistence
@@ -11,7 +10,7 @@ namespace Todos.Source.Persistence
         public bool IsDeleted;
 
         [JsonProperty] public int Version;
-        [JsonProperty] public DateTime CreatedAt;
+        [JsonProperty] public DateTimeOffset CreatedAt;
         [JsonProperty] public TodoScheduleJson Schedule;
 
         [JsonProperty] public long OrderIndex;
@@ -21,7 +20,7 @@ namespace Todos.Source.Persistence
         public TodoJson()
         {
             Version = Migrator.CURRENT_VERSION;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTimeOffset.Now;
             Schedule = new TodoScheduleJson { Parent = this };
             OrderIndex = CreatedAt.Ticks;
         }

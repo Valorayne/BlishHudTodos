@@ -6,18 +6,18 @@ namespace Todos.Source.Utils
 {
     public static class TimeService
     {
-        public static Variable<DateTime> NewMinute = new Variable<DateTime>(DateTime.Now.WithoutSeconds());
+        public static Variable<DateTimeOffset> NewMinute = new Variable<DateTimeOffset>(DateTimeOffset.Now.WithoutSeconds());
 
         public static void ProgressTimer(GameTime time)
         {
             if (!time.IsRunningSlowly) 
-                NewMinute.Value = DateTime.Now.WithoutSeconds();
+                NewMinute.Value = DateTimeOffset.Now.WithoutSeconds();
         }
 
         public static void Dispose()
         {
             NewMinute.Dispose();
-            NewMinute = new Variable<DateTime>(DateTime.Now.WithoutSeconds());
+            NewMinute = new Variable<DateTimeOffset>(DateTimeOffset.Now.WithoutSeconds());
         }
     }
 }

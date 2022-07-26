@@ -10,7 +10,7 @@ namespace Todos.Source.Models.Resets
         public string DropdownEntry => "Never Resets";
         public string DropdownEntryTooltip => "This task will not reset automatically";
         
-        public bool IsDone(DateTime now, DateTime lastExecution, TimeSpan localTime, TimeSpan duration) => true;
-        public string IconTooltip(DateTime now, DateTime? lastExecution, TimeSpan localTime, TimeSpan duration) => null;
+        public bool IsDone(DateTimeOffset now, DateTimeOffset lastExecution, TimeSpan localTime, TimeSpan duration) => true;
+        public string IconTooltip(DateTimeOffset now, DateTimeOffset? lastExecution, TimeSpan localTime, TimeSpan duration) => null;
     }
 }

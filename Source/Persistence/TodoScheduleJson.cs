@@ -14,12 +14,12 @@ namespace Todos.Source.Persistence
         [JsonProperty] public TimeSpan LocalTime;
         [JsonProperty] public TimeSpan Duration;
 
-        [JsonProperty] public List<DateTime> Executions;
+        [JsonProperty] public List<DateTimeOffset> Executions;
 
         public TodoScheduleJson()
         {
             Type = TodoScheduleType.DailyServer;
-            Executions = new List<DateTime>();
+            Executions = new List<DateTimeOffset>();
             Duration = TimeSpan.FromDays(1);
         }
 

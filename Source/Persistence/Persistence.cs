@@ -39,6 +39,8 @@ namespace Todos.Source.Persistence
                 {
                     var jsonString = File.ReadAllText(file);
                     var migrated = Migrator.Migrate(jsonString);
+                    if (migrated == null)
+                        return;
                     var json = JsonConvert.DeserializeObject<TodoJson>(migrated, SETTINGS);
                     if (json != null)
                         todos.Add(json);

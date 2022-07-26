@@ -22,6 +22,9 @@ namespace Todos.Source.Persistence.Migrations
             var fileVersion = json["Version"]?.ToObject<int>();
             Debug.Assert(fileVersion != null, nameof(fileVersion) + " != null");
 
+            if (fileVersion.Value > CURRENT_VERSION)
+                return null;
+            
             if (fileVersion.Value == CURRENT_VERSION)
                 return jsonString;
             

@@ -10,6 +10,7 @@ using Todos.Source.Components.Settings;
 using Todos.Source.Models;
 using Todos.Source.Persistence;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source
 {
@@ -58,6 +59,9 @@ namespace Todos.Source
 
 			Resources.Dispose();
 			_settings?.Dispose();
+			
+			if (Debug.TrackVariableDisposals)
+				Variable<object>.CheckForNotDisposedVariables();
 		}
 	}
 }

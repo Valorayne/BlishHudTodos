@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Todos.Source.Utils.Reactive
 {
@@ -14,6 +15,8 @@ namespace Todos.Source.Utils.Reactive
         public Variable(T defaultValue)
         {
             _value = defaultValue;
+            if (Debug.TrackVariableDisposals)
+                _instances.Add(this);
         }
 
         public T Value
@@ -64,6 +67,17 @@ namespace Todos.Source.Utils.Reactive
             _handlers.Clear();
             _handlers = null;
             _value = default;
+            if (Debug.TrackVariableDisposals)
+                _instances.Remove(this);
+        }
+
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly List<IProperty> _instances = new List<IProperty>();
+
+        public static void CheckForNotDisposedVariables()
+        {
+            if (_instances.Count > 0)
+                throw new Exception($"Forgot to dispose the following variables:\r\n{JsonConvert.SerializeObject(_instances)}");
         }
     }
 }

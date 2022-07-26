@@ -1,6 +1,6 @@
 {
   "name": "Todos",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "namespace": "valorayne.bh.todos",
   "package": "Todos.dll",
   "manifest_version": 1,

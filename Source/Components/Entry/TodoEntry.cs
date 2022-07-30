@@ -25,7 +25,7 @@ namespace Todos.Source.Components.Entry
             
             WidthSizingMode = SizingMode.Fill;
 
-            _hoverMenu = new TodoEntryHoverMenu(todoList, todo, popup, _saveScroll) { Parent = this };
+            _hoverMenu = new TodoEntryHoverMenu(todoList, todo, popup, _saveScroll, settings) { Parent = this };
             _row = new TodoEntryRow(settings, todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
             Height = _row.Height;

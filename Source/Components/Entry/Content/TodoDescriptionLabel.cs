@@ -19,7 +19,6 @@ namespace Todos.Source.Components.Entry.Content
             _clipboardService = new WindowsClipboardService();
             
             StrokeText = true;
-            AutoSizeWidth = true;
             Location = new Point(0, 8);
             
             todo.Description.Subscribe(this, v => Text = v);

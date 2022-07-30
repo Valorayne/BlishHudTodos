@@ -1,12 +1,10 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using Blish_HUD.Graphics.UI;
 using Blish_HUD.Modules;
 using Blish_HUD.Settings;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components;
-using Todos.Source.Components.Messages;
 using Todos.Source.Components.Settings;
 using Todos.Source.Models;
 using Todos.Source.Persistence;
@@ -21,6 +19,7 @@ namespace Todos.Source
 		private TodoVisualsManager _visuals;
 		private TodoCornerIcon _cornerIcon;
 		private TodoListModel _todoList;
+		private PopupModel _popup;
 		private SettingsModel _settings;
 		private GameModel _game;
 
@@ -34,11 +33,11 @@ namespace Todos.Source
 		{
 			Resources.Initialize(ModuleParameters.ContentsManager);
 			_game = new GameModel();
+			_popup = new PopupModel();
 			_todoList = await TodoListModel.Initialize(_settings, ModuleParameters.DirectoriesManager);
 			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
-			ConfirmDeletionWindow.Initialize();
 			_cornerIcon = new TodoCornerIcon(_settings);
-			_visuals = new TodoVisualsManager(_settings, _game, _todoList);
+			_visuals = new TodoVisualsManager(_settings, _game, _todoList, _popup);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -51,11 +50,11 @@ namespace Todos.Source
 		{
 			_visuals?.Dispose();
 			_cornerIcon?.Dispose();
+			_popup?.Dispose();
 			_todoList?.Dispose();
 
 			TimeService.Dispose();
 			SaveScheduler.Dispose();
-			ConfirmDeletionWindow.Dispose();
 
 			Resources.Dispose();
 			_settings?.Dispose();

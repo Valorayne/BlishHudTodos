@@ -19,11 +19,13 @@ namespace Todos.Source.Components
         private readonly Dictionary<TodoModel, TodoEntry> _entries = new Dictionary<TodoModel, TodoEntry>();
         private readonly SettingsModel _settings;
         private readonly TodoListModel _todoList;
-        
-        public TodoScrollView(SettingsModel settings, TodoListModel todoList, Action saveScroll)
+        private readonly PopupModel _popup;
+
+        public TodoScrollView(SettingsModel settings, TodoListModel todoList, PopupModel popup, Action saveScroll)
         {
             _settings = settings;
             _todoList = todoList;
+            _popup = popup;
             _saveScroll = saveScroll;
             
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
@@ -41,7 +43,7 @@ namespace Todos.Source.Components
             _saveScroll();
             RemoveEntries();
             foreach (var todo in newValue)
-                _entries.Add(todo, new TodoEntry(_settings, _todoList, todo, _saveScroll) { Parent = this });            
+                _entries.Add(todo, new TodoEntry(_settings, _todoList, _popup, todo, _saveScroll) { Parent = this });            
         }
 
         private void RemoveEntries()

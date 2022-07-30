@@ -104,6 +104,7 @@
     <Compile Include="Source\Components\TodoListWindow.cs" />
     <Compile Include="Source\Components\TodoWindowToggleHotkey.cs" />
     <Compile Include="Source\Models\GameModel.cs" />
+    <Compile Include="Source\Models\PopupModel.cs" />
     <Compile Include="Source\Models\SettingsModel.cs" />
     <Compile Include="Source\Models\TodoListModel.cs" />
     <Compile Include="Source\Models\Resets\DailyReset.cs" />

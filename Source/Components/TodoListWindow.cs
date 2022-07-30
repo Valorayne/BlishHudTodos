@@ -3,7 +3,6 @@ using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
-using Todos.Source.Components.Messages;
 using Todos.Source.Models;
 using Todos.Source.Utils;
 
@@ -12,7 +11,8 @@ namespace Todos.Source.Components
     public class TodoListWindow : StandardWindow
     {
         private readonly SettingsModel _settings;
-        
+        private readonly PopupModel _popup;
+
         private const int MIN_WIDTH = 300;
         private const int MAX_WIDTH = 1000;
         private const int MIN_HEIGHT = 150;
@@ -27,10 +27,11 @@ namespace Todos.Source.Components
         private static Rectangle GetContentRegion(SettingsModel settings) => new Rectangle(0, -28, 
             GetWindowRegion(settings).Width, GetWindowRegion(settings).Height + 33);
 
-        public TodoListWindow(SettingsModel settings, TodoListModel todoList) 
+        public TodoListWindow(SettingsModel settings, TodoListModel todoList, PopupModel popup) 
             : base(Resources.GetTexture(Textures.Empty), GetWindowRegion(settings), GetContentRegion(settings))
         {
             _settings = settings;
+            _popup = popup;
             Parent = GameService.Graphics.SpriteScreen;
             Title = "To-Dos";
             CanResize = !settings.FixatedWindow.Value;
@@ -39,7 +40,7 @@ namespace Todos.Source.Components
             Location = new Point(settings.WindowLocationX.Value, settings.WindowLocationY.Value);
             Visible = true;
 
-            new TodoListPanel(settings, todoList) { Parent = this };
+            new TodoListPanel(settings, todoList, popup) { Parent = this };
 
             settings.WindowOpacityWhenNotFocussed.Subscribe(this, newOpacity => { if (!_hovered) Opacity = newOpacity; });
             settings.FixatedWindow.Subscribe(this, fixated => CanResize = !fixated);
@@ -62,6 +63,7 @@ namespace Todos.Source.Components
 
         protected override void OnMoved(MovedEventArgs e)
         {
+            _popup?.Close();
             if (_settings.FixatedWindow.Value)
             {
                 Location = new Point(_settings.WindowLocationX.Value, _settings.WindowLocationY.Value);
@@ -75,12 +77,13 @@ namespace Todos.Source.Components
 
         protected override void OnClick(MouseEventArgs e)
         {
-            ConfirmDeletionWindow.Hide();
+            _popup.Close();
             base.OnClick(e);
         }
 
         protected override void OnResized(ResizedEventArgs e)
         {
+            _popup?.Close();
             if (_settings == null)
             {
                 base.OnResized(e);

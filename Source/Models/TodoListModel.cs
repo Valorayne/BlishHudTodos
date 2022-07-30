@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Todos.Source.Persistence;
-using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Models

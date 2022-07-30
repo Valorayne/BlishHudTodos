@@ -9,13 +9,13 @@ namespace Todos.Source.Components.Entry.Menu
     {
         private const int PADDING_RIGHT = 8;
 
-        public TodoEntryHoverMenu(TodoListModel todoList, TodoModel todo, Action<Point> onDelete)
+        public TodoEntryHoverMenu(TodoListModel todoList, TodoModel todo, PopupModel popup, Action saveScroll)
         {
             Height = HEADER_HEIGHT;
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
             OuterControlPadding = new Vector2(PADDING_RIGHT, 0);
 
-            var deleteButton = new TodoDeleteButton(onDelete) { Parent = this };
+            var deleteButton = new TodoDeleteButton(todo, popup, saveScroll) { Parent = this };
             var editButton = new TodoEditButton(todo) { Parent = this };
             var reorderButton = new TodoReorderButton(todoList, todo) { Parent = this };
 

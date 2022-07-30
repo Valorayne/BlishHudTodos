@@ -11,10 +11,10 @@ namespace Todos.Source
         private readonly IDisposable _showWindowSubscription;
         private readonly TodoListWindow _window;
 
-        public TodoVisualsManager(SettingsModel settings, GameModel game, TodoListModel todoList)
+        public TodoVisualsManager(SettingsModel settings, GameModel game, TodoListModel todoList, PopupModel popup)
         {
             _hotkeyManager = new TodoWindowToggleHotkey(settings);
-            _window = new TodoListWindow(settings, todoList);
+            _window = new TodoListWindow(settings, todoList, popup);
 
             _showWindowSubscription = game.IsInGame.CombineWith(game.IsMapOpen, settings.WindowMinimized,
                 settings.ShowWindowOnMap, settings.ShowWindowOutOfGame, ShouldHideWindow)

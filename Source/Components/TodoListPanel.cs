@@ -1,4 +1,5 @@
-﻿using Blish_HUD.Controls;
+﻿using System.ComponentModel;
+using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Components.Menu;
@@ -12,20 +13,22 @@ namespace Todos.Source.Components
         private const int SCROLL_BAR_WIDTH = 15;
 
         private readonly TodoListModel _todoList;
+        private readonly PopupModel _popup;
         private readonly Scrollbar _scrollBar;
         private readonly TodoListMenuBar _menuBar;
         private readonly TodoScrollView _scrollView;
 
-        public TodoListPanel(SettingsModel settings, TodoListModel todoList)
+        public TodoListPanel(SettingsModel settings, TodoListModel todoList, PopupModel popup)
         {
             _todoList = todoList;
-            
+            _popup = popup;
+
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
             HeightSizingMode = SizingMode.Fill;
 
             _menuBar = new TodoListMenuBar(settings, todoList) { Parent = this };
-            _scrollView = new TodoScrollView(settings, todoList, SaveScroll) { Parent = this };
+            _scrollView = new TodoScrollView(settings, todoList, popup, SaveScroll) { Parent = this };
             _scrollBar = new Scrollbar(_scrollView) { Parent = this };
 
             _todoList.AllTodos.Subscribe(this, (before, after) =>
@@ -33,6 +36,14 @@ namespace Todos.Source.Components
                 if (before.Count < after.Count)
                     Utility.Delay(() => _scrollBar.ScrollDistance = 1, 50);
             });
+
+            _scrollBar.PropertyChanged += OnScrollPropertyChanged;
+        }
+
+        private void OnScrollPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ScrollDistance")
+                _popup.Close();
         }
 
         private float? _scrollTarget;
@@ -79,6 +90,7 @@ namespace Todos.Source.Components
         protected override void DisposeControl()
         {
             _todoList.Unsubscribe(this);
+            _scrollBar.PropertyChanged -= OnScrollPropertyChanged;
             base.DisposeControl();
         }
     }

@@ -9,7 +9,6 @@ namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntry : Panel
     {
-        private readonly PopupModel _popup;
         private readonly TodoModel _todo;
         private readonly Action _saveScroll;
         
@@ -19,13 +18,12 @@ namespace Todos.Source.Components.Entry
 
         public TodoEntry(SettingsModel settings, TodoListModel todoList, PopupModel popup, TodoModel todo, Action saveScroll)
         {
-            _popup = popup;
             _todo = todo;
             _saveScroll = saveScroll;
             
             WidthSizingMode = SizingMode.Fill;
 
-            _hoverMenu = new TodoEntryHoverMenu(todoList, todo, popup, _saveScroll, settings) { Parent = this };
+            _hoverMenu = new TodoEntryHoverMenu(todoList, todo, popup, _saveScroll) { Parent = this };
             _row = new TodoEntryRow(settings, todo, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
             Height = _row.Height;

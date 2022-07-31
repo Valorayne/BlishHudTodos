@@ -14,18 +14,16 @@ namespace Todos.Source.Components.Entry.Menu
         public const int WIDTH = Panel.HEADER_HEIGHT;
         
         private readonly TodoModel _todo;
-        private readonly SettingsModel _settings;
         private readonly PopupModel _popupModel;
         private readonly Action _saveScroll;
 
-        public TodoDeleteButton(TodoModel todo, SettingsModel settings, PopupModel popupModel, Action saveScroll) : base(
+        public TodoDeleteButton(TodoModel todo, PopupModel popupModel, Action saveScroll) : base(
             Resources.GetTexture(Textures.DeleteIcon),
             Resources.GetTexture(Textures.DeleteIconHovered),
             WIDTH, WIDTH, _ => {}
         )
         {
             _todo = todo;
-            _settings = settings;
             _popupModel = popupModel;
             _saveScroll = saveScroll;
             BasicTooltipText = "Delete";
@@ -45,7 +43,7 @@ namespace Todos.Source.Components.Entry.Menu
 
         private void OpenPopup()
         {
-            var popup = _popupModel.Open(Parent, new ConfirmDeletionWindow(_settings)
+            var popup = _popupModel.Open(Parent, new ConfirmDeletionWindow
             {
                 OnYes = () =>
                 {

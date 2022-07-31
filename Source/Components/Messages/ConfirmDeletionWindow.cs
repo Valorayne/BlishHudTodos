@@ -3,7 +3,6 @@ using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
-using Todos.Source.Models;
 
 namespace Todos.Source.Components.Messages
 {
@@ -17,13 +16,11 @@ namespace Todos.Source.Components.Messages
         public Action OnYes;
         public Action OnNo;
 
-        private readonly SettingsModel _settings;
         private readonly StandardButton _yes;
         private readonly StandardButton _no;
 
-        public ConfirmDeletionWindow(SettingsModel settings)
+        public ConfirmDeletionWindow()
         {
-            _settings = settings;
             Parent = GameService.Graphics.SpriteScreen;
             Height = HEIGHT;
             Width = WIDTH;
@@ -31,14 +28,13 @@ namespace Todos.Source.Components.Messages
             Title = "Are you sure?";
             ZIndex = Screen.TOOLTIP_BASEZINDEX;
             OuterControlPadding = Vector2.One * PADDING;
+            BackgroundTexture = Content.GetTexture("tooltip");
 
             _yes = new StandardButton { Parent = this, Text = "Yes", Width = BUTTON_WIDTH };
             _no = new StandardButton { Parent = this, Text = "No", Width = BUTTON_WIDTH };
 
             _yes.Click += OnYesHandler;
             _no.Click += OnNoHandler;
-            
-            settings.BackgroundOpacity.Subscribe(this, opacity => BackgroundColor = new Color(0, 0, 0, opacity));
         }
 
         private void OnNoHandler(object sender, MouseEventArgs e) => OnNo?.Invoke();
@@ -50,7 +46,6 @@ namespace Todos.Source.Components.Messages
             _no.Click -= OnNoHandler;
             OnYes = null;
             OnNo = null;
-            _settings.Unsubscribe(this);
             base.DisposeControl();
         }
     }

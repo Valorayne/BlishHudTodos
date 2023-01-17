@@ -12,6 +12,7 @@ namespace Todos.Source.Components
     {
         private readonly SettingsModel _settings;
         private readonly PopupModel _popup;
+        private readonly TodoListPanel _panel;
 
         private const int MIN_WIDTH = 300;
         private const int MAX_WIDTH = 1000;
@@ -32,6 +33,8 @@ namespace Todos.Source.Components
         {
             _settings = settings;
             _popup = popup;
+            _panel = new TodoListPanel(settings, todoList, popup) { Parent = this };
+            
             Parent = GameService.Graphics.SpriteScreen;
             Title = "To-Dos";
             CanResize = !settings.FixatedWindow.Value;
@@ -39,8 +42,6 @@ namespace Todos.Source.Components
             Opacity = settings.WindowOpacityWhenNotFocussed.Value;
             Location = new Point(settings.WindowLocationX.Value, settings.WindowLocationY.Value);
             Visible = true;
-
-            new TodoListPanel(settings, todoList, popup) { Parent = this };
 
             settings.WindowOpacityWhenNotFocussed.Subscribe(this, newOpacity => { if (!_hovered) Opacity = newOpacity; });
             settings.FixatedWindow.Subscribe(this, fixated => CanResize = !fixated);
@@ -64,6 +65,7 @@ namespace Todos.Source.Components
         protected override void OnMoved(MovedEventArgs e)
         {
             _popup?.Close();
+            
             if (_settings.FixatedWindow.Value)
             {
                 Location = new Point(_settings.WindowLocationX.Value, _settings.WindowLocationY.Value);
@@ -84,6 +86,8 @@ namespace Todos.Source.Components
         protected override void OnResized(ResizedEventArgs e)
         {
             _popup?.Close();
+            _panel?.SaveScroll();
+            
             if (_settings == null)
             {
                 base.OnResized(e);

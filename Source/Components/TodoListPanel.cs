@@ -48,7 +48,7 @@ namespace Todos.Source.Components
 
         private float? _scrollTarget;
 
-        private void SaveScroll()
+        public void SaveScroll()
         {
             if (_scrollBar != null)
                 _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Height - _scrollView.ContentBounds.Y);

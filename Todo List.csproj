@@ -89,6 +89,7 @@
     <Compile Include="Source\Components\Generic\TooltipNotification.cs" />
     <Compile Include="Source\Components\Menu\AddNewTodoButton.cs" />
     <Compile Include="Source\Components\Menu\CloseTodoWindowButton.cs" />
+    <Compile Include="Source\Components\Menu\LockAllTasksToggle.cs" />
     <Compile Include="Source\Components\Menu\TodoListMenuBar.cs" />
     <Compile Include="Source\Components\Menu\TodoShowAlreadyDoneToggle.cs" />
     <Compile Include="Source\Components\Messages\AllTodosDoneMessage.cs" />

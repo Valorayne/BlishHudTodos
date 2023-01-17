@@ -21,6 +21,7 @@ namespace Todos.Source.Models
         public readonly IVariable<int> WindowHeight;
 
         public readonly IVariable<bool> ShowAlreadyDoneTasks;
+        public readonly IVariable<bool> LockAllTasks;
 
         public readonly IVariable<KeyBinding> ToggleWindowHotkey;
         public readonly IVariable<CheckboxType> CheckboxType;
@@ -41,6 +42,7 @@ namespace Todos.Source.Models
             WindowHeight = Add(settings.DefineSetting("Window.Dimensions.Height", 200).ToVariable());
 
             ShowAlreadyDoneTasks = Add(settings.DefineSetting("Menu.Bar.ShowAlreadyDoneTasks", true).ToVariable());
+            LockAllTasks = Add(settings.DefineSetting("Menu.Bar.LockAllTasks", false).ToVariable());
 
             ToggleWindowHotkey = Add(settings.DefineSetting("Hotkeys.Window.Toggle", new KeyBinding()).ToVariable());
             CheckboxType = Add(settings.DefineSetting("Checkbox.Type", Utils.CheckboxType.Standard).ToVariable());

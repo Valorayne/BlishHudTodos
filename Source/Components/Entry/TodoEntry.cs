@@ -31,7 +31,11 @@ namespace Todos.Source.Components.Entry
             todo.IsEditing.Subscribe(this, OnEditModeChanged);
             _row.Resized += OnRowResized;
 
-            _hoverSubscription = new HoverSubscription(this, _hoverMenu.Show, () =>
+            _hoverSubscription = new HoverSubscription(this, () =>
+            {
+                if (!settings.LockAllTasks.Value)
+                    _hoverMenu.Show();
+            }, () =>
             {
                 if (!_todo.IsEditing.Value)
                     _hoverMenu.Hide();

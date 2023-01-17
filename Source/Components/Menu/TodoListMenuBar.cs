@@ -19,6 +19,7 @@ namespace Todos.Source.Components.Menu
             new CloseTodoWindowButton(settings) { Parent = this };
             new TodoShowAlreadyDoneToggle(settings) { Parent = this };
             new AddNewTodoButton(todoList) { Parent = this };
+            new LockAllTasksToggle(settings) { Parent = this };
         }
     }
 }

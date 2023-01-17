@@ -25,7 +25,7 @@ namespace Todos.Source.Components
             Math.Max(MIN_HEIGHT, Math.Min(MAX_HEIGHT, settings.WindowHeight.Value)));
         
         private static Rectangle GetContentRegion(SettingsModel settings) => new Rectangle(0, -28, 
-            GetWindowRegion(settings).Width, GetWindowRegion(settings).Height + 33);
+            GetWindowRegion(settings).Width, GetWindowRegion(settings).Height);
 
         public TodoListWindow(SettingsModel settings, TodoListModel todoList, PopupModel popup) 
             : base(Resources.GetTexture(Textures.Empty), GetWindowRegion(settings), GetContentRegion(settings))

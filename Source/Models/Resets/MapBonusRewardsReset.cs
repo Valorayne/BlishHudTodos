@@ -22,6 +22,11 @@ namespace Todos.Source.Models.Resets
             return $"Map Bonus Rewards reset in {NextWeeklyReset(now).ToDurationString()}";
         }
 
+        public string ClipboardContent(DateTimeOffset now)
+        {
+            return null;
+        }
+
         private static DateTimeOffset LastWeeklyReset(DateTimeOffset now)
         {
             return NextWeeklyReset(now) - TimeSpan.FromDays(7);

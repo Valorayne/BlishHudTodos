@@ -109,6 +109,7 @@
     <Compile Include="Source\Models\Resets\EuWvWReset.cs" />
     <Compile Include="Source\Models\Resets\MapBonusRewardsReset.cs" />
     <Compile Include="Source\Models\Resets\NaWvWReset.cs" />
+    <Compile Include="Source\Models\Resets\PsnaReset.cs" />
     <Compile Include="Source\Models\SettingsModel.cs" />
     <Compile Include="Source\Models\TodoListModel.cs" />
     <Compile Include="Source\Models\Resets\DailyReset.cs" />

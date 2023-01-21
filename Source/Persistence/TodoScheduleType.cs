@@ -9,6 +9,7 @@
         Duration = 3,
         MapBonusRewards = 4,
         EuWvW = 5,
-        NaWvW = 6
+        NaWvW = 6,
+        Psna = 7
     }
 }

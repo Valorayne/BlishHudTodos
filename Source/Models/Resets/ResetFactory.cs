@@ -14,6 +14,7 @@ namespace Todos.Source.Models.Resets
             new MapBonusRewardsReset(),
             new EuWvWReset(),
             new NaWvWReset(),
+            new PsnaReset(),
             new LocalTimeReset(),
             new DurationReset()
         };

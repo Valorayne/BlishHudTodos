@@ -38,7 +38,9 @@ namespace Todos.Source.Components
 
         protected override CaptureType CapturesInput()
         {
-            return _settings.ClickThroughBackground.Value ? CaptureType.DoNotBlock : base.CapturesInput();
+            return _settings.ClickThroughBackground.Value
+                ? CaptureType.MouseWheel | CaptureType.Filter
+                : base.CapturesInput();
         }
 
         private void OnVisibleTodosChanged(IReadOnlyList<TodoModel> newValue)

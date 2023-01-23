@@ -7,6 +7,7 @@ namespace Todos.Source.Utils
     public enum Textures
     {
         CornerIcon,
+        CornerIconAlert,
         Empty,
         Header,
         HeaderHovered,
@@ -58,6 +59,7 @@ namespace Todos.Source.Utils
         private static readonly IReadOnlyDictionary<Textures, string> PATHS = new Dictionary<Textures, string>
         {
             { Textures.CornerIcon, @"textures\156701.png" },
+            { Textures.CornerIconAlert, @"textures\156702_red.png" },
             { Textures.Empty, @"textures\empty.png" },
             { Textures.Header, @"textures\1032325.png" },
             { Textures.HeaderHovered, @"textures\1032324.png" },

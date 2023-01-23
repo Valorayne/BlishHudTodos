@@ -46,7 +46,7 @@ namespace Todos.Source
             _popup = new PopupModel();
             _todoList = await TodoListModel.Initialize(_settings, ModuleParameters.DirectoriesManager);
             SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
-            _cornerIcon = new TodoCornerIcon(_settings);
+            _cornerIcon = new TodoCornerIcon(_settings, _todoList);
             _visuals = new TodoVisualsManager(_settings, _game, _todoList, _popup);
         }
 

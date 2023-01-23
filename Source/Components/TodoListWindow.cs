@@ -56,6 +56,11 @@ namespace Todos.Source.Components
                 GetWindowRegion(settings).Width, GetWindowRegion(settings).Height);
         }
 
+        protected override CaptureType CapturesInput()
+        {
+            return base.CapturesInput() | CaptureType.DoNotBlock;
+        }
+
         protected override void OnMouseEntered(MouseEventArgs e)
         {
             _hovered = true;

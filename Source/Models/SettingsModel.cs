@@ -10,6 +10,7 @@ namespace Todos.Source.Models
         public readonly IVariable<float> BackgroundOpacity;
         public readonly IVariable<CheckboxType> CheckboxType;
         public readonly IVariable<bool> ClickThroughBackground;
+        public readonly IVariable<bool> ColorMenuIcon;
         public readonly IVariable<bool> FixatedWindow;
         public readonly IVariable<bool> LockAllTasks;
 
@@ -38,7 +39,8 @@ namespace Todos.Source.Models
             BackgroundOpacity = Add(settings.DefineSetting("Window.Background.Opacity", 0.2f).ToVariable());
             WindowOpacityWhenNotFocussed =
                 Add(settings.DefineSetting("Window.Visibility.Opacity.WhenNotFocussed", 1f).ToVariable());
-            ClickThroughBackground = Add(settings.DefineSetting("Window.Background.ClickThrough", false).ToVariable());
+            ClickThroughBackground = Add(settings.DefineSetting("Window.Background.ClickThrough", true).ToVariable());
+            ColorMenuIcon = Add(settings.DefineSetting("Window.Bar.Colored", false).ToVariable());
 
             WindowLocationX = Add(settings.DefineSetting("Window.Location.X", 200).ToVariable());
             WindowLocationY = Add(settings.DefineSetting("Window.Location.Y", 200).ToVariable());

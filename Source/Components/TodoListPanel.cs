@@ -43,6 +43,11 @@ namespace Todos.Source.Components
             _scrollBar.PropertyChanged += OnScrollPropertyChanged;
         }
 
+        protected override CaptureType CapturesInput()
+        {
+            return base.CapturesInput() | CaptureType.DoNotBlock;
+        }
+
         private void OnScrollPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ScrollDistance")

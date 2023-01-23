@@ -26,6 +26,8 @@ namespace Todos.Source.Components.Settings
                     "When fixed, the Todos window can neither be moved nor resized"),
                 SettingRow.Boolean(this, settings.ClickThroughBackground, "Click Through Background",
                     "Whether or not it should be possible to click through the\r\nbackground to interact with game elements (e.g. Daily Chests)"),
+                SettingRow.Boolean(this, settings.ColorMenuIcon, "Color Menu Icon",
+                    "When active, the Todo icon at the top of the screen will be colored\r\nred as long as there's open tasks and the window is minimized"),
                 SettingRow.Slider(this, settings.BackgroundOpacity,
                     "Background opacity", "The opacity of the window background"),
                 SettingRow.Slider(this, settings.WindowOpacityWhenNotFocussed,

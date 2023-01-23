@@ -15,6 +15,7 @@ namespace Todos.Source.Models
         public readonly IVariable<TodoModel> HoveredTodo;
 
         public readonly IVariable<TodoModel> MovingTodo;
+        public readonly IProperty<int> OpenTodos;
         public readonly IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
         private TodoListModel(SettingsModel settings, List<TodoModel> sortedTodos)
@@ -24,6 +25,7 @@ namespace Todos.Source.Models
             VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
             MovingTodo = Add(Variables.Transient<TodoModel>(null));
             HoveredTodo = Add(Variables.Transient<TodoModel>(null));
+            OpenTodos = Add(AllTodos.Select(todos => todos.Count(todo => !todo.Schedule.IsDone.Value)));
 
             foreach (var todo in sortedTodos)
                 SetupTodo(todo);
@@ -48,12 +50,14 @@ namespace Todos.Source.Models
         {
             todo.OrderIndex.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
             todo.IsVisible.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
+            todo.Schedule.IsDone.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
             todo.IsDeleted.Subscribe(this, _ => _allTodos.Remove(TearDownTodo(todo)), false);
             return todo;
         }
 
         private TodoModel TearDownTodo(TodoModel todo)
         {
+            todo.Schedule.Unsubscribe(this);
             todo.Unsubscribe(this);
             todo.Dispose();
             return todo;
@@ -99,6 +103,7 @@ namespace Todos.Source.Models
             foreach (var todo in AllTodos.Value)
                 TearDownTodo(todo);
 
+            OpenTodos.Dispose();
             MouseService.LeftButton.Unsubscribe(this);
         }
     }

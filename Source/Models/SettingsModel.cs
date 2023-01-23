@@ -24,6 +24,7 @@ namespace Todos.Source.Models
         public readonly IVariable<int> WindowLocationY;
         public readonly IVariable<bool> WindowMinimized;
         public readonly IVariable<float> WindowOpacityWhenNotFocussed;
+        public readonly IVariable<string> WindowTitle;
         public readonly IVariable<int> WindowWidth;
 
         public SettingsModel(SettingCollection settings)
@@ -32,6 +33,7 @@ namespace Todos.Source.Models
             ShowWindowOutOfGame = Add(settings.DefineSetting("Window.Visibility.Always", false).ToVariable());
             ShowWindowOnMap = Add(settings.DefineSetting("Window.Visibility.OnMap", false).ToVariable());
             FixatedWindow = Add(settings.DefineSetting("Window.Location.Fixed", false).ToVariable());
+            WindowTitle = Add(settings.DefineSetting("Window.Title", "To-Dos").ToVariable());
 
             BackgroundOpacity = Add(settings.DefineSetting("Window.Background.Opacity", 0.2f).ToVariable());
             WindowOpacityWhenNotFocussed =

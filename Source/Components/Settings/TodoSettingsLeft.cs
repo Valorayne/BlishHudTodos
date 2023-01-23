@@ -17,6 +17,7 @@ namespace Todos.Source.Components.Settings
 
             _rows = new List<IDisposable>
             {
+                SettingRow.String(this, settings.WindowTitle, "Window Title", "The title of the Todo List Window"),
                 SettingRow.Boolean(this, settings.ShowWindowOutOfGame, "Show outside of game",
                     "Whether or not the Todos window should also be shown during\r\ncutscenes, the character selection screen and loading screens"),
                 SettingRow.Boolean(this, settings.ShowWindowOnMap, "Show on map",

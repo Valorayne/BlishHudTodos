@@ -1,95 +1,32 @@
-﻿using System.Linq;
-using Blish_HUD.Controls;
+﻿using Blish_HUD.Controls;
 using Blish_HUD.Input;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components.Entry.Menu
 {
-    public class TodoReorderButton : FlowPanel
+    public class TodoReorderButton : Panel
     {
-        private readonly TodoListModel _todoList;
         private readonly TodoModel _todo;
-        private readonly Panel _upButton;
-        private readonly Panel _downButton;
+        private readonly TodoListModel _todoList;
 
         public TodoReorderButton(TodoListModel todoList, TodoModel todo)
         {
             _todoList = todoList;
             _todo = todo;
-            
+
             Width = HEADER_HEIGHT;
             Height = HEADER_HEIGHT;
-            FlowDirection = ControlFlowDirection.SingleTopToBottom;
+            BasicTooltipText = "Drag to reorder";
 
-            _upButton = new Panel { Parent = this, Width = HEADER_HEIGHT, Height = HEADER_HEIGHT / 2 };
-            _downButton = new Panel { Parent = this, Width = HEADER_HEIGHT, Height = HEADER_HEIGHT / 2 };
-
-            _upButton.MouseEntered += OnMouseEnteredUp;
-            _upButton.Click += OnUpClicked;
-            _upButton.MouseLeft += OnMouseLeft;
-            
-            _downButton.MouseEntered += OnMouseEnteredDown;
-            _downButton.Click += OnDownClicked;
-            _downButton.MouseLeft += OnMouseLeft;
-            
             BackgroundTexture = Resources.GetTexture(Textures.ReorderIcon);
         }
 
-        private bool CanBeMovedUp => _todoList.VisibleTodos.Value.FirstOrDefault() != _todo;
-        private bool CanBeMovedDown => _todoList.VisibleTodos.Value.LastOrDefault() != _todo;
-
-        private void OnUpClicked(object sender, MouseEventArgs e)
+        protected override void OnLeftMouseButtonPressed(MouseEventArgs e)
         {
-            if (CanBeMovedUp)
-                _todoList.MoveUp(_todo);
-        }
-
-        private void OnDownClicked(object sender, MouseEventArgs e)
-        {
-            if (CanBeMovedDown)
-                _todoList.MoveDown(_todo);
-        }
-
-        private void OnMouseEnteredDown(object sender, MouseEventArgs e)
-        {
-            if (CanBeMovedDown)
-            {
-                BackgroundTexture = Resources.GetTexture(Textures.ReorderIconDown);
-                _downButton.BasicTooltipText = "Move Down";
-            }
-        }
-
-        private void OnMouseLeft(object sender, MouseEventArgs e)
-        {
-            if (!_upButton.MouseOver && !_downButton.MouseOver)
-            {
-                BackgroundTexture = Resources.GetTexture(Textures.ReorderIcon);
-                _upButton.BasicTooltipText = "";
-                _downButton.BasicTooltipText = "";
-            }
-        }
-
-        private void OnMouseEnteredUp(object sender, MouseEventArgs e)
-        {
-            if (CanBeMovedUp)
-            {
-                BackgroundTexture = Resources.GetTexture(Textures.ReorderIconUp);
-                _upButton.BasicTooltipText = "Move Up";
-            }
-        }
-
-        protected override void DisposeControl()
-        {
-            _upButton.MouseEntered -= OnMouseEnteredUp;
-            _upButton.MouseLeft -= OnMouseLeft;
-            _upButton.Click -= OnUpClicked;
-            
-            _downButton.MouseEntered -= OnMouseEnteredDown;
-            _downButton.MouseLeft -= OnMouseLeft;
-            _downButton.Click -= OnDownClicked;
-            
-            base.DisposeControl();
+            if (_todoList.MovingTodo.Value?.Item1 == null) _todoList.MovingTodo.Set(_todo, e.MousePosition);
+            base.OnLeftMouseButtonPressed(e);
         }
     }
 }

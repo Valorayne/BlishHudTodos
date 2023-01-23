@@ -1,35 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
+using Microsoft.Xna.Framework;
 using Todos.Source.Persistence;
+using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Models
 {
     public class TodoListModel : ModelBase
     {
+        private readonly IVariable<List<TodoModel>> _allTodos;
         private readonly SettingsModel _settings;
-        private readonly IVariable<List<TodoModel>> _allTodos; 
-        
-        public IProperty<IReadOnlyList<TodoModel>> AllTodos => _allTodos;
-        public IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
-        public static async Task<TodoListModel> Initialize(SettingsModel settings, DirectoriesManager manager)
-        {
-            var storedTodos = await new Persistence.Persistence(manager).LoadAll();
-            var todoModels = storedTodos.Select(json => new TodoModel(settings, json, false));
-            return new TodoListModel(settings, todoModels.OrderBy(t => t.OrderIndex.Value).ToList());
-        }
+        public readonly IVariable<Tuple<TodoModel, Point>> MovingTodo;
+        public readonly IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
         private TodoListModel(SettingsModel settings, List<TodoModel> sortedTodos)
         {
             _settings = settings;
             _allTodos = Add(Variables.Transient(sortedTodos));
             VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
+            MovingTodo = Add(Variables.Transient<Tuple<TodoModel, Point>>(null));
 
             foreach (var todo in sortedTodos)
                 SetupTodo(todo);
+
+            MouseService.LeftButton.Subscribe(this, state =>
+            {
+                if (MovingTodo.Value != null && state == MouseService.ButtonState.Released)
+                    MovingTodo.Reset();
+            });
+        }
+
+        public IProperty<IReadOnlyList<TodoModel>> AllTodos => _allTodos;
+
+        public static async Task<TodoListModel> Initialize(SettingsModel settings, DirectoriesManager manager)
+        {
+            var storedTodos = await new Persistence.Persistence(manager).LoadAll();
+            var todoModels = storedTodos.Select(json => new TodoModel(settings, json, false));
+            return new TodoListModel(settings, todoModels.OrderBy(t => t.OrderIndex.Value).ToList());
         }
 
         private TodoModel SetupTodo(TodoModel todo)
@@ -47,7 +59,10 @@ namespace Todos.Source.Models
             return todo;
         }
 
-        public void AddNewTodo() => _allTodos.Add(SetupTodo(new TodoModel(_settings, new TodoJson(), true)));
+        public void AddNewTodo()
+        {
+            _allTodos.Add(SetupTodo(new TodoModel(_settings, new TodoJson(), true)));
+        }
 
         public void MoveUp(TodoModel todo)
         {
@@ -83,6 +98,8 @@ namespace Todos.Source.Models
         {
             foreach (var todo in AllTodos.Value)
                 TearDownTodo(todo);
+
+            MouseService.LeftButton.Unsubscribe(this);
         }
     }
 }

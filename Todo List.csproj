@@ -136,6 +136,7 @@
     <Compile Include="Source\Utils\CheckboxType.cs" />
     <Compile Include="Source\Utils\DateUtils.cs" />
     <Compile Include="Source\Utils\Debug.cs" />
+    <Compile Include="Source\Utils\MouseService.cs" />
     <Compile Include="Source\Utils\Reactive\IProperty.cs" />
     <Compile Include="Source\Utils\Reactive\IVariable.cs" />
     <Compile Include="Source\Utils\Reactive\ModelBase.cs" />

@@ -1,26 +1,34 @@
 ﻿using System;
+using System.Linq;
 using Blish_HUD.Controls;
+using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Models;
+using Todos.Source.Utils.Reactive;
 using Todos.Source.Utils.Subscriptions;
 
 namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntry : Panel
     {
-        private readonly TodoModel _todo;
-        private readonly Action _saveScroll;
-        
-        private readonly TodoEntryHoverMenu _hoverMenu;
-        private readonly TodoEntryRow _row;
-        private readonly HoverSubscription _hoverSubscription;
+        private const float MOVING_OPACITY = 0.7f;
+        private const int EXTRA = 5;
 
-        public TodoEntry(SettingsModel settings, TodoListModel todoList, PopupModel popup, TodoModel todo, Action saveScroll)
+        private readonly TodoEntryHoverMenu _hoverMenu;
+        private readonly HoverSubscription _hoverSubscription;
+        private readonly TodoEntryRow _row;
+        private readonly Action _saveScroll;
+        private readonly TodoModel _todo;
+        private readonly TodoListModel _todoList;
+
+        public TodoEntry(SettingsModel settings, TodoListModel todoList, PopupModel popup, TodoModel todo,
+            Action saveScroll)
         {
+            _todoList = todoList;
             _todo = todo;
             _saveScroll = saveScroll;
-            
+
             WidthSizingMode = SizingMode.Fill;
 
             _hoverMenu = new TodoEntryHoverMenu(todoList, todo, popup, _saveScroll) { Parent = this };
@@ -40,7 +48,12 @@ namespace Todos.Source.Components.Entry
                 if (!_todo.IsEditing.Value)
                     _hoverMenu.Hide();
             });
+
+            _todoList.MovingTodo.Subscribe(this, move => Opacity = move?.Item1 == todo ? MOVING_OPACITY : 1f);
         }
+
+        private bool CanBeMovedUp => _todoList.VisibleTodos.Value.FirstOrDefault() != _todo;
+        private bool CanBeMovedDown => _todoList.VisibleTodos.Value.LastOrDefault() != _todo;
 
         private void OnEditModeChanged(bool isInEditMode)
         {
@@ -48,7 +61,7 @@ namespace Todos.Source.Components.Entry
                 _hoverMenu.Show();
             else if (!MouseOver)
                 _hoverMenu.Hide();
-            
+
             Height = _row.Height;
         }
 
@@ -65,11 +78,38 @@ namespace Todos.Source.Components.Entry
             base.OnResized(e);
         }
 
+        protected override void OnMouseLeft(MouseEventArgs e)
+        {
+            if (_todoList.MovingTodo.Value?.Item1 == _todo)
+            {
+                var before = _todoList.MovingTodo.Reset();
+
+                // Move Up
+                if (e.MousePosition.Y <= AbsoluteBounds.Y && CanBeMovedUp)
+                {
+                    _todoList.MoveUp(before.Item1);
+                    _todoList.MovingTodo.Set(before.Item1, new Point(e.MousePosition.X, e.MousePosition.Y - EXTRA));
+                    base.OnMouseLeft(e);
+                    return;
+                }
+
+                // Move Down
+                if (e.MousePosition.Y >= AbsoluteBounds.Y + AbsoluteBounds.Height && CanBeMovedDown)
+                {
+                    _todoList.MoveDown(before.Item1);
+                    _todoList.MovingTodo.Set(before.Item1, new Point(e.MousePosition.X, e.MousePosition.Y + EXTRA));
+                }
+            }
+
+            base.OnMouseLeft(e);
+        }
+
         protected override void DisposeControl()
         {
             _row.Resized -= OnRowResized;
             _todo.Unsubscribe(this);
             _hoverSubscription.Dispose();
+            _todoList.Unsubscribe(this);
             base.DisposeControl();
         }
     }

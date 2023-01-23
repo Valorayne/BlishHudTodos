@@ -13,55 +13,67 @@ using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source
 {
-	[Export(typeof(Module))]
-	public class TodoModule : Module
-	{
-		private TodoVisualsManager _visuals;
-		private TodoCornerIcon _cornerIcon;
-		private TodoListModel _todoList;
-		private PopupModel _popup;
-		private SettingsModel _settings;
-		private GameModel _game;
+    [Export(typeof(Module))]
+    public class TodoModule : Module
+    {
+        private TodoCornerIcon _cornerIcon;
+        private GameModel _game;
+        private PopupModel _popup;
+        private SettingsModel _settings;
+        private TodoListModel _todoList;
+        private TodoVisualsManager _visuals;
 
-		[ImportingConstructor]
-		public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
+        [ImportingConstructor]
+        public TodoModule([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters)
+        {
+        }
 
-		protected override void DefineSettings(SettingCollection settings) => _settings = new SettingsModel(settings);
-		public override IView GetSettingsView() => new TodoSettingsView(_settings);
+        protected override void DefineSettings(SettingCollection settings)
+        {
+            _settings = new SettingsModel(settings);
+        }
 
-		protected override async Task LoadAsync()
-		{
-			Resources.Initialize(ModuleParameters.ContentsManager);
-			_game = new GameModel();
-			_popup = new PopupModel();
-			_todoList = await TodoListModel.Initialize(_settings, ModuleParameters.DirectoriesManager);
-			SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
-			_cornerIcon = new TodoCornerIcon(_settings);
-			_visuals = new TodoVisualsManager(_settings, _game, _todoList, _popup);
-		}
+        public override IView GetSettingsView()
+        {
+            return new TodoSettingsView(_settings);
+        }
 
-		protected override void Update(GameTime gameTime)
-		{
-			TimeService.ProgressTimer(gameTime);
-			SaveScheduler.Progress(gameTime);
-		}
-		
-		protected override void Unload()
-		{
-			_visuals?.Dispose();
-			_cornerIcon?.Dispose();
-			_popup?.Dispose();
-			_todoList?.Dispose();
+        protected override async Task LoadAsync()
+        {
+            Resources.Initialize(ModuleParameters.ContentsManager);
+            MouseService.Initialize();
+            _game = new GameModel();
+            _popup = new PopupModel();
+            _todoList = await TodoListModel.Initialize(_settings, ModuleParameters.DirectoriesManager);
+            SaveScheduler.Initialize(ModuleParameters.DirectoriesManager);
+            _cornerIcon = new TodoCornerIcon(_settings);
+            _visuals = new TodoVisualsManager(_settings, _game, _todoList, _popup);
+        }
 
-			TimeService.Dispose();
-			SaveScheduler.Dispose();
+        protected override void Update(GameTime gameTime)
+        {
+            MouseService.Update();
+            TimeService.ProgressTimer(gameTime);
+            SaveScheduler.Progress(gameTime);
+        }
 
-			Resources.Dispose();
-			_settings?.Dispose();
-			_game?.Dispose();
-			
-			if (Debug.TrackVariableDisposals)
-				Variable<object>.CheckForNotDisposedVariables();
-		}
-	}
+        protected override void Unload()
+        {
+            _visuals?.Dispose();
+            _cornerIcon?.Dispose();
+            _popup?.Dispose();
+            _todoList?.Dispose();
+
+            TimeService.Dispose();
+            SaveScheduler.Dispose();
+
+            MouseService.Dispose();
+            Resources.Dispose();
+            _settings?.Dispose();
+            _game?.Dispose();
+
+            if (Debug.TrackVariableDisposals)
+                Variable<object>.CheckForNotDisposedVariables();
+        }
+    }
 }

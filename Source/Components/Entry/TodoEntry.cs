@@ -31,7 +31,7 @@ namespace Todos.Source.Components.Entry
             WidthSizingMode = SizingMode.Fill;
 
             _hoverMenu = new TodoEntryHoverMenu(todoList, todo, popup, _saveScroll) { Parent = this };
-            _row = new TodoEntryRow(settings, todo, _hoverMenu) { Parent = this };
+            _row = new TodoEntryRow(settings, todo, todoList, _hoverMenu) { Parent = this };
             _hoverMenu.ZIndex = _row.ZIndex + 1;
             Height = _row.Height;
 
@@ -40,15 +40,23 @@ namespace Todos.Source.Components.Entry
 
             _hoverSubscription = new HoverSubscription(this, () =>
             {
-                _todo.IsHovered.Set(true);
+                if (_todoList.MovingTodo.Value != _todo)
+                    _todoList.MovingTodo.Unset();
+
+                _todoList.HoveredTodo.Set(_todo);
+
                 if (!settings.LockAllTasks.Value)
                     _hoverMenu.Show();
             }, () =>
             {
-                _todo.IsHovered.Set(false);
-                if (!_todo.IsEditing.Value)
+                if (!_todo.IsEditing.Value && _todoList.MovingTodo.Value != _todo)
                     _hoverMenu.Hide();
+
+                if (_todoList.HoveredTodo.Value == _todo)
+                    _todoList.HoveredTodo.Unset();
             });
+
+            _todoList.MovingTodo.Subscribe(this, move => Opacity = move == _todo ? MOVING_OPACITY : 1f);
         }
 
         private bool CanBeMovedUp => _todoList.VisibleTodos.Value.FirstOrDefault() != _todo;
@@ -97,6 +105,7 @@ namespace Todos.Source.Components.Entry
             _row.Resized -= OnRowResized;
             _todo.Unsubscribe(this);
             _hoverSubscription.Dispose();
+            _todoList.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -12,6 +12,7 @@ namespace Todos.Source.Models
     {
         private readonly IVariable<List<TodoModel>> _allTodos;
         private readonly SettingsModel _settings;
+        public readonly IVariable<TodoModel> HoveredTodo;
 
         public readonly IVariable<TodoModel> MovingTodo;
         public readonly IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
@@ -22,6 +23,7 @@ namespace Todos.Source.Models
             _allTodos = Add(Variables.Transient(sortedTodos));
             VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
             MovingTodo = Add(Variables.Transient<TodoModel>(null));
+            HoveredTodo = Add(Variables.Transient<TodoModel>(null));
 
             foreach (var todo in sortedTodos)
                 SetupTodo(todo);

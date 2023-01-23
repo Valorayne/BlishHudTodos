@@ -21,12 +21,20 @@ namespace Todos.Source.Components.Entry.Menu
             BasicTooltipText = "Drag to reorder";
 
             BackgroundTexture = Resources.GetTexture(Textures.ReorderIcon);
+
+            _todoList.MovingTodo.Subscribe(this, move => BasicTooltipText = move == todo ? null : "Drag to reorder");
         }
 
         protected override void OnLeftMouseButtonPressed(MouseEventArgs e)
         {
             if (_todoList.MovingTodo.IsUnset()) _todoList.MovingTodo.Set(_todo);
             base.OnLeftMouseButtonPressed(e);
+        }
+
+        protected override void DisposeControl()
+        {
+            _todoList.Unsubscribe(this);
+            base.DisposeControl();
         }
     }
 }

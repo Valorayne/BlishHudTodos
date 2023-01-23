@@ -12,11 +12,12 @@ namespace Todos.Source.Components.Entry.Content
         private readonly TodoDescription _description;
 
         private readonly TodoScheduleIcon _icon;
-        private readonly TodoModel _todo;
+        private readonly TodoListModel _todoList;
 
-        public TodoEntryContent(SettingsModel settings, TodoModel todo, TodoEntryHoverMenu hoverMenu)
+        public TodoEntryContent(SettingsModel settings, TodoModel todo, TodoListModel todoList,
+            TodoEntryHoverMenu hoverMenu)
         {
-            _todo = todo;
+            _todoList = todoList;
 
             WidthSizingMode = SizingMode.Fill;
             Height = HEADER_HEIGHT;
@@ -26,9 +27,9 @@ namespace Todos.Source.Components.Entry.Content
             _icon = new TodoScheduleIcon(todo.Schedule) { Parent = this };
             _description = new TodoDescription(todo, hoverMenu) { Parent = this };
 
-            _todo.IsHovered.Subscribe(this, isHovered =>
+            _todoList.HoveredTodo.Subscribe(this, hovered =>
             {
-                BackgroundTexture = isHovered
+                BackgroundTexture = hovered == todo
                     ? Resources.GetTexture(Textures.HeaderHovered)
                     : Resources.GetTexture(Textures.Header);
             });
@@ -43,7 +44,7 @@ namespace Todos.Source.Components.Entry.Content
 
         protected override void DisposeControl()
         {
-            _todo.IsHovered.Unsubscribe(this);
+            _todoList.HoveredTodo.Unsubscribe(this);
             base.DisposeControl();
         }
     }

@@ -5,18 +5,21 @@ using Microsoft.Xna.Framework.Graphics;
 using Todos.Source.Components.Menu;
 using Todos.Source.Models;
 using Todos.Source.Utils;
+using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Components
 {
     public sealed class TodoListPanel : FlowPanel
     {
         private const int SCROLL_BAR_WIDTH = 15;
-
-        private readonly TodoListModel _todoList;
+        private readonly TodoListMenuBar _menuBar;
         private readonly PopupModel _popup;
         private readonly Scrollbar _scrollBar;
-        private readonly TodoListMenuBar _menuBar;
         private readonly TodoScrollView _scrollView;
+
+        private readonly TodoListModel _todoList;
+
+        private float? _scrollTarget;
 
         public TodoListPanel(SettingsModel settings, TodoListModel todoList, PopupModel popup)
         {
@@ -43,17 +46,18 @@ namespace Todos.Source.Components
         private void OnScrollPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ScrollDistance")
+            {
                 _popup.Close();
+                _todoList.MovingTodo.Unset();
+            }
         }
-
-        private float? _scrollTarget;
 
         public void SaveScroll()
         {
             if (_scrollBar != null)
                 _scrollTarget = _scrollBar.ScrollDistance * (_scrollView.Height - _scrollView.ContentBounds.Y);
         }
-        
+
         public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
         {
             base.PaintBeforeChildren(spriteBatch, bounds);

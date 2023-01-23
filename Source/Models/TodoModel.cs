@@ -9,6 +9,8 @@ namespace Todos.Source.Models
         public readonly IVariable<string> Description;
         public readonly IVariable<bool> IsDeleted;
         public readonly IVariable<bool> IsEditing;
+
+        public readonly IVariable<bool> IsHovered;
         public readonly IProperty<bool> IsVisible;
 
         public readonly IVariable<long> OrderIndex;
@@ -29,6 +31,7 @@ namespace Todos.Source.Models
 
             IsVisible = Add(Schedule.IsDone.CombineWith(IsEditing, settings.ShowAlreadyDoneTasks,
                 (done, editing, show) => !done || editing || show));
+            IsHovered = Add(Variables.Transient(false));
         }
 
         public override string ToString()

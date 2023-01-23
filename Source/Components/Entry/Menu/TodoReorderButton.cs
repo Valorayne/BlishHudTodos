@@ -25,7 +25,7 @@ namespace Todos.Source.Components.Entry.Menu
 
         protected override void OnLeftMouseButtonPressed(MouseEventArgs e)
         {
-            if (_todoList.MovingTodo.Value?.Item1 == null) _todoList.MovingTodo.Set(_todo, e.MousePosition);
+            if (_todoList.MovingTodo.IsUnset()) _todoList.MovingTodo.Set(_todo);
             base.OnLeftMouseButtonPressed(e);
         }
     }

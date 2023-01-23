@@ -13,7 +13,6 @@ namespace Todos.Source.Components.Entry
     public sealed class TodoEntry : Panel
     {
         private const float MOVING_OPACITY = 0.7f;
-        private const int EXTRA = 5;
 
         private readonly TodoEntryHoverMenu _hoverMenu;
         private readonly HoverSubscription _hoverSubscription;
@@ -41,15 +40,15 @@ namespace Todos.Source.Components.Entry
 
             _hoverSubscription = new HoverSubscription(this, () =>
             {
+                _todo.IsHovered.Set(true);
                 if (!settings.LockAllTasks.Value)
                     _hoverMenu.Show();
             }, () =>
             {
+                _todo.IsHovered.Set(false);
                 if (!_todo.IsEditing.Value)
                     _hoverMenu.Hide();
             });
-
-            _todoList.MovingTodo.Subscribe(this, move => Opacity = move?.Item1 == todo ? MOVING_OPACITY : 1f);
         }
 
         private bool CanBeMovedUp => _todoList.VisibleTodos.Value.FirstOrDefault() != _todo;
@@ -80,25 +79,14 @@ namespace Todos.Source.Components.Entry
 
         protected override void OnMouseLeft(MouseEventArgs e)
         {
-            if (_todoList.MovingTodo.Value?.Item1 == _todo)
+            if (_todoList.MovingTodo.Value == _todo)
             {
-                var before = _todoList.MovingTodo.Reset();
-
-                // Move Up
                 if (e.MousePosition.Y <= AbsoluteBounds.Y && CanBeMovedUp)
-                {
-                    _todoList.MoveUp(before.Item1);
-                    _todoList.MovingTodo.Set(before.Item1, new Point(e.MousePosition.X, e.MousePosition.Y - EXTRA));
-                    base.OnMouseLeft(e);
-                    return;
-                }
-
-                // Move Down
-                if (e.MousePosition.Y >= AbsoluteBounds.Y + AbsoluteBounds.Height && CanBeMovedDown)
-                {
-                    _todoList.MoveDown(before.Item1);
-                    _todoList.MovingTodo.Set(before.Item1, new Point(e.MousePosition.X, e.MousePosition.Y + EXTRA));
-                }
+                    _todoList.MoveUp(_todoList.MovingTodo.Value);
+                else if (e.MousePosition.Y >= AbsoluteBounds.Y + AbsoluteBounds.Height && CanBeMovedDown)
+                    _todoList.MoveDown(_todoList.MovingTodo.Value);
+                else
+                    _todoList.MovingTodo.Unset();
             }
 
             base.OnMouseLeft(e);
@@ -109,7 +97,6 @@ namespace Todos.Source.Components.Entry
             _row.Resized -= OnRowResized;
             _todo.Unsubscribe(this);
             _hoverSubscription.Dispose();
-            _todoList.Unsubscribe(this);
             base.DisposeControl();
         }
     }

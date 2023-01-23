@@ -152,11 +152,26 @@ namespace Todos.Source.Utils.Reactive
             variable.Value = !variable.Value;
         }
 
-        public static T Reset<T>(this IVariable<T> variable) where T : class
+        public static T Unset<T>(this IVariable<T> variable) where T : class
         {
             var before = variable.Value;
             variable.Value = null;
             return before;
+        }
+
+        public static bool IsSet<T>(this IVariable<T> variable)
+        {
+            return variable.Value != null;
+        }
+
+        public static bool IsUnset<T>(this IVariable<T> variable)
+        {
+            return variable.Value == null;
+        }
+
+        public static void Set<T>(this IVariable<T> variable, T value)
+        {
+            variable.Value = value;
         }
 
         public static void Set<A, B>(this IVariable<Tuple<A, B>> variable, A a, B b)

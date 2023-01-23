@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
-using Microsoft.Xna.Framework;
 using Todos.Source.Persistence;
 using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
@@ -15,7 +13,7 @@ namespace Todos.Source.Models
         private readonly IVariable<List<TodoModel>> _allTodos;
         private readonly SettingsModel _settings;
 
-        public readonly IVariable<Tuple<TodoModel, Point>> MovingTodo;
+        public readonly IVariable<TodoModel> MovingTodo;
         public readonly IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
         private TodoListModel(SettingsModel settings, List<TodoModel> sortedTodos)
@@ -23,15 +21,15 @@ namespace Todos.Source.Models
             _settings = settings;
             _allTodos = Add(Variables.Transient(sortedTodos));
             VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
-            MovingTodo = Add(Variables.Transient<Tuple<TodoModel, Point>>(null));
+            MovingTodo = Add(Variables.Transient<TodoModel>(null));
 
             foreach (var todo in sortedTodos)
                 SetupTodo(todo);
 
             MouseService.LeftButton.Subscribe(this, state =>
             {
-                if (MovingTodo.Value != null && state == MouseService.ButtonState.Released)
-                    MovingTodo.Reset();
+                if (MovingTodo.IsSet() && state == MouseService.ButtonState.Released)
+                    MovingTodo.Unset();
             });
         }
 

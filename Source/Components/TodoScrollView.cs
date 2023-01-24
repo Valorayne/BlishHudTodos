@@ -30,8 +30,8 @@ namespace Todos.Source.Components
             OuterControlPadding = new Vector2(OUTER_PADDING, OUTER_PADDING);
             ControlPadding = new Vector2(INNER_PADDING, INNER_PADDING);
 
-            new AllTodosDoneMessage(todoList) { Parent = this };
-            new NoTodosYetMessage(todoList) { Parent = this };
+            new AllTodosDoneMessage(todoList, settings) { Parent = this };
+            new NoTodosYetMessage(todoList, settings) { Parent = this };
 
             todoList.VisibleTodos.Subscribe(this, OnVisibleTodosChanged);
         }

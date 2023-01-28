@@ -4,12 +4,12 @@ using Todos.Source.Utils;
 
 namespace Todos.Source.Models.Resets
 {
-    public class WeeklyReset : IReset
+    public class MapBonusRewardsReset : IReset
     {
-        public TodoScheduleType Type => TodoScheduleType.WeeklyServer;
+        public TodoScheduleType Type => TodoScheduleType.MapBonusRewards;
 
-        public string DropdownEntry => "Weekly Server Reset";
-        public string DropdownEntryTooltip => "This task will reset every Monday, 7:30 UTC";
+        public string DropdownEntry => "Map Bonus Rewards Reset";
+        public string DropdownEntryTooltip => "This task will reset every Thursday, 20:00 UTC";
 
         public bool IsDone(DateTimeOffset now, DateTimeOffset lastExecution, TimeSpan localTime, TimeSpan duration)
         {
@@ -19,7 +19,7 @@ namespace Todos.Source.Models.Resets
         public string IconTooltip(DateTimeOffset now, DateTimeOffset? lastExecution, TimeSpan localTime,
             TimeSpan duration)
         {
-            return $"Weekly reset in {NextWeeklyReset(now).ToDurationString()}";
+            return $"Map Bonus Rewards reset in {NextWeeklyReset(now).ToDurationString()}";
         }
 
         public string ClipboardContent(DateTimeOffset now)
@@ -35,9 +35,9 @@ namespace Todos.Source.Models.Resets
         private static DateTimeOffset NextWeeklyReset(DateTimeOffset now)
         {
             var date = DateTimeOffset.UtcNow.StartOfDay();
-            while (date.DayOfWeek != DayOfWeek.Monday)
+            while (date.DayOfWeek != DayOfWeek.Thursday)
                 date += TimeSpan.FromDays(1);
-            var time = date + TimeSpan.FromHours(7) + TimeSpan.FromMinutes(30);
+            var time = date + TimeSpan.FromHours(20);
             return now > time ? time + TimeSpan.FromDays(7) : time;
         }
     }

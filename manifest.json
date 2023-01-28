@@ -1,12 +1,12 @@
 {
   "name": "Todos",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "namespace": "valorayne.bh.todos",
   "package": "Todos.dll",
   "manifest_version": 1,
   "description": "Allows to define potentially re-occuring custom Todos",
   "dependencies": {
-    "bh.blishhud": ">=0.11.7"
+    "bh.blishhud": ">=1.0.0"
   },
   "url": "https://github.com/Valorayne/BlishHudTodos",
   "contributors": [
@@ -14,6 +14,8 @@
       "name": "Valorayne",
       "username": "RavenGrey.4709"
     }
-  ], 
-  "directories": ["todos"]
+  ],
+  "directories": [
+    "todos"
+  ]
 }

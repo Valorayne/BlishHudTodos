@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using Todos.Source.Components.Generic;
 using Todos.Source.Models;
-using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Messages
 {
@@ -12,13 +11,20 @@ namespace Todos.Source.Components.Messages
             "Nothing to do yet!\r\nUse the plus button above to\r\nstart working towards your goals!";
 
         private static readonly Point LOCATION = new Point(0, 25);
-        
+        private readonly SettingsModel _settings;
+
         private readonly TodoListModel _todoList;
 
-        public NoTodosYetMessage(TodoListModel todoList) : base(TEXT, LOCATION)
+        public NoTodosYetMessage(TodoListModel todoList, SettingsModel settings) : base(TEXT, LOCATION)
         {
             _todoList = todoList;
+            _settings = settings;
             _todoList.AllTodos.Subscribe(this, newValue => Visible = newValue.Count == 0);
+        }
+
+        protected override CaptureType CapturesInput()
+        {
+            return _settings.ClickThroughBackground.Value ? CaptureType.MouseWheel : base.CapturesInput();
         }
 
         protected override void DisposeControl()

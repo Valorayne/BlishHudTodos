@@ -5,34 +5,42 @@ using Todos.Source.Components.Entry.Content;
 using Todos.Source.Components.Entry.Edit;
 using Todos.Source.Components.Entry.Menu;
 using Todos.Source.Models;
-using Todos.Source.Utils;
 
 namespace Todos.Source.Components.Entry
 {
     public sealed class TodoEntryRow : FlowPanel
     {
-        private readonly TodoModel _todo;
         private readonly TodoEntryContent _content;
         private readonly TodoEditPanel _editMenu;
+        private readonly TodoModel _todo;
 
-        public TodoEntryRow(SettingsModel settings, TodoModel todo, TodoEntryHoverMenu hoverMenu)
+        public TodoEntryRow(SettingsModel settings, TodoModel todo, TodoListModel todoList,
+            TodoEntryHoverMenu hoverMenu)
         {
             _todo = todo;
-            
+
             FlowDirection = ControlFlowDirection.SingleTopToBottom;
             WidthSizingMode = SizingMode.Fill;
-            
-            _content = new TodoEntryContent(settings, todo, hoverMenu) { Parent = this, Location = Point.Zero };
+
+            _content = new TodoEntryContent(settings, todo, todoList, hoverMenu)
+                { Parent = this, Location = Point.Zero };
             _editMenu = new TodoEditPanel(todo) { Parent = this, Location = new Point(0, HEADER_HEIGHT) };
-            
+
             _editMenu.Resized += OnEditMenuResized;
             todo.IsEditing
                 .Subscribe(this, v => _editMenu.Visible = v)
                 .Subscribe(this, _ => UpdateHeight());
         }
 
-        private void UpdateHeight() => Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
-        private void OnEditMenuResized(object sender, EventArgs eventArgs) => UpdateHeight();
+        private void UpdateHeight()
+        {
+            Height = _content.Height + (_editMenu.Visible ? _editMenu.Height : 0);
+        }
+
+        private void OnEditMenuResized(object sender, EventArgs eventArgs)
+        {
+            UpdateHeight();
+        }
 
         protected override void OnResized(ResizedEventArgs e)
         {

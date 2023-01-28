@@ -3,17 +3,41 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blish_HUD.Modules.Managers;
 using Todos.Source.Persistence;
+using Todos.Source.Utils;
 using Todos.Source.Utils.Reactive;
 
 namespace Todos.Source.Models
 {
     public class TodoListModel : ModelBase
     {
+        private readonly IVariable<List<TodoModel>> _allTodos;
         private readonly SettingsModel _settings;
-        private readonly IVariable<List<TodoModel>> _allTodos; 
-        
+        public readonly IVariable<TodoModel> HoveredTodo;
+
+        public readonly IVariable<TodoModel> MovingTodo;
+        public readonly IProperty<int> OpenTodos;
+        public readonly IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
+
+        private TodoListModel(SettingsModel settings, List<TodoModel> sortedTodos)
+        {
+            _settings = settings;
+            _allTodos = Add(Variables.Transient(sortedTodos));
+            VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
+            MovingTodo = Add(Variables.Transient<TodoModel>(null));
+            HoveredTodo = Add(Variables.Transient<TodoModel>(null));
+            OpenTodos = Add(AllTodos.Select(todos => todos.Count(todo => !todo.Schedule.IsDone.Value)));
+
+            foreach (var todo in sortedTodos)
+                SetupTodo(todo);
+
+            MouseService.LeftButton.Subscribe(this, state =>
+            {
+                if (MovingTodo.IsSet() && state == MouseService.ButtonState.Released)
+                    MovingTodo.Unset();
+            });
+        }
+
         public IProperty<IReadOnlyList<TodoModel>> AllTodos => _allTodos;
-        public IProperty<IReadOnlyList<TodoModel>> VisibleTodos;
 
         public static async Task<TodoListModel> Initialize(SettingsModel settings, DirectoriesManager manager)
         {
@@ -22,32 +46,27 @@ namespace Todos.Source.Models
             return new TodoListModel(settings, todoModels.OrderBy(t => t.OrderIndex.Value).ToList());
         }
 
-        private TodoListModel(SettingsModel settings, List<TodoModel> sortedTodos)
-        {
-            _settings = settings;
-            _allTodos = Add(Variables.Transient(sortedTodos));
-            VisibleTodos = Add(AllTodos.Select(all => all.Where(t => t.IsVisible.Value).ToList()));
-
-            foreach (var todo in sortedTodos)
-                SetupTodo(todo);
-        }
-
         private TodoModel SetupTodo(TodoModel todo)
         {
             todo.OrderIndex.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
             todo.IsVisible.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
+            todo.Schedule.IsDone.Subscribe(this, _ => _allTodos.OrderBy(t => t.OrderIndex.Value));
             todo.IsDeleted.Subscribe(this, _ => _allTodos.Remove(TearDownTodo(todo)), false);
             return todo;
         }
 
         private TodoModel TearDownTodo(TodoModel todo)
         {
+            todo.Schedule.Unsubscribe(this);
             todo.Unsubscribe(this);
             todo.Dispose();
             return todo;
         }
 
-        public void AddNewTodo() => _allTodos.Add(SetupTodo(new TodoModel(_settings, new TodoJson(), true)));
+        public void AddNewTodo()
+        {
+            _allTodos.Add(SetupTodo(new TodoModel(_settings, new TodoJson(), true)));
+        }
 
         public void MoveUp(TodoModel todo)
         {
@@ -83,6 +102,9 @@ namespace Todos.Source.Models
         {
             foreach (var todo in AllTodos.Value)
                 TearDownTodo(todo);
+
+            OpenTodos.Dispose();
+            MouseService.LeftButton.Unsubscribe(this);
         }
     }
 }

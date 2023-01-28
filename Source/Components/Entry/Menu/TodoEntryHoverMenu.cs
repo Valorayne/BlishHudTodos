@@ -15,8 +15,8 @@ namespace Todos.Source.Components.Entry.Menu
             FlowDirection = ControlFlowDirection.SingleRightToLeft;
             OuterControlPadding = new Vector2(PADDING_RIGHT, 0);
 
-            var deleteButton = new TodoDeleteButton(todo, popup, saveScroll) { Parent = this };
-            var editButton = new TodoEditButton(todo) { Parent = this };
+            var deleteButton = new TodoDeleteButton(todoList, todo, popup, saveScroll) { Parent = this };
+            var editButton = new TodoEditButton(todoList, todo) { Parent = this };
             var reorderButton = new TodoReorderButton(todoList, todo) { Parent = this };
 
             Width = deleteButton.Width + editButton.Width + reorderButton.Width + PADDING_RIGHT;

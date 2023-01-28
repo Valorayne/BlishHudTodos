@@ -12,21 +12,26 @@ namespace Todos.Source.Components.Entry.Menu
     public sealed class TodoDeleteButton : HoverButton
     {
         public const int WIDTH = Panel.HEADER_HEIGHT;
-        
-        private readonly TodoModel _todo;
         private readonly PopupModel _popupModel;
         private readonly Action _saveScroll;
+        private readonly TodoModel _todo;
 
-        public TodoDeleteButton(TodoModel todo, PopupModel popupModel, Action saveScroll) : base(
-            Resources.GetTexture(Textures.DeleteIcon),
-            Resources.GetTexture(Textures.DeleteIconHovered),
-            WIDTH, WIDTH, _ => {}
-        )
+        private readonly TodoListModel _todoList;
+
+        public TodoDeleteButton(TodoListModel todoList, TodoModel todo, PopupModel popupModel, Action saveScroll) :
+            base(
+                Resources.GetTexture(Textures.DeleteIcon),
+                Resources.GetTexture(Textures.DeleteIconHovered),
+                WIDTH, WIDTH, _ => { }
+            )
         {
+            _todoList = todoList;
             _todo = todo;
             _popupModel = popupModel;
             _saveScroll = saveScroll;
             BasicTooltipText = "Delete";
+
+            _todoList.MovingTodo.Subscribe(this, move => Utility.Delay(() => Visible = move != todo));
         }
 
         private bool PopupShown => _popupModel.Parent == Parent;
@@ -54,6 +59,12 @@ namespace Todos.Source.Components.Entry.Menu
                 OnNo = _popupModel.Close
             });
             popup.Location = new Point(AbsoluteBounds.Center.X - popup.Width, AbsoluteBounds.Center.Y);
+        }
+
+        protected override void DisposeControl()
+        {
+            _todoList.Unsubscribe(this);
+            base.DisposeControl();
         }
     }
 }

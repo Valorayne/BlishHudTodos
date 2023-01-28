@@ -17,17 +17,22 @@ namespace Todos.Source.Components.Settings
 
             _rows = new List<IDisposable>
             {
+                SettingRow.String(this, settings.WindowTitle, "Window Title", "The title of the Todo List Window"),
                 SettingRow.Boolean(this, settings.ShowWindowOutOfGame, "Show outside of game",
                     "Whether or not the Todos window should also be shown during\r\ncutscenes, the character selection screen and loading screens"),
-                SettingRow.Boolean(this, settings.ShowWindowOnMap, "Show on map", 
+                SettingRow.Boolean(this, settings.ShowWindowOnMap, "Show on map",
                     "Whether or not the Todos window should\r\nalso be shown while the map is opened"),
                 SettingRow.Boolean(this, settings.FixatedWindow, "Fixed Window",
                     "When fixed, the Todos window can neither be moved nor resized"),
+                SettingRow.Boolean(this, settings.ClickThroughBackground, "Click Through Background",
+                    "Whether or not it should be possible to click through the\r\nbackground to interact with game elements (e.g. Daily Chests)"),
+                SettingRow.Boolean(this, settings.ColorMenuIcon, "Color Menu Icon",
+                    "When active, the Todo icon at the top of the screen will be colored\r\nred as long as there's open tasks and the window is minimized"),
                 SettingRow.Slider(this, settings.BackgroundOpacity,
                     "Background opacity", "The opacity of the window background"),
                 SettingRow.Slider(this, settings.WindowOpacityWhenNotFocussed,
                     "Unfocused opacity", "The opacity of the window when you're not currently using it"),
-                SettingRow.Dropdown(this, settings.CheckboxType, "Checkbox Type", 
+                SettingRow.Dropdown(this, settings.CheckboxType, "Checkbox Type",
                     "The visual appearance of the checkboxes of todo entries")
             };
         }

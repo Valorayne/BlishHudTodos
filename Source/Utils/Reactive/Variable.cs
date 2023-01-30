@@ -7,6 +7,8 @@ namespace Todos.Source.Utils.Reactive
 {
     public class Variable<T> : IVariable<T>
     {
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly List<IProperty> _instances = new List<IProperty>();
         private IDictionary<object, Action<T, T>> _handlers = new Dictionary<object, Action<T, T>>();
         private T _value;
 
@@ -37,7 +39,9 @@ namespace Todos.Source.Utils.Reactive
         public IProperty<T> Subscribe(object subscriber, Action<T, T> handler, bool executeImmediately = true)
         {
             if (!_handlers.ContainsKey(subscriber))
+            {
                 _handlers[subscriber] = handler;
+            }
             else
             {
                 var previousHandler = _handlers[subscriber];
@@ -59,10 +63,16 @@ namespace Todos.Source.Utils.Reactive
             return Subscribe(subscriber, (before, after) => handler(after), executeImmediately);
         }
 
-        public void Unsubscribe(object subscriber) => _handlers?.Remove(subscriber);
+        public void Unsubscribe(object subscriber)
+        {
+            _handlers?.Remove(subscriber);
+        }
 
         public void Dispose()
         {
+            if (_handlers == null)
+                return;
+
             OnDisposal?.Invoke();
             _handlers.Clear();
             _handlers = null;
@@ -71,13 +81,11 @@ namespace Todos.Source.Utils.Reactive
                 _instances.Remove(this);
         }
 
-        // ReSharper disable once StaticMemberInGenericType
-        private static readonly List<IProperty> _instances = new List<IProperty>();
-
         public static void CheckForNotDisposedVariables()
         {
             if (_instances.Count > 0)
-                throw new Exception($"Forgot to dispose the following variables:\r\n{JsonConvert.SerializeObject(_instances)}");
+                throw new Exception(
+                    $"Forgot to dispose the following variables:\r\n{JsonConvert.SerializeObject(_instances)}");
         }
     }
 }
